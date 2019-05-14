@@ -57,7 +57,8 @@ namespace Epico.Sistema
             ResWidth = width;
             ResHeigth = heigth;
             render = new Bitmap(width, heigth, formatoPixel);
-            g = Graphics.FromImage(render);
+#warning g = Graphics.FromImage(render); 
+            //g = Graphics.FromImage(render);
             g.AntiAlias = AntiSerrilhado;
             g.ImageInterpolation = ModoInterpolacao;
             g.PixelOffsetMode = ModoDeslocamentoPixel;
@@ -77,7 +78,8 @@ namespace Epico.Sistema
                 ResWidth = width;
                 ResHeigth = height;
                 render = new Bitmap(width, height, pixelFormat);
-                g = Graphics.FromImage(render);
+#warning g = Graphics.FromImage(render); 
+                //g = Graphics.FromImage(render);
                 g.AntiAlias = AntiSerrilhado;
                 g.ImageInterpolation = ModoInterpolacao;
                 g.PixelOffsetMode = ModoDeslocamentoPixel;

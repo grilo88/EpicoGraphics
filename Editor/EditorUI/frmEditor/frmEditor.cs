@@ -6,7 +6,7 @@ namespace Editor.win32
 {
     public partial class frmEditor : Form
     {
-        Epico2D _epico2D;
+        Epico2D _epico2D = new Epico2D();
         bool _sair = false;
 
         PointF cameraDrag;
@@ -54,7 +54,7 @@ namespace Editor.win32
             //        Cam.Nome,
             //        Cam
             //    }).ToList();
-            //#endregion
+            #endregion
 
             Show();
 
@@ -68,8 +68,9 @@ namespace Editor.win32
 
                 if (moveCamera)
                 {
-                    _epico2D.Camera.Pos.X += -(float)((cameraDrag.X - Cursor.Position.X) * _epico2D.Camera.TempoDelta * 0.000001);
-                    _epico2D.Camera.Pos.Y += -(float)((cameraDrag.Y - Cursor.Position.Y) * _epico2D.Camera.TempoDelta * 0.000001);
+#warning MousePos
+                    //_epico2D.Camera.Pos.X += -(float)((cameraDrag.X - Cursor.Position.X) * _epico2D.Camera.TempoDelta * 0.000001);
+                    //_epico2D.Camera.Pos.Y += -(float)((cameraDrag.Y - Cursor.Position.Y) * _epico2D.Camera.TempoDelta * 0.000001);
                 }
 
                 if (_epico2D.Camera.ResWidth != imageView.Size.Width ||
