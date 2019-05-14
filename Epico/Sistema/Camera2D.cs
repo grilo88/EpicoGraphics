@@ -218,7 +218,7 @@ namespace Epico.Sistema
                             if (mat.CorBorda.A > 0) // Desenha borda dos objetos materialmente visíveis
                             {
                                 // Cor da borda do objeto
-                                Pen pen = new Pen(new SolidBrush(Color.FromArgb(255, 0, 0, 0) /*Preto*/));
+                                Pen pen = new Pen(new SolidBrush(Color.FromArgb(mat.CorBorda.A, mat.CorBorda.R, mat.CorBorda.G, mat.CorBorda.B)));
 
 #if Editor2D
                                 pen.Width = mat.LarguraBorda;
