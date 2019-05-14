@@ -103,8 +103,13 @@ namespace Editor2D
 
                 if (moveCamera)
                 {
-                    _engine2D.Camera.Pos.X += -(float)((cameraDrag.X - Cursor.Position.X) * _engine2D.Camera.TempoDelta * 0.000001);
-                    _engine2D.Camera.Pos.Y += -(float)((cameraDrag.Y - Cursor.Position.Y) * _engine2D.Camera.TempoDelta * 0.000001);
+                    EixoXY xyCamDrag = new XY(cameraDrag.X, cameraDrag.Y);
+                    EixoXY xyCursor = new XY(Cursor.Position.X, Cursor.Position.Y);
+                    float distCursor = Util.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
+                    float angCursor = Util.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
+
+                    _engine2D.Camera.Pos.X += (float)(Math.Cos(Util.Angulo2Radiano(angCursor)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
+                    _engine2D.Camera.Pos.Y += (float)(Math.Sin(Util.Angulo2Radiano(angCursor)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
                 }
 
                 if (_engine2D.Camera.ResWidth != picScreen.ClientRectangle.Width ||
@@ -1121,6 +1126,17 @@ namespace Editor2D
         private void TxtVerticeAngulo_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void TxtCamAngulo_ValueChanged(object sender, EventArgs e)
+        {
+            if (txtCamAngulo.Focused)
+            {
+                if (float.TryParse(txtCamAngulo.Text, out float ang))
+                {
+                    _engine2D.Camera.Angulo = ang;
+                }
+            }
         }
     }
 }

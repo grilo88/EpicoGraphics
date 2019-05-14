@@ -1086,6 +1086,7 @@
             this.txtCamAngulo.Name = "txtCamAngulo";
             this.txtCamAngulo.Size = new System.Drawing.Size(59, 20);
             this.txtCamAngulo.TabIndex = 30;
+            this.txtCamAngulo.ValueChanged += new System.EventHandler(this.TxtCamAngulo_ValueChanged);
             // 
             // label8
             // 
@@ -1364,7 +1365,7 @@
             this.toolStripRefazer.Size = new System.Drawing.Size(29, 22);
             this.toolStripRefazer.Text = "toolStripRefazer";
             // 
-            // Form1
+            // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1374,7 +1375,7 @@
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "frmEditor";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);

@@ -20,7 +20,7 @@ namespace Epico.Sistema
         /// <summary>Distância do centro ao ponto máximo da circunferência.</summary>
         public float Raio { get; set; }
         /// <summary>Ângulo Z do objeto</summary>
-        public float Angulo { get; set; }
+        public virtual float Angulo { get; set; }
         /// <summary>Ângulo X do objeto</summary>
         public float AnguloX { get; set; }
         /// <summary>Ângulo Y do objeto</summary>
@@ -401,11 +401,11 @@ namespace Epico.Sistema
         /// <summary>Atualiza todas as vértices considerando fatores como: radiano, raio, ângulo, escala, etc.</summary>
         public virtual void AtualizarGeometria(float novoAngulo)
         {
-            float diffAng = novoAngulo - Angulo;
+            float graus = novoAngulo - Angulo;
             Angulo = novoAngulo;
             for (int i = 0; i < Vertices.Length; i++)
             {
-                EixoXY eixo = Util.RotacionarPonto2D(Origem[0], Vertices[i], diffAng);
+                EixoXY eixo = Util.RotacionarPonto2D(Origem[0], Vertices[i], graus);
                 Vertices[i].X = eixo.X;
                 Vertices[i].Y = eixo.Y;
             }
@@ -424,7 +424,10 @@ namespace Epico.Sistema
 
         public virtual object Clone()
         {
-            return MemberwiseClone();
+            object clone = MemberwiseClone();
+
+
+            return clone;
         }
     }
 }

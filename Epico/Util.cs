@@ -38,16 +38,16 @@ namespace Epico
         /// </summary>
         /// <param name="origem">Ponto de origem do objeto</param>
         /// <param name="p">Ponto a ser rotacionado</param>
-        /// <param name="angulo">Soma dos ângulos</param>
+        /// <param name="graus">Diferença de ângulos no caso de rotação ou soma dos ângulo no caso de acoplamento de objetos.</param>
         /// <returns></returns>
-        public static EixoXY RotacionarPonto2D(EixoXY origem, EixoXY ponto, float angulo) => RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, angulo);
+        public static EixoXY RotacionarPonto2D(EixoXY origem, EixoXY ponto, float graus) => RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, graus);
 
         /// <summary>
         /// Rotaciona um ponto 2D a partir de um ponto de origem
         /// </summary>
         /// <param name="origem">Ponto de origem do objeto</param>
         /// <param name="p">Ponto a ser rotacionado</param>
-        /// <param name="angulo">Soma dos ângulos</param>
+        /// <param name="angulo">Diferença de ângulos no caso de rotação ou soma dos ângulo no caso de acoplamento de objetos.</param>
         /// <returns></returns>
         public static EixoXY RotacionarPonto2D(float origemX, float origemY, float x, float y, float angulo)
         {
