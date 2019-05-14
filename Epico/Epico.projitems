@@ -9,5 +9,47 @@
     <Import_RootNamespace>Epico</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\Button2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\CheckBox2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\ComboBox2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\Form2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\GroupBox2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\MaskedEdit2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\ProgressBar2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\Textbox2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Epico2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Luzes\LuzDestaque.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Luzes\LuzDirecional.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Luzes\LuzObjeto2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Luzes\LuzPonto.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Avancados\Deformado.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Avancados\Estrela.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Avancados\Quadrilatero.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Circulo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Hexagono.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Losango.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Pentagono.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Quadrado.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Retangulo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Triangulo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\TrianguloRetangulo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Animacao2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Avancado2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Camera2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Controle2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Cores.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Entrada\Joystick.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Entrada\Mouse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Entrada\Teclado.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Estruturas2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Luz2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Luz2DRenderizar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Material.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Objeto2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Objeto2DRenderizar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Pivo2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Primitivo2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Transformacao.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Util.cs" />
   </ItemGroup>
 </Project>
