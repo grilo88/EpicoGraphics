@@ -487,7 +487,7 @@ namespace Editor2D
             
             if (_objs_sel.Count == 1)
             {
-                if (_engine2D.Camera.Objeto2DVisivel(_objs_sel.First()))
+                if (_engine2D.Camera.Objeto2DVisivelCamera(_objs_sel.First()))
                     txtVisivel.Text = "Sim";
                 else
                     txtVisivel.Text = "Não";

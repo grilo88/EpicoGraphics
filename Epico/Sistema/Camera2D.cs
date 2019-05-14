@@ -34,9 +34,6 @@ namespace Epico.Sistema
         public ImageInterpolation ModoInterpolacao = ImageInterpolation.Default;
         public PixelOffsetMode ModoDeslocamentoPixel = PixelOffsetMode.None;
 #endif
-        public bool AntiSerrilhado = true;
-        public float PontosPorPixel = 1;
-        
         private int _fps;
         private int _tickFPS;
 #endregion
@@ -48,9 +45,15 @@ namespace Epico.Sistema
         /// <summary>Tempo de atraso entre uma renderização e outra.</summary>
         public long TempoDelta { get; private set; }
         public float ZoomCamera { get; set; } = 1F;
-
         public bool DesligarSistemaZoom { get; set; } = true;
-#endregion
+        public bool AntiSerrilhado { get; set; } = true;
+        public float PontosPorPixel { get; set; } = 1;
+
+        public float Left => Pos.X - ResWidth / 2;
+        public float Right => Pos.X + ResWidth / 2;
+        public float Top => Pos.Y - ResHeigth / 2;
+        public float Bottom => Pos.Y + ResHeigth / 2;
+        #endregion
 
         public Camera2D(Epico2D engine, int width, int height)
         {
@@ -137,23 +140,9 @@ namespace Epico.Sistema
         public void Focar(Origem2D c) => Pos = new Vetor2D(c.GlobalX, c.GlobalY);
         public void Focar(Vertice2D v) => Pos = new Vetor2D(v.GlobalX, v.GlobalY);
 
-        public bool Objeto2DVisivel(Objeto2D obj)
-        {
-            float xMax = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMax;
-            float xMin = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMin;
-            float yMax = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMax;
-            float yMin = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMin;
-
-            if (xMax >= 0 && xMin <= ResWidth)
-                if (yMax >= 0 && yMin <= ResHeigth)
-                {
-                    return true;
-                }
-
-            return false;
-        }
-
+#warning O ângulo da câmera não está perfeita, as vezes gira demais ou de menos.
         private float _grausCamera;
+        private float _anguloRotacionado;
         public override float Angulo
         {
             get
@@ -164,6 +153,9 @@ namespace Epico.Sistema
             {
                 float novoAngulo = value;
                 _grausCamera = novoAngulo - base.Angulo;
+
+#warning A ideia é manter a quantidade de graus que houve rotação da camera em relação a Zero
+                _anguloRotacionado = base.Angulo + _grausCamera;
                 base.Angulo = novoAngulo;
             }
         }
@@ -194,8 +186,8 @@ namespace Epico.Sistema
                 g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
 
                 // Obtém a posição da tela da câmera
-                TelaPos.X = Pos.X - ResWidth / 2;
                 TelaPos.Y = Pos.Y - ResHeigth / 2;
+                TelaPos.X = Pos.X - ResWidth / 2;
 
                 for (int i = 0; i < engine.objetos.Count; i++)
                 {
@@ -219,15 +211,16 @@ namespace Epico.Sistema
                             XY globalPos = new XY(
                                 obj.Vertices[v].GlobalX,
                                 obj.Vertices[v].GlobalY);
-
+#warning O ângulo da câmera não está perfeita, as vezes gira demais ou de menos.
                             EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, _grausCamera);
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
-                        obj.AtualizarXYMinMax();
                         #endregion
 
-                        if (Objeto2DVisivel(obj))
+                        obj.AtualizarXYMinMax();
+
+                        if (Objeto2DVisivelCamera(obj))
                         {
                             if (obj.Mat_render.CorSolida.A > 0) // Pinta objeto materialmente visível
                             {
@@ -315,7 +308,7 @@ namespace Epico.Sistema
                     {
                         if (luz is LuzPonto)
                         {
-                            if (Objeto2DVisivel(luz))
+                            if (Objeto2DVisivelCamera(luz))
                             {
                                 //GraphicsPath preenche = new GraphicsPath();
                                 //preenche.FillMode = FillMode.Alternate;
@@ -374,6 +367,58 @@ namespace Epico.Sistema
 #endif
             return render;
         }
+
+        public Objeto2D ObjetoAnguloCamera(Objeto2D obj, bool clonar = true)
+        {
+#warning obter objetos de acordo com o angulo da camera. Ainda há falhas nesta lógica
+            Objeto2D clone = clonar ? (Objeto2D)obj.Clone() : obj;
+            for (int v = 0; v < obj.Vertices.Count(); v++)
+            {
+                XY globalPos = new XY(
+                    obj.Vertices[v].GlobalX,
+                    obj.Vertices[v].GlobalY);
+
+#warning Zero não rotaciona, 1 rotaciona
+                EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, _anguloRotacionado);
+                obj.Vertices[v].X = xy.X - obj.Pos.X;
+                obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
+            }
+            return clone;
+        }
+
+        public bool Objeto2DVisivelCamera(Objeto2D obj)
+        {
+            TelaPos.Y = Pos.Y - ResHeigth / 2;
+            TelaPos.X = Pos.X - ResWidth / 2;
+
+            float pontoXMax = -TelaPos.X + obj.GlobalXMax;
+            float pontoXMin = -TelaPos.X + obj.GlobalXMin;
+            float pontoYMax = -TelaPos.Y + obj.GlobalYMax;
+            float pontoYMin = -TelaPos.Y + obj.GlobalYMin;
+
+            if (pontoXMax >= 0 && pontoXMin <= ResWidth)
+                if (pontoYMax >= 0 && pontoYMin <= ResHeigth)
+                {
+                    return true;
+                }
+            return false;
+        }
+
+        //public bool Objeto2DVisivel(Objeto2D obj)
+        //{
+        //    float xMax = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMax;
+        //    float xMin = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMin;
+        //    float yMax = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMax;
+        //    float yMin = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMin;
+
+        //    if (xMax >= 0 && xMin <= ResWidth)
+        //        if (yMax >= 0 && yMin <= ResHeigth)
+        //        {
+        //            return true;
+        //        }
+
+        //    return false;
+        //}
 
         /// <summary>
         /// Trabalha o Zoom orientado a escala do objeto

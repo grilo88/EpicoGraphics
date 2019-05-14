@@ -34,6 +34,11 @@ namespace Epico.Sistema
         /// <summary>Ponto Y mínimo do objeto</summary>
         public float YMin { get; set; }
 
+        public float GlobalXMax => Pos.X + XMax;
+        public float GlobalXMin => Pos.X + XMin;
+        public float GlobalYMax => Pos.Y + YMax;
+        public float GlobalYMin => Pos.Y + YMin;
+
         /// <summary>Cor de representação abstrata do objeto</summary>
         public RGBA Cor { get; set; }
 

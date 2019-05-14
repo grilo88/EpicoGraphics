@@ -111,21 +111,24 @@ namespace Epico
         {
             return ObterObjetos2DPelaTela(engine, camera, new XY(ponto.X, ponto.Y));
         }
-            /// <summary>
-            /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
-            /// </summary>
-            /// <param name="ponto"></param>
-            /// <returns></returns>
-            public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
+
+        /// <summary>
+        /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
+        /// </summary>
+        /// <param name="ponto"></param>
+        /// <returns></returns>
+        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
         {
             for (int i = 0; i < engine.objetos.Count; i++)
             {
                 Objeto2D obj = engine.objetos[i];
+#warning obter objetos de acordo com o angulo da camera. Ainda há falhas nesta lógica
+                Objeto2D comp = camera.ObjetoAnguloCamera(obj, true);
 
-                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMax;
-                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMin;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMax;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMin;
+                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMax;
+                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMin;
+                float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMax;
+                float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMin;
 
                 if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
                     if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
