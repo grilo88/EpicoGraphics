@@ -73,8 +73,8 @@ namespace Epico.Sistema
             render = new Bitmap(width, heigth, formatoPixel);
 #if Editor2D
             g = Graphics.FromImage(render);
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.InterpolationMode = InterpolationMode.Bilinear;
+            g.SmoothingMode = AntiSerrilhado ? SmoothingMode.AntiAlias : SmoothingMode.None;
+            g.InterpolationMode = ModoInterpolacao;
 #elif EtoForms
             g.AntiAlias = AntiSerrilhado;
             g.ImageInterpolation = ModoInterpolacao;
@@ -98,8 +98,8 @@ namespace Epico.Sistema
                 render = new Bitmap(width, height, pixelFormat);
 #if Editor2D
                 g = Graphics.FromImage(render);
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.InterpolationMode = InterpolationMode.Bilinear;
+                g.SmoothingMode = AntiSerrilhado ? SmoothingMode.AntiAlias : SmoothingMode.None;
+                g.InterpolationMode = ModoInterpolacao;
 #elif EtoForms
                 g.AntiAlias = AntiSerrilhado;
                 g.ImageInterpolation = ModoInterpolacao;
@@ -204,7 +204,7 @@ namespace Epico.Sistema
                     {
                         Objeto2DRenderizar obj = (Objeto2DRenderizar)objEspaco.Clone();
 
-                        #region ZOOM
+                        #region Calcula o ZOOM da câmera
                         if (!DesligarSistemaZoom)
                         {
                             Objeto2D objZoom = ZoomEscalaObjeto2D(obj, ZoomCamera);
@@ -213,7 +213,7 @@ namespace Epico.Sistema
                         }
                         #endregion
 
-                        #region Rotaciona a Câmera conforme seu ângulo
+                        #region Calcula o ângulo da câmera
                         for (int v = 0; v < obj.Vertices.Count(); v++)
                         {
                             XY globalPos = new XY(
@@ -224,7 +224,7 @@ namespace Epico.Sistema
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
-
+                        obj.AtualizarXYMinMax();
                         #endregion
 
                         if (Objeto2DVisivel(obj))

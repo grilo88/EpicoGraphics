@@ -53,7 +53,7 @@ namespace Epico.Sistema
         #endregion
 
         #region Arrays
-        /// <summary>Ponto(s) central(is) do objeto</summary>
+        /// <summary>Ponto(s) de origem do objeto</summary>
         public List<Origem2D> Origem { get; set; } = new List<Origem2D>();
         /// <summary>Vértices do objeto</summary>
         public Vertice2D[] Vertices = new Vertice2D[0];
