@@ -17,11 +17,6 @@ namespace Editor.win32
             InitializeComponent();
         }
 
-        private void FrmEditor_Load(object sender, System.EventArgs e)
-        {
-
-        }
-
         private void FrmEditor_LoadComplete(object sender, System.EventArgs e)
         {
             #region Cria a Câmera

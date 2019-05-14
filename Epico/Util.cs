@@ -1,10 +1,16 @@
 ﻿using Epico.Sistema;
-using Eto.Drawing;
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+#if Editor2D
+using System.Drawing;
+#elif EtoForms
+using Eto.Drawing;
+#endif
 
 namespace Epico
 {
@@ -101,12 +107,16 @@ namespace Epico
             return null;
         }
 
-        /// <summary>
-        /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
-        /// </summary>
-        /// <param name="ponto"></param>
-        /// <returns></returns>
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
+        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, PointF ponto)
+        {
+            return ObterObjetos2DPelaTela(engine, camera, new XY(ponto.X, ponto.Y));
+        }
+            /// <summary>
+            /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
+            /// </summary>
+            /// <param name="ponto"></param>
+            /// <returns></returns>
+            public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
         {
             for (int i = 0; i < engine.objetos.Count; i++)
             {

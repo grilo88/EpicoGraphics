@@ -3,7 +3,7 @@ using System;
 
 namespace Epico.Objetos2D.Avancados
 {
-    class Retangulo : Primitivo2D
+    public class Retangulo : Primitivo2D
     {
 
         public Retangulo()

@@ -1,10 +1,16 @@
 ﻿using Epico.Sistema;
-using Eto.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+#if Editor2D
+using System.Drawing;
+using System.Drawing.Imaging;
+#elif EtoForms
+using Eto.Drawing;
+#endif
 
 namespace Epico
 {
@@ -39,7 +45,13 @@ namespace Epico
 
         public Camera2D CriarCamera(int width, int heigth)
         {
-            return CriarCamera(width, heigth, PixelFormat.Format32bppRgba);
+            return CriarCamera(width, heigth, 
+#if Editor2D 
+                 PixelFormat.Format32bppArgb
+#elif EtoForms
+                PixelFormat.Format32bppRgba
+#endif
+                );
         }
         public Camera2D CriarCamera(int width, int heigth, PixelFormat pixelFormat)
         {
