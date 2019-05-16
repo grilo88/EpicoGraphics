@@ -42,7 +42,14 @@ namespace VideoStreamWebApp
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc((routes => {
+                routes.MapRoute(
+                    name: "default", 
+                    template: "{controller=Video}/{action=GetVideoContent}")
+                    .MapRoute(
+                    name: "api", 
+                    template: "api/{controller}/{action}/{id?}");
+            }));
         }
     }
 }

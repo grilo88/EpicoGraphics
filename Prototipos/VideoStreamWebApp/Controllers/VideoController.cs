@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +19,15 @@ namespace VideoStreamWebApp.Controllers
 {
     public class VideoController : Controller
     {
-        private bool frameAvailable = false;
+        private bool quadroDisponivel = false;
         private Bitmap frame = null;
         private string BOUNDARY = "frame";
         Epico2D epico;
 
         /// <summary>
-        /// Initializer for the MJPEGstream
+        /// Inicializa o motor de renderização
         /// </summary>
-        VideoController()
+        public VideoController()
         {
             epico = new Epico2D();
             Estrela obj = new Estrela();
@@ -35,87 +37,88 @@ namespace VideoStreamWebApp.Controllers
             epico.AddObjeto(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);
-
-            //mjpegStream.Source = @"{{INSERT STREAM URL}}";
-            //mjpegStream.NewFrame += new NewFrameEventHandler(showFrameEvent);
         }
 
         [HttpGet]
         public HttpResponseMessage GetVideoContent()
         {
-            //mjpegStream.Start();
-
-            var response = Request.CreateResponse();
-            response.Content = new PushStreamContent((Action<Stream, HttpContent, TransportContext>)StartStream);
+#error Obter o request do contexto atual.
+            HttpRequestMessage request = new HttpRequestMessage();
+            HttpResponseMessage response = request.CreateResponse();
+            response.Content = new PushStreamContent((Action<Stream, HttpContent, TransportContext>)IniciarFluxo);
             response.Content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("multipart/x-mixed-replace; boundary=" + BOUNDARY);
             return response;
         }
 
         /// <summary>
-        /// Craete an appropriate header.
+        /// Cria um cabeçalho apropriado
         /// </summary>
-        /// <param name="length"></param>
+        /// <param name="comp"></param>
         /// <returns></returns>
-        private byte[] CreateHeader(int length)
+        private byte[] CriarCabecalho(int comp)
         {
             string header =
                 "--" + BOUNDARY + "\r\n" +
                 "Content-Type:image/jpeg\r\n" +
-                "Content-Length:" + length + "\r\n\r\n";
+                "Content-Length:" + comp + "\r\n\r\n";
 
             return Encoding.ASCII.GetBytes(header);
         }
 
-        public byte[] CreateFooter()
+        public byte[] CriarRodape()
         {
             return Encoding.ASCII.GetBytes("\r\n");
         }
 
         /// <summary>
-        /// Write the given frame to the stream
+        /// Escreva o quadro no fluxo
         /// </summary>
-        /// <param name="stream">Stream</param>
-        /// <param name="frame">Bitmap format frame</param>
-        private void WriteFrame(Stream stream, Bitmap frame)
+        /// <param name="fluxo">Fluxo</param>
+        /// <param name="quadro">Formato de quadro bitmap</param>
+        private void EscreveQuadro(Stream fluxo, Bitmap quadro)
         {
-            // prepare image data
-            byte[] imageData = null;
+            // Prepara a imagem
+            quadro = epico.Camera.Renderizar();
+            byte[] dadosImagem = null;
 
-            // this is to make sure memory stream is disposed after using
+            // isso é para garantir que o fluxo de memória seja descartado após o uso
             using (MemoryStream ms = new MemoryStream())
             {
-                frame.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                imageData = ms.ToArray();
+                quadro.Save(ms, ImageFormat.Jpeg);
+                dadosImagem = ms.ToArray();
             }
 
-            // prepare header
-            byte[] header = CreateHeader(imageData.Length);
-            // prepare footer
-            byte[] footer = CreateFooter();
+            // Prepara o cabeçalho
+            byte[] cab = CriarCabecalho(dadosImagem.Length);
+            // Prepara o rodapé
+            byte[] rodp = CriarRodape();
 
-            // Start writing data
-            stream.Write(header, 0, header.Length);
-            stream.Write(imageData, 0, imageData.Length);
-            stream.Write(footer, 0, footer.Length);
+            // Inicia escrita de dados
+            fluxo.Write(cab, 0, cab.Length);
+            fluxo.Write(dadosImagem, 0, dadosImagem.Length);
+            fluxo.Write(rodp, 0, rodp.Length);
         }
 
         /// <summary>
-        /// While the MJPEGStream is running and clients are connected,
-        /// continue sending frames.
+        /// Enquanto o Motor de Renderização estiver em execução e os clientes estiverem conectados, continue enviando quadros.
         /// </summary>
-        /// <param name="stream">Stream to write to.</param>
-        /// <param name="httpContent">The content information</param>
+        /// <param name="fluxo">Fluxo a escrever</param>
+        /// <param name="httpContent">O conteúdo da informação</param>
         /// <param name="transportContext"></param>
-        private void StartStream(Stream stream, HttpContent httpContent, TransportContext transportContext)
+        private void IniciarFluxo(Stream fluxo, HttpContent httpContent, TransportContext transportContext)
         {
+            // TODO: Implementar /*motor rodando && cliente conectado?*/
+
+            //bool ClienteConectado = HttpContext.Current.Response.IsClientConnected;
+
             while (true /*motor rodando && cliente conectado?*/)
             {
-                if (frameAvailable)
+                if (quadroDisponivel)
                 {
                     try
                     {
-                        WriteFrame(stream, epico.Camera.Renderizar());
-                        frameAvailable = false;
+                        EscreveQuadro(fluxo, epico.Camera.Renderizar());
+                        quadroDisponivel = false;
                     }
                     catch (Exception e)
                     {
@@ -126,6 +129,27 @@ namespace VideoStreamWebApp.Controllers
                 {
                     Thread.Sleep(30);
                 }
+            }
+        }
+        private byte[] BitmapToByteArray(Bitmap bitmap)
+        {
+            BitmapData bmpdata = null;
+
+            try
+            {
+                bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                int numbytes = bmpdata.Stride * bitmap.Height;
+                byte[] bytedata = new byte[numbytes];
+                IntPtr ptr = bmpdata.Scan0;
+
+                Marshal.Copy(ptr, bytedata, 0, numbytes);
+
+                return bytedata;
+            }
+            finally
+            {
+                if (bmpdata != null)
+                    bitmap.UnlockBits(bmpdata);
             }
         }
     }
