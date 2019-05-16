@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if Editor2D
+#if Editor2D || NetCore3 || NetStandard2
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 #elif EtoForms
 using Eto.Drawing;
 #endif
+
 
 namespace Epico.Sistema
 {
@@ -25,7 +26,7 @@ namespace Epico.Sistema
 #region Campos
         public int ResWidth;
         public int ResHeigth;
-#if Editor2D
+#if Editor2D || NetStandard2 || NetCore3
         public PixelFormat FormatoPixel = PixelFormat.Format32bppArgb;
         public InterpolationMode ModoInterpolacao = InterpolationMode.Default;
         public PixelOffsetMode ModoDeslocamentoPixel = PixelOffsetMode.None;
@@ -53,7 +54,7 @@ namespace Epico.Sistema
         public float Right => Pos.X + ResWidth / 2;
         public float Top => Pos.Y - ResHeigth / 2;
         public float Bottom => Pos.Y + ResHeigth / 2;
-        #endregion
+#endregion
 
         public Camera2D(Epico2D engine, int width, int height)
         {
@@ -61,10 +62,16 @@ namespace Epico.Sistema
             IniciarCamera(width, height, FormatoPixel);
         }
 
-        public Camera2D(Epico2D engine, int width, int height, PixelFormat formatoPixel)
+        public Camera2D(Epico2D engine, int width, int height,
+#if NetStandard2
+            System.Drawing.Imaging.PixelFormat formatoPixel
+#else
+            PixelFormat FormatoPixel
+#endif
+            )
         {
             this.engine = engine;
-            IniciarCamera(width, height, formatoPixel);
+            IniciarCamera(width, height, FormatoPixel);
         }
 
         private void IniciarCamera(int width, int heigth, PixelFormat formatoPixel)
@@ -167,14 +174,14 @@ namespace Epico.Sistema
         long _tickRender;
 
         readonly Font font_debug = new Font("Lucida Console", 12,
-#if Editor2D
+#if Editor2D || NetStandard2 || NetCore3
             FontStyle.Regular
 #elif EtoForms
             FontStyle.None
 #endif
             );
         readonly SolidBrush font_debug_color = new SolidBrush(Color.FromArgb(255, 127, 255, 212) /*Aquamarine*/);
-        #endregion
+#endregion
 
         public Bitmap Renderizar()
         {
@@ -196,16 +203,16 @@ namespace Epico.Sistema
                     {
                         Objeto2DRenderizar obj = (Objeto2DRenderizar)objEspaco.Clone();
 
-                        #region Calcula o ZOOM da câmera
+#region Calcula o ZOOM da câmera
                         if (!DesligarSistemaZoom)
                         {
                             Objeto2D objZoom = ZoomEscalaObjeto2D(obj, ZoomCamera);
                             Objeto2D objPosZoom = ZoomPosObjeto2D(obj, ZoomCamera);
                             objZoom.Pos = objPosZoom.Pos;
                         }
-                        #endregion
+#endregion
 
-                        #region Calcula o ângulo da câmera
+#region Calcula o ângulo da câmera
                         for (int v = 0; v < obj.Vertices.Count(); v++)
                         {
                             XY globalPos = new XY(
@@ -216,7 +223,7 @@ namespace Epico.Sistema
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
-                        #endregion
+#endregion
 
                         obj.AtualizarXYMinMax();
 
@@ -328,12 +335,12 @@ namespace Epico.Sistema
                     }
 
                     // Sombras devem ser renderizadas após a renderização da iluminação
-                    #region Sombras
+#region Sombras
 
-                    #endregion
+#endregion
                 }
 
-                #region Exibe informações de depuração
+#region Exibe informações de depuração
                 if (engine.Debug)
                 {
 #if Editor2D
@@ -344,11 +351,11 @@ namespace Epico.Sistema
                     g.DrawText(font_debug, font_debug_color, new PointF(10, 30), "FPS: " + FPS);
 #endif
                 }
-                #endregion
+#endregion
             }
             _grausCamera = 0;
 
-            #region Calcula o FPS
+#region Calcula o FPS
             if (Environment.TickCount - _tickFPS >= 1000)
             {
                 _tickFPS = Environment.TickCount;
@@ -356,11 +363,11 @@ namespace Epico.Sistema
                 _fps = 0;
             }
             else _fps++;
-            #endregion
+#endregion
 
-            #region Limita o FPS
+#region Limita o FPS
             // TODO: Limitar o FPS
-            #endregion
+#endregion
 
 #if EtoForms
             g.DrawImage(render, new PointF(0, 0));

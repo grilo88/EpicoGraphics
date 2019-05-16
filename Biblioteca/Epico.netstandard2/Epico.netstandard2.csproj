@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;NetStandard2</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="..\..\Epico\Epico.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
+
+</Project>

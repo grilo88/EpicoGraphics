@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if Editor2D
+#if Editor2D || NetStandard2 || NetCore3
 using System.Drawing;
 using System.Drawing.Imaging;
 #elif EtoForms
@@ -42,18 +42,24 @@ namespace Epico
             objetos.Add(objeto2d);
         }
 
-
         public Camera2D CriarCamera(int width, int heigth)
         {
-            return CriarCamera(width, heigth, 
-#if Editor2D 
+            return CriarCamera(width, heigth,
+#if Editor2D || NetStandard2 || NetCore3
                  PixelFormat.Format32bppArgb
 #elif EtoForms
                 PixelFormat.Format32bppRgba
 #endif
                 );
         }
-        public Camera2D CriarCamera(int width, int heigth, PixelFormat pixelFormat)
+        public Camera2D CriarCamera(int width, int heigth,
+
+#if NetStandard2
+            System.Drawing.Imaging.PixelFormat pixelFormat
+#else
+            PixelFormat pixelFormat
+#endif
+            )
         {
             Camera2D camera = new Camera2D(this, width, heigth, pixelFormat);
             Camera2D ambiguo = Cameras.Where(x => x.Nome.StartsWith(camera.Nome)).LastOrDefault();
