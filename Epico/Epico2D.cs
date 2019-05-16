@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if Editor2D || NetStandard2 || NetCore3
+#if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
 using System.Drawing.Imaging;
 #elif EtoForms
@@ -45,7 +45,7 @@ namespace Epico
         public Camera2D CriarCamera(int width, int heigth)
         {
             return CriarCamera(width, heigth,
-#if Editor2D || NetStandard2 || NetCore3
+#if Editor2D || NetStandard2 || NetCore
                  PixelFormat.Format32bppArgb
 #elif EtoForms
                 PixelFormat.Format32bppRgba

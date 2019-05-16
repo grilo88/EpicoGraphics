@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if Editor2D || NetStandard2 || NetCore3
+#if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
 #elif EtoForms
 using Eto.Drawing;

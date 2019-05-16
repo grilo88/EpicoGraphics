@@ -43,9 +43,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epico.editor2d", "Epico.edi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epico.netstandard2", "Biblioteca\Epico.netstandard2\Epico.netstandard2.csproj", "{CA0CE758-D604-419E-9102-185514FAEBBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epico.netcore3.x86", "Biblioteca\Epico.netcore3.x86\Epico.netcore3.x86.csproj", "{8FC503F7-5AE3-48B8-91F3-7343E52D4F92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epico.netcore3.x86", "Biblioteca\Epico.netcore3.x86\Epico.netcore3.x86.csproj", "{8FC503F7-5AE3-48B8-91F3-7343E52D4F92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebAssembly", "Prototipos\BlazorWebAssembly\BlazorWebAssembly.csproj", "{8E193009-A1EF-458D-8720-18F68D7732C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebAssembly", "Prototipos\BlazorWebAssembly\BlazorWebAssembly.csproj", "{8E193009-A1EF-458D-8720-18F68D7732C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoStreamWebApp", "Prototipos\VideoStreamWebApp\VideoStreamWebApp.csproj", "{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epico.netcore2.2.x86", "Epico.netcore2.2.x86\Epico.netcore2.2.x86.csproj", "{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -121,6 +125,14 @@ Global
 		{8E193009-A1EF-458D-8720-18F68D7732C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E193009-A1EF-458D-8720-18F68D7732C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E193009-A1EF-458D-8720-18F68D7732C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +157,8 @@ Global
 		{CA0CE758-D604-419E-9102-185514FAEBBD} = {4015CCF9-63BA-48B4-8C90-EF24F34C2910}
 		{8FC503F7-5AE3-48B8-91F3-7343E52D4F92} = {4015CCF9-63BA-48B4-8C90-EF24F34C2910}
 		{8E193009-A1EF-458D-8720-18F68D7732C3} = {439C52C6-880A-402F-AF1A-0E6E480F0983}
+		{0BB1CA39-2B79-4A44-9A5B-DA507BAB4FE5} = {439C52C6-880A-402F-AF1A-0E6E480F0983}
+		{E0A3C4B0-0A40-41F6-AE21-3D2A0ADC950F} = {4015CCF9-63BA-48B4-8C90-EF24F34C2910}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D7D1649-9BEB-41E4-8EC4-2EEDB8B60200}

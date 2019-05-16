@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if Editor2D || NetCore3 || NetStandard2
+#if Editor2D || NetCore || NetStandard2
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
@@ -26,7 +26,7 @@ namespace Epico.Sistema
 #region Campos
         public int ResWidth;
         public int ResHeigth;
-#if Editor2D || NetStandard2 || NetCore3
+#if Editor2D || NetStandard2 || NetCore
         public PixelFormat FormatoPixel = PixelFormat.Format32bppArgb;
         public InterpolationMode ModoInterpolacao = InterpolationMode.Default;
         public PixelOffsetMode ModoDeslocamentoPixel = PixelOffsetMode.None;
@@ -62,13 +62,7 @@ namespace Epico.Sistema
             IniciarCamera(width, height, FormatoPixel);
         }
 
-        public Camera2D(Epico2D engine, int width, int height,
-#if NetStandard2
-            System.Drawing.Imaging.PixelFormat formatoPixel
-#else
-            PixelFormat FormatoPixel
-#endif
-            )
+        public Camera2D(Epico2D engine, int width, int height, PixelFormat FormatoPixel)
         {
             this.engine = engine;
             IniciarCamera(width, height, FormatoPixel);
@@ -81,7 +75,7 @@ namespace Epico.Sistema
             ResWidth = width;
             ResHeigth = heigth;
             render = new Bitmap(width, heigth, formatoPixel);
-#if Editor2D
+#if Editor2D || NetCore || NetStandard2
             g = Graphics.FromImage(render);
             g.SmoothingMode = AntiSerrilhado ? SmoothingMode.AntiAlias : SmoothingMode.None;
             g.InterpolationMode = ModoInterpolacao;
@@ -106,7 +100,7 @@ namespace Epico.Sistema
                 ResWidth = width;
                 ResHeigth = height;
                 render = new Bitmap(width, height, pixelFormat);
-#if Editor2D
+#if Editor2D || NetCore || NetStandard2
                 g = Graphics.FromImage(render);
                 g.SmoothingMode = AntiSerrilhado ? SmoothingMode.AntiAlias : SmoothingMode.None;
                 g.InterpolationMode = ModoInterpolacao;
@@ -174,7 +168,7 @@ namespace Epico.Sistema
         long _tickRender;
 
         readonly Font font_debug = new Font("Lucida Console", 12,
-#if Editor2D || NetStandard2 || NetCore3
+#if Editor2D || NetStandard2 || NetCore
             FontStyle.Regular
 #elif EtoForms
             FontStyle.None
