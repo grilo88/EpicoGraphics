@@ -1,4 +1,6 @@
 ﻿using Epico;
+using Epico.Controles;
+using Epico.Controles;
 using Epico.Luzes;
 using Epico.Objetos2D.Avancados;
 using Epico.Objetos2D.Primitivos;
@@ -154,6 +156,8 @@ namespace Editor2D
                 txtVerticePosX.Text = string.Empty;
                 txtVerticePosY.Text = string.Empty;
                 txtVerticeRaio.Text = string.Empty;
+
+                propGrid.SelectedObject = null;
             }
             else
             {
@@ -168,6 +172,7 @@ namespace Editor2D
                     txtRaio.Text = selecionados.First().Raio.ToString();
                     txtEscalaX.Text = selecionados.First().Escala.X.ToString();
                     txtEscalaY.Text = selecionados.First().Escala.Y.ToString();
+                    propGrid.SelectedObject = selecionados.First();
                 }
                 else // Muitos objetos selecionados?
                 {
@@ -184,6 +189,8 @@ namespace Editor2D
                     txtVerticePosX.Text = string.Empty;
                     txtVerticePosY.Text = string.Empty;
                     txtVerticeRaio.Text = string.Empty;
+
+                    propGrid.SelectedObject = null;
                 }
             }
         }
@@ -231,13 +238,11 @@ namespace Editor2D
 
         private void BtnQuadrado_Click(object sender, EventArgs e)
         {
-            Quadrado obj = new Quadrado();
+            Quadrado obj = new Quadrado(_raio_padrao);
             obj.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            obj.GerarGeometria(45, _raio_padrao);
             _engine2D.AddObjeto(obj);
 
             AtualizarComboObjetos2D();
@@ -247,13 +252,11 @@ namespace Editor2D
 
         private void BtnCirculo_Click(object sender, EventArgs e)
         {
-            Circulo obj = new Circulo();
+            Circulo obj = new Circulo(_raio_padrao);
             obj.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            obj.GerarGeometria(0, _raio_padrao);
             _engine2D.AddObjeto(obj);
 
             AtualizarComboObjetos2D();
@@ -262,14 +265,12 @@ namespace Editor2D
 
         private void BtnTriangulo_Click(object sender, EventArgs e)
         {
-            Triangulo obj = new Triangulo();
+            Triangulo obj = new Triangulo(_raio_padrao);
             obj.Pos = PosAleatorio();
 
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            obj.GerarGeometria(0, _raio_padrao);
             _engine2D.AddObjeto(obj);
 
             AtualizarComboObjetos2D();
@@ -278,13 +279,11 @@ namespace Editor2D
 
         private void BtnPentagono_Click(object sender, EventArgs e)
         {
-            Pentagono obj = new Pentagono();
+            Pentagono obj = new Pentagono(_raio_padrao);
             obj.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            obj.GerarGeometria(0, _raio_padrao);
             _engine2D.AddObjeto(obj);
 
             AtualizarComboObjetos2D();
@@ -293,13 +292,11 @@ namespace Editor2D
 
         private void BtnHexagono_Click(object sender, EventArgs e)
         {
-            Hexagono hexagono = new Hexagono();
+            Hexagono hexagono = new Hexagono(_raio_padrao);
             hexagono.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             hexagono.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             hexagono.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            hexagono.GerarGeometria(0, _raio_padrao);
             _engine2D.AddObjeto(hexagono);
 
             AtualizarComboObjetos2D();
@@ -309,13 +306,13 @@ namespace Editor2D
 
         private void BtnLosango_Click(object sender, EventArgs e)
         {
-            Losango losango = new Losango();
+            Losango losango = new Losango(_raio_padrao);
             losango.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             losango.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             losango.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
 
-            losango.GerarGeometria(0, _raio_padrao);
+            
             _engine2D.AddObjeto(losango);
 
             AtualizarComboObjetos2D();
@@ -324,13 +321,11 @@ namespace Editor2D
 
         private void BtnTrianguloRetangulo_Click(object sender, EventArgs e)
         {
-            TrianguloRetangulo triangulo = new TrianguloRetangulo();
+            TrianguloRetangulo triangulo = new TrianguloRetangulo(_raio_padrao);
             triangulo.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             triangulo.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             triangulo.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            triangulo.GerarGeometria(45, _raio_padrao);
             _engine2D.AddObjeto(triangulo);
 
             AtualizarComboObjetos2D();
@@ -339,13 +334,11 @@ namespace Editor2D
 
         private void BtnRetangulo_Click(object sender, EventArgs e)
         {
-            Retangulo retangulo = new Retangulo();
+            Retangulo retangulo = new Retangulo(_raio_padrao);
             retangulo.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             retangulo.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             retangulo.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-
-            retangulo.GerarGeometria(45, _raio_padrao);
             _engine2D.AddObjeto(retangulo);
 
             AtualizarComboObjetos2D();
@@ -478,7 +471,7 @@ namespace Editor2D
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _sair = true;
+            
         }
 
         private void TmrObjeto2D_Tick(object sender, EventArgs e)
@@ -533,7 +526,7 @@ namespace Editor2D
                 _objs_sel.Add((Objeto2D)cboObjeto2D.SelectedValue);
                 _objs_sel.First().Selecionado = true;
                 AtualizarControlesObjeto2D(_objs_sel);
-
+                
                 //_vertices_sel.ForEach(x => x.sel = false);
                 //_vertices_sel.Clear();
 
@@ -646,12 +639,11 @@ namespace Editor2D
 
         private void BtnEstrela_Click(object sender, EventArgs e)
         {
-            Estrela estrela = new Estrela();
+            Estrela estrela = new Estrela(_raio_padrao);
             estrela.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             estrela.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             estrela.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            estrela.GerarGeometria(rnd.Next(0, 359), _raio_padrao, (int)(_raio_padrao * 1.5F), 10);
             _engine2D.AddObjeto(estrela);
 
             AtualizarComboObjetos2D();
@@ -662,12 +654,11 @@ namespace Editor2D
 
         private void BtnEstrelaQuaPon_Click(object sender, EventArgs e)
         {
-            Estrela estrela = new Estrela();
+            Estrela estrela = new Estrela(null, _raio_padrao, 8);
             estrela.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             estrela.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             estrela.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            estrela.GerarGeometria(rnd.Next(0, 359), _raio_padrao, (int)(_raio_padrao * 1.5F),8);
             _engine2D.AddObjeto(estrela);
 
             AtualizarComboObjetos2D();
@@ -676,12 +667,11 @@ namespace Editor2D
 
         private void BtnEstrelaSeisPontas_Click(object sender, EventArgs e)
         {
-            Estrela estrela = new Estrela();
+            Estrela estrela = new Estrela(null, _raio_padrao, 12);
             estrela.Pos = PosAleatorio();
             var rnd = new Random(Environment.TickCount);
             estrela.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             estrela.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            estrela.GerarGeometria(rnd.Next(0, 359), _raio_padrao, (int)(_raio_padrao * 1.5F),12);
             _engine2D.AddObjeto(estrela);
 
             AtualizarComboObjetos2D();
@@ -1137,6 +1127,43 @@ namespace Editor2D
                     _engine2D.Camera.Angulo = ang;
                 }
             }
+        }
+
+        private void BtnForm2D_Click(object sender, EventArgs e)
+        {
+            Form2D form = new Form2D();
+
+            form.Pos = new Vetor2D(200, 200);
+            _engine2D.AddObjeto(form);
+
+            AtualizarComboObjetos2D();
+            cboObjeto2D.SelectedValue = form;
+        }
+
+        private void FrmEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _sair = true;
+        }
+
+        private void BtnPanel_Click(object sender, EventArgs e)
+        {
+            Panel2D form = new Panel2D();
+            
+            form.Pos = new Vetor2D(200, 200);
+            _engine2D.AddObjeto(form);
+
+            AtualizarComboObjetos2D();
+            cboObjeto2D.SelectedValue = form;
+        }
+
+        private void test()
+        {
+            
+        }
+
+        private void SplitterProp_SplitterMoving(object sender, SplitterEventArgs e)
+        {
+            propGrid.Width += e.SplitX;
         }
     }
 }

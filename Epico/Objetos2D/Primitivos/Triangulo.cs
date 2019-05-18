@@ -5,14 +5,10 @@ namespace Epico.Objetos2D.Primitivos
 {
     public class Triangulo : Primitivo2D
     {
-        public Triangulo()
+        public Triangulo(float raio)
         {
             Nome = "Triângulo";
-        }
-
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 3);
+            GerarGeometriaRadial(10, raio, 3);
         }
     }
 }

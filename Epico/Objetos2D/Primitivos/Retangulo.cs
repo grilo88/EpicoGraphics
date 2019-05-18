@@ -6,17 +6,14 @@ namespace Epico.Objetos2D.Avancados
     public class Retangulo : Primitivo2D
     {
 
-        public Retangulo()
+        public Retangulo(float raio)
         {
             Nome = "Retângulo";
+            GerarGeometriaRadial(45, raio, 4);
+
         }
 
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 4);
-        }
-
-        protected override void GerarGeometriaRadial(int angulo, int raio, int lados)
+        protected override void GerarGeometriaRadial(float angulo, float raio, int lados)
         {
             float rad = (float)(Math.PI * 2 / lados);
             for (int i = 0; i < lados; i++)

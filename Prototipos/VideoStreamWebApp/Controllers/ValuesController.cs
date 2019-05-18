@@ -20,9 +20,9 @@ namespace VideoStreamWebApp.Controllers
         {
             Epico2D epico = new Epico2D();
             Estrela obj = new Estrela();
+            
             obj.Mat_render.CorBorda = new Epico.Sistema.RGBA(255, 0, 0, 0);
             obj.Mat_render.CorSolida = new Epico.Sistema.RGBA(255, 0, 150, 200);
-            obj.GerarGeometria(0, 0, 50, 10);
             epico.AddObjeto(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);

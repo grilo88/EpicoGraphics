@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controles\Form2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\GroupBox2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\MaskedEdit2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\Panel2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\ProgressBar2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\Textbox2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Epico2D.cs" />

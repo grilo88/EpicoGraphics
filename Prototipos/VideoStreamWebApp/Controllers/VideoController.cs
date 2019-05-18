@@ -33,7 +33,6 @@ namespace VideoStreamWebApp.Controllers
             Estrela obj = new Estrela();
             obj.Mat_render.CorBorda = new Epico.Sistema.RGBA(255, 0, 0, 0);
             obj.Mat_render.CorSolida = new Epico.Sistema.RGBA(255, 0, 150, 200);
-            obj.GerarGeometria(0, 0, 50, 10);
             epico.AddObjeto(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);
@@ -42,7 +41,7 @@ namespace VideoStreamWebApp.Controllers
         [HttpGet]
         public HttpResponseMessage GetVideoContent()
         {
-#error Obter o request do contexto atual.
+//#error Obter o request do contexto atual.
             HttpRequestMessage request = new HttpRequestMessage();
             HttpResponseMessage response = request.CreateResponse();
             response.Content = new PushStreamContent((Action<Stream, HttpContent, TransportContext>)IniciarFluxo);

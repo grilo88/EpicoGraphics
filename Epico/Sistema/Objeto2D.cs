@@ -76,13 +76,13 @@ namespace Epico.Sistema
             Transformação = new Transformacao(this);
         }
 
-        /// <summary>
-        /// Atualiza fatores importantes e otimiza os cálculos geométricos durante uma atualização geométrica.
-        /// </summary>
-        public void BeginAtualizarGeometria()
-        {
-            _otimizaAtualizaGeometria = true;
-        }
+        ///// <summary>
+        ///// Atualiza fatores importantes e otimiza os cálculos geométricos durante uma atualização geométrica.
+        ///// </summary>
+        //public void BeginAtualizarGeometria()
+        //{
+        //    _otimizaAtualizaGeometria = true;
+        //}
 
         public void EndAtualizarGeometria()
         {
@@ -104,24 +104,24 @@ namespace Epico.Sistema
         /// <param name="v"></param>
         public void AdicionarVertice(Vertice2D v)
         {
-            if (_otimizaAtualizaGeometria)
-            {
-                if (Vertices.Length == _quantVertices)
-                {
-                    Array.Resize(ref Vertices, Vertices.Length + 10); // Otimiza o redimensionamento
-                }
+            //if (_otimizaAtualizaGeometria)
+            //{
+            //    if (Vertices.Length == _quantVertices)
+            //    {
+            //        Array.Resize(ref Vertices, Vertices.Length + 10); // Otimiza o redimensionamento
+            //    }
 
-                Vertices[Vertices.Length - 1] = v;
-            }
-            else
-            {
+            //    Vertices[Vertices.Length - 1] = v;
+            //}
+            //else
+            //{
                 Array.Resize(ref Vertices, Vertices.Length + 1);
                 Vertices[Vertices.Length - 1] = v;
                 _quantVertices = Vertices.Length;
                 AtualizarXYMinMax();
-            }
+            //}
 
-            _quantVertices = Vertices.Length;
+            //_quantVertices = Vertices.Length;
         }
 
         public virtual void Animar(string nome)

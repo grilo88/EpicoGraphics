@@ -94,6 +94,8 @@
             this.btnDeformado = new System.Windows.Forms.Button();
             this.tabDesenho = new System.Windows.Forms.TabPage();
             this.tabControles = new System.Windows.Forms.TabPage();
+            this.btnPanel = new System.Windows.Forms.Button();
+            this.btnForm2D = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.tabLuzes = new System.Windows.Forms.TabPage();
@@ -124,6 +126,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtCamPosY = new System.Windows.Forms.NumericUpDown();
             this.pnScreen = new System.Windows.Forms.Panel();
+            this.propGrid = new System.Windows.Forms.PropertyGrid();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripSelecao = new System.Windows.Forms.ToolStripButton();
             this.toolStripOrigem = new System.Windows.Forms.ToolStripButton();
@@ -144,6 +147,7 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripDesfazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripRefazer = new System.Windows.Forms.ToolStripDropDownButton();
+            this.splitterProp = new System.Windows.Forms.Splitter();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -231,7 +235,7 @@
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picScreen.Location = new System.Drawing.Point(0, 25);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(572, 591);
+            this.picScreen.Size = new System.Drawing.Size(344, 591);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
@@ -851,6 +855,8 @@
             // 
             // tabControles
             // 
+            this.tabControles.Controls.Add(this.btnPanel);
+            this.tabControles.Controls.Add(this.btnForm2D);
             this.tabControles.Controls.Add(this.button3);
             this.tabControles.Controls.Add(this.button2);
             this.tabControles.Location = new System.Drawing.Point(4, 22);
@@ -861,9 +867,29 @@
             this.tabControles.Text = "Controles";
             this.tabControles.UseVisualStyleBackColor = true;
             // 
+            // btnPanel
+            // 
+            this.btnPanel.Location = new System.Drawing.Point(87, 6);
+            this.btnPanel.Name = "btnPanel";
+            this.btnPanel.Size = new System.Drawing.Size(75, 23);
+            this.btnPanel.TabIndex = 3;
+            this.btnPanel.Text = "Panel";
+            this.btnPanel.UseVisualStyleBackColor = true;
+            this.btnPanel.Click += new System.EventHandler(this.BtnPanel_Click);
+            // 
+            // btnForm2D
+            // 
+            this.btnForm2D.Location = new System.Drawing.Point(6, 6);
+            this.btnForm2D.Name = "btnForm2D";
+            this.btnForm2D.Size = new System.Drawing.Size(75, 23);
+            this.btnForm2D.TabIndex = 2;
+            this.btnForm2D.Text = "Form";
+            this.btnForm2D.UseVisualStyleBackColor = true;
+            this.btnForm2D.Click += new System.EventHandler(this.BtnForm2D_Click);
+            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(6, 6);
+            this.button3.Location = new System.Drawing.Point(6, 54);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 1;
@@ -872,7 +898,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(6, 29);
+            this.button2.Location = new System.Drawing.Point(6, 77);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -1157,13 +1183,23 @@
             // 
             // pnScreen
             // 
+            this.pnScreen.Controls.Add(this.splitterProp);
             this.pnScreen.Controls.Add(this.picScreen);
+            this.pnScreen.Controls.Add(this.propGrid);
             this.pnScreen.Controls.Add(this.toolStrip1);
             this.pnScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnScreen.Location = new System.Drawing.Point(303, 3);
             this.pnScreen.Name = "pnScreen";
             this.pnScreen.Size = new System.Drawing.Size(572, 616);
             this.pnScreen.TabIndex = 1;
+            // 
+            // propGrid
+            // 
+            this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
+            this.propGrid.Location = new System.Drawing.Point(344, 25);
+            this.propGrid.Name = "propGrid";
+            this.propGrid.Size = new System.Drawing.Size(228, 591);
+            this.propGrid.TabIndex = 4;
             // 
             // toolStrip1
             // 
@@ -1365,6 +1401,16 @@
             this.toolStripRefazer.Size = new System.Drawing.Size(29, 22);
             this.toolStripRefazer.Text = "toolStripRefazer";
             // 
+            // splitterProp
+            // 
+            this.splitterProp.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitterProp.Location = new System.Drawing.Point(341, 25);
+            this.splitterProp.Name = "splitterProp";
+            this.splitterProp.Size = new System.Drawing.Size(3, 591);
+            this.splitterProp.TabIndex = 5;
+            this.splitterProp.TabStop = false;
+            this.splitterProp.SplitterMoving += new System.Windows.Forms.SplitterEventHandler(this.SplitterProp_SplitterMoving);
+            // 
             // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1377,6 +1423,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmEditor";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEditor_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -1549,6 +1596,10 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDesfazer;
         private System.Windows.Forms.ToolStripDropDownButton toolStripRefazer;
+        private System.Windows.Forms.Button btnPanel;
+        private System.Windows.Forms.Button btnForm2D;
+        private System.Windows.Forms.PropertyGrid propGrid;
+        private System.Windows.Forms.Splitter splitterProp;
     }
 }
 

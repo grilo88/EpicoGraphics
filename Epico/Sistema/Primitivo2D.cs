@@ -9,7 +9,7 @@ namespace Epico.Sistema
 {
     public class Primitivo2D : Objeto2DRenderizar
     {
-        protected virtual void GerarGeometriaRadial(int angulo, int raio, int lados)
+        protected virtual void GerarGeometriaRadial(float angulo, float raio, int lados)
         {
             float rad = (float)(Math.PI * 2 / lados);
             for (int i = 0; i < lados; i++)

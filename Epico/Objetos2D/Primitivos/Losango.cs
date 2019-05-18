@@ -5,14 +5,10 @@ namespace Epico.Objetos2D.Primitivos
 {
     public sealed class Losango : Primitivo2D
     {
-        public Losango()
+        public Losango(float raio)
         {
             Nome = "Losango";
-        }
-
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 4);
+            GerarGeometriaRadial(0, raio, 4);
         }
     }
 }

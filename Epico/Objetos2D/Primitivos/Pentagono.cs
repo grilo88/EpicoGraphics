@@ -5,14 +5,10 @@ namespace Epico.Objetos2D.Primitivos
 {
     public class Pentagono : Primitivo2D
     {
-        public Pentagono()
+        public Pentagono(float raio)
         {
             Nome = "Pentágono";
-        }
-
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 5);
+            GerarGeometriaRadial(0, raio, 5);
         }
     }
 }

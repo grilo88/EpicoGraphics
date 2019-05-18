@@ -5,14 +5,10 @@ namespace Epico.Objetos2D.Primitivos
 {
     public sealed class Hexagono : Primitivo2D
     {
-        public Hexagono()
+        public Hexagono(float raio)
         {
             Nome = "Hexágono";
-        }
-
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 6);
+            GerarGeometriaRadial(0, raio, 6);
         }
     }
 }

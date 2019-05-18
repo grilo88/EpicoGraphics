@@ -12,7 +12,7 @@ namespace Epico.Objetos2D.Avancados
 
         public void GerarGeometria(int angulo, int raio_min, int raio_max)
         {
-            GerarGeometriaRadialVariante(angulo, raio_min, raio_max, 4);
+            GerarGeometriaRadial(angulo, raio_min, raio_max, 4);
         }
     }
 }

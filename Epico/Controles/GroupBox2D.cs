@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Epico.Controles2D
+namespace Epico.Controles
 {
     public class GroupBox2D : Controle2D
     {

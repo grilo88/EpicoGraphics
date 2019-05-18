@@ -5,14 +5,10 @@ namespace Epico.Objetos2D.Primitivos
 {
     public class Quadrado : Primitivo2D
     {
-        public Quadrado()
+        public Quadrado(float raio)
         {
             Nome = "Quadrado";
-        }
-
-        public void GerarGeometria(int angulo, int raio)
-        {
-            GerarGeometriaRadial(angulo, raio, 4);
+            GerarGeometriaRadial(45, raio, 4);
         }
     }
 }
