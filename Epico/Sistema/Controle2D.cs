@@ -16,7 +16,7 @@ namespace Epico.Sistema
 
         public float X { get => _x; set
             {
-                if (value != _x)
+                if (value != _x) // Alterou?
                 {
                     _x = value; OnPropertyChanged();
                 }
@@ -24,7 +24,7 @@ namespace Epico.Sistema
         }
         public float Y { get => _y; set
             {
-                if (value != _y)
+                if (value != _y) // Alterou?
                 {
                     _y = value; OnPropertyChanged();
                 }
@@ -32,10 +32,10 @@ namespace Epico.Sistema
         }
 
         public Location() { }
-        public Location(float X, float Y)
+        public Location(float x, float y)
         {
-            _x = X;
-            _y = Y;
+            _x = x;
+            _y = y;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -53,7 +53,7 @@ namespace Epico.Sistema
 
         public float Width { get => _width; set
             {
-                if (value != _width)
+                if (value != _width) // Alterou?
                 {
                     _width = value; OnPropertyChanged();
                 }
@@ -61,7 +61,7 @@ namespace Epico.Sistema
         }
         public float Height { get => _heigth; set
             {
-                if (value != _heigth)
+                if (value != _heigth) // Alterou?
                 {
                     _heigth = value; OnPropertyChanged();
                 }
@@ -69,10 +69,10 @@ namespace Epico.Sistema
         }
 
         public Size() { }
-        public Size(float Width, float Height)
+        public Size(float width, float height)
         {
-            _width = Width;
-            _heigth = Height;
+            _width = width;
+            _heigth = height;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -90,13 +90,14 @@ namespace Epico.Sistema
 
     public class Controle2D : Objeto2DRenderizar
     {
-        private Vertice2D _vTopLeft;
-        private Vertice2D _vTopRigth;
-        private Vertice2D _vBottomRight;
-        private Vertice2D _vBottomLeft;
+        private Vertice2D _vTopLeft;            // Superior Esquerdo
+        private Vertice2D _vTopRigth;           // Superior Direito
+        private Vertice2D _vBottomRight;        // Inferior Direito
+        private Vertice2D _vBottomLeft;         // Inferior Esquerdo
 
         private Location _location;
-        public Size _size;
+        private Size _size;
+        private Controle2D _parent;
 
         [Category("Layout")]
         [Description("As coordenadas do canto superior esquerdo do controle em relação ao canto superior esquerdo do seu recipiente.")]
@@ -106,7 +107,6 @@ namespace Epico.Sistema
             get => _location; set
             {
                 _location = value;
-                Location.PropertyChanged += Location_PropertyChanged;
                 AtualizarLayout();
             }
         }
@@ -119,8 +119,6 @@ namespace Epico.Sistema
             get => _size; set
             {
                 _size = value;
-#error assinatura nao funciona
-                Size.PropertyChanged += Size_PropertyChanged;
                 AtualizarLayout();
             }
         }
@@ -148,9 +146,21 @@ namespace Epico.Sistema
         [Category("Layout")]
         public float Height { get => Size.Height; set => Size.Height = value; }
 
-        public Controle2D Parent { get; set; }
-        public ColecaoControles Controls { get; set; }
+        public Controle2D Parent { get => _parent; set {
+                _parent = value;
 
+                // Adiciona este controle filho na lista de controles do parent (Controle Pai)
+                if (!_parent.Controls.Contains(this)) _parent.Controls.Add(this);
+            }
+        }
+
+        [Browsable(false)]
+        public ColecaoControles Controls { get; private set; } = new ColecaoControles();
+
+        [Category("Layout")]
+        [Description("Controles filhos deste controle.")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public List<Controle2D> Controles { get => Controls.Cast<Controle2D>().ToList(); }
         public Controle2D()
         {
             Size = new Size();
@@ -193,12 +203,17 @@ namespace Epico.Sistema
             Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
 
             Mat_render.LarguraBorda = 1;
+
+            AtualizarLayout();
         }
 
         private void AtualizarLayout()
         {
             if (_location != null && _size != null)
             {
+                Pos.X = _location.X;
+                Pos.Y = _location.Y;
+
                 if (_vTopLeft != null)
                 {
                     _vTopLeft.X = _location.X;
@@ -219,9 +234,6 @@ namespace Epico.Sistema
                     _vBottomLeft.X = _location.X;
                     _vBottomLeft.Y = _location.Y + _size.Height;
                 }
-
-                Pos.X = _location.X;
-                Pos.Y = _location.Y;
             }
         }
 

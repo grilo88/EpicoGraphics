@@ -855,23 +855,22 @@ namespace Editor2D
             {
                 if (toolStripSelecao.Checked) // Ferramenta Seleção de Objetos
                 {
-                    if (selRect.Width == 0 && selRect.Height == 0)
+                    if (selRect.Width == 0 && selRect.Height == 0) // Não formou retângulo multi-seleção?
                     {
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
                         _obj_sel.ForEach(x => x.Selecionado = false);
-                        _obj_sel = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, selStart).ToList();
+                        Objeto2D objSel = Util.ObterUnicoObjeto2DPelaTela(_engine2D, _engine2D.Camera, new XY(selStart.X, selStart.Y));
+                        _obj_sel = new List<Objeto2D>();
+                        if (objSel != null) _obj_sel.Add(objSel);
                     }
 
-                    if (_obj_sel.Count() == 0)
+                    if (_obj_sel.Count() == 0) // Nenhum objeto selecionado?
                     {
-                        // Nenhum objeto selecionado
                         cboObjeto2D.SelectedIndex = -1;
-                        
                     }
-                    else if (_obj_sel.Count == 1)
+                    else if (_obj_sel.Count == 1) // Um objeto selecionado?
                     {
-                        // Único objeto selecionado
                         cboObjeto2D.SelectedValue = _obj_sel.First();
                         _obj_sel.First().Selecionado = true;
                     }

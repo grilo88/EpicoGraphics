@@ -13,8 +13,10 @@ namespace Epico.Sistema
     public abstract class Objeto2D : ICloneable
     {
         #region Propriedades
+        [Category("Design")]
         /// <summary>Id do objeto</summary>
         public int Id { get; set; }
+        [Category("Design")]
         /// <summary>Nome do objeto</summary>
         public string Nome { get; set; }
 
@@ -57,9 +59,11 @@ namespace Epico.Sistema
         [Category("Padrão")]
         public RGBA Cor { get; set; }
 
+        [Category("Design")]
         /// <summary>Define se o objeto está selecionado em modo Editor</summary>
         public bool Selecionado { get; set; }
 
+        
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public Transformacao Transformação { get; set; }
         #endregion

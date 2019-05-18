@@ -139,14 +139,16 @@ namespace Epico.Sistema
         /// <param name="obj"></param>
         public void Focar(Objeto2D obj)
         {
-            Pos.X = obj.Pos.X;
-            Pos.Y = obj.Pos.Y;
-        }
-
-        public void Focar(Controle2D ctrl)
-        {
-            Pos.X = ctrl.Pos.X + ctrl.Width / 2;
-            Pos.Y = ctrl.Pos.Y + ctrl.Height / 2;
+            if (obj is Controle2D)
+            {
+                Pos.X = obj.Pos.X + ((Controle2D)obj).Width / 2;
+                Pos.Y = obj.Pos.Y + ((Controle2D)obj).Height / 2;
+            }
+            else
+            {
+                Pos.X = obj.Pos.X;
+                Pos.Y = obj.Pos.Y;
+            }
         }
 
         public void Focar(EixoXY xy)

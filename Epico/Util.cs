@@ -138,6 +138,11 @@ namespace Epico
             }
         }
 
+        public static Objeto2D ObterUnicoObjeto2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
+        {
+            return ObterObjetos2DPelaTela(engine, camera, ponto).LastOrDefault();
+        }
+
         /// <summary>
         /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
         /// </summary>
