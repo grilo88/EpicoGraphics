@@ -14,7 +14,7 @@ namespace Epico.Controles
         public Form2D()
         {
             Nome = _nomePadrao;
-            GerarControle(new Location(0, 0), new Size(100, 100));
+            GerarControle(new Location(0, 0), new Size(640, 480));
         }
     }
 }

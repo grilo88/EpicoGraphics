@@ -104,8 +104,13 @@ namespace Epico.Sistema
             AdicionarVertice(_vBottomRight);
             AdicionarVertice(_vBottomLeft);
 
+            Origem[0].X = (_location.X + _size.Width) / 2;
+            Origem[0].Y = (_location.Y + _size.Height) / 2;
+
             Mat_render.CorSolida = new RGBA(200, 150, 80, 230);
             Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
+
+            Mat_render.LarguraBorda = 1;
         }
 
         private void AtualizarLayout()

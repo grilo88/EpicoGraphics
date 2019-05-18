@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,17 +16,19 @@ namespace Epico.Sistema
         /// Objeto 2D da qual esta posição2D está associada
         /// </summary>
         protected Objeto2D obj;
-        
+
         /// <summary>Posição local na coordenada x</summary>
         public float X { get; set; }
+
         /// <summary>Posição local na coordenada y</summary>
         public float Y { get; set; }
 
         /// <summary>Seleção</summary>
-        public bool Sel { get; set; }   
+        public bool Sel { get; set; }
 
         /// <summary>Posição global na coordenada X</summary>
         public float GlobalX => obj.Pos.X + X;
+
         /// <summary>Posição global na coordenada Y</summary>
         public float GlobalY => obj.Pos.Y + Y;
     }

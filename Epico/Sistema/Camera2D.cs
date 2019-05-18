@@ -23,7 +23,7 @@ namespace Epico.Sistema
         Bitmap render;
         Graphics g;
 
-#region Campos
+        #region Campos
         public int ResWidth;
         public int ResHeigth;
 #if Editor2D || NetStandard2 || NetCore
@@ -37,9 +37,9 @@ namespace Epico.Sistema
 #endif
         private int _fps;
         private int _tickFPS;
-#endregion
+        #endregion
 
-#region Propriedades
+        #region Propriedades
         public int FPS { get; private set; }
         private int _maxFPS { get; set; } = 60;
         private float _tickMaxFPS { get; set; }
@@ -54,7 +54,7 @@ namespace Epico.Sistema
         public float Right => Pos.X + ResWidth / 2;
         public float Top => Pos.Y - ResHeigth / 2;
         public float Bottom => Pos.Y + ResHeigth / 2;
-#endregion
+        #endregion
 
         public Camera2D(Epico2D engine, int width, int height)
         {
@@ -137,7 +137,12 @@ namespace Epico.Sistema
         /// Centraliza a camera no objeto
         /// </summary>
         /// <param name="obj"></param>
-        public void Focar(Objeto2D obj) => Pos = obj.Pos;
+        public void Focar(Objeto2D obj)
+        {
+            Pos.X = obj.Pos.X;
+            Pos.Y = obj.Pos.Y;
+        }
+
         public void Focar(Origem2D c) => Pos = new Vetor2D(c.GlobalX, c.GlobalY);
         public void Focar(Vertice2D v) => Pos = new Vetor2D(v.GlobalX, v.GlobalY);
 

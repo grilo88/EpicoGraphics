@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,35 +17,51 @@ namespace Epico.Sistema
         public int Id { get; set; }
         /// <summary>Nome do objeto</summary>
         public string Nome { get; set; }
-        
+
+        [Category("Geometria")]
         /// <summary>Distância do centro ao ponto máximo da circunferência.</summary>
         public float Raio { get; set; }
+        [Category("Geometria")]
         /// <summary>Ângulo Z do objeto</summary>
         public virtual float Angulo { get; set; }
+        [Category("Geometria")]
         /// <summary>Ângulo X do objeto</summary>
         public float AnguloX { get; set; }
+        [Category("Geometria")]
         /// <summary>Ângulo Y do objeto</summary>
         public float AnguloY { get; set; }
+        [Category("Extremidade")]
         /// <summary>Ponto X máximo do objeto</summary>
         public float XMax { get; set; }
+        [Category("Extremidade")]
         /// <summary>Ponto X mínimo do objeto</summary>
         public float XMin { get; set; }
+        [Category("Extremidade")]
         /// <summary>Ponto Y máximo do objeto</summary>
         public float YMax { get; set; }
+        [Category("Extremidade")]
         /// <summary>Ponto Y mínimo do objeto</summary>
         public float YMin { get; set; }
 
+        [Category("Extremidade")]
         public float GlobalXMax => Pos.X + XMax;
+        [Category("Extremidade")]
         public float GlobalXMin => Pos.X + XMin;
+        [Category("Extremidade")]
         public float GlobalYMax => Pos.Y + YMax;
+        [Category("Extremidade")]
         public float GlobalYMin => Pos.Y + YMin;
 
         /// <summary>Cor de representação abstrata do objeto</summary>
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Padrão")]
         public RGBA Cor { get; set; }
 
         /// <summary>Define se o objeto está selecionado em modo Editor</summary>
         public bool Selecionado { get; set; }
-        public Transformacao Transformação { get; private set; }
+
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public Transformacao Transformação { get; set; }
         #endregion
 
         #region Campos
@@ -62,8 +79,10 @@ namespace Epico.Sistema
         public List<Origem2D> Origem { get; set; } = new List<Origem2D>();
         /// <summary>Vértices do objeto</summary>
         public Vertice2D[] Vertices = new Vertice2D[0];
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Animações do objeto</summary>
         public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Pivôs do objeto</summary>
         public List<Pivo2D> Pivos { get; set; } = new List<Pivo2D>();
         #endregion

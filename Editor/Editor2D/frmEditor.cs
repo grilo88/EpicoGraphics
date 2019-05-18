@@ -75,7 +75,7 @@ namespace Editor2D
                 txtOrigemPosX, txtOrigemPosY,
                 txtVerticePosX, txtVerticePosY, txtVerticeRaio, txtVerticeAngulo);
 
-            BtnCirculo_Click(sender, e);
+            BtnForm2D_Click(sender, e);
             AtualizarControlesObjeto2D(_objs_sel);
             AtualizarComboObjetos2D();
 
@@ -350,6 +350,7 @@ namespace Editor2D
             if (_objs_sel.Count == 1 && cboObjeto2D.Focused)
             {
                 _objs_sel.First().Nome = cboObjeto2D.Text;
+                propGrid.Refresh();
             }
         }
 
@@ -360,6 +361,7 @@ namespace Editor2D
                 if (float.TryParse(txtAngulo.Text, out float angulo))
                 {
                     _objs_sel.First().DefinirAngulo(angulo);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -371,6 +373,7 @@ namespace Editor2D
                 if (float.TryParse(txtRaio.Text, out float raio))
                 {
                     _objs_sel.First().DefinirRaio(raio);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -382,6 +385,7 @@ namespace Editor2D
                 if (float.TryParse(txtPosY.Text, out float posY))
                 {
                     _objs_sel.First().PosicionarY(posY);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -393,6 +397,7 @@ namespace Editor2D
                 if (float.TryParse(txtPosX.Text, out float posX))
                 {
                     _objs_sel.First().PosicionarX(posX);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -428,6 +433,7 @@ namespace Editor2D
                 if (float.TryParse(txtCamPosX.Text, out float camPosX))
                 {
                     _engine2D.Camera.Pos.X = camPosX;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -439,6 +445,7 @@ namespace Editor2D
                 if (float.TryParse(txtCamPosY.Text, out float camPosY))
                 {
                     _engine2D.Camera.Pos.Y = camPosY;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -455,6 +462,7 @@ namespace Editor2D
                 if (float.TryParse(txtEscalaY.Text, out float escalaY))
                 {
                     _objs_sel.First().DefinirEscalaY(escalaY);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -465,6 +473,7 @@ namespace Editor2D
                 if (float.TryParse(txtEscalaX.Text, out float escalaX))
                 {
                     _objs_sel.First().DefinirEscalaX(escalaX);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -759,6 +768,7 @@ namespace Editor2D
                 if (float.TryParse(txtCamZoom.Text, out float camZoom))
                 {
                     _engine2D.Camera.DefinirZoom(camZoom);
+                    propGrid.Refresh();
                 }
             }
         }
@@ -819,14 +829,15 @@ namespace Editor2D
             }
         }
 
-        private void AtualizarControlesVertice(List<Vertice2D> vertices)
+        private void AtualizarControlesVertice(List<Vertice2D> selecionados)
         {
-            if (vertices.Count == 1)
+            if (selecionados.Count == 1)
             {
-                txtVerticePosX.Text = vertices.First().X.ToString();
-                txtVerticePosY.Text = vertices.First().Y.ToString();
-                txtVerticeAngulo.Text = vertices.First().Ang.ToString();
-                txtVerticeRaio.Text = vertices.First().Raio.ToString();
+                txtVerticePosX.Text = selecionados.First().X.ToString();
+                txtVerticePosY.Text = selecionados.First().Y.ToString();
+                txtVerticeAngulo.Text = selecionados.First().Ang.ToString();
+                txtVerticeRaio.Text = selecionados.First().Raio.ToString();
+                propGrid.SelectedObject = selecionados.First();
             }
             else
             {
@@ -834,6 +845,7 @@ namespace Editor2D
                 txtVerticePosY.Text = string.Empty;
                 txtVerticeAngulo.Text = string.Empty;
                 txtVerticeRaio.Text = string.Empty;
+                propGrid.SelectedObject = null;
             }
         }
 
@@ -1036,6 +1048,7 @@ namespace Editor2D
             {
                 txtOrigemPosX.Text = string.Empty;
                 txtOrigemPosY.Text = string.Empty;
+                propGrid.SelectedObject = null;
             }
             else
             {
@@ -1043,11 +1056,13 @@ namespace Editor2D
                 {
                     txtOrigemPosX.Text = selecionados.First().X.ToString();
                     txtOrigemPosY.Text = selecionados.First().Y.ToString();
+                    propGrid.SelectedObject = selecionados.First();
                 }
                 else // Muitos objetos selecionados?
                 {
                     txtOrigemPosX.Text = string.Empty;
                     txtOrigemPosY.Text = string.Empty;
+                    propGrid.SelectedObject = null;
                 }
             }
         }
@@ -1059,6 +1074,7 @@ namespace Editor2D
                 if (float.TryParse(txtOrigemPosX.Text, out float posX))
                 {
                     _origens_sel.First().X = posX;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -1070,6 +1086,7 @@ namespace Editor2D
                 if (float.TryParse(txtOrigemPosY.Text, out float posY))
                 {
                     _origens_sel.First().Y = posY;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -1091,6 +1108,7 @@ namespace Editor2D
                     // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
                     // nas novas coordenadas de PosX e PosY
                     _vertices_sel.First().X = posX;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -1104,6 +1122,7 @@ namespace Editor2D
                     // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
                     // nas novas coordenadas de PosX e PosY
                     _vertices_sel.First().Y = posY;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -1125,6 +1144,7 @@ namespace Editor2D
                 if (float.TryParse(txtCamAngulo.Text, out float ang))
                 {
                     _engine2D.Camera.Angulo = ang;
+                    propGrid.Refresh();
                 }
             }
         }
@@ -1135,6 +1155,7 @@ namespace Editor2D
 
             form.Pos = new Vetor2D(200, 200);
             _engine2D.AddObjeto(form);
+            _engine2D.Camera.Focar(form);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = form;
@@ -1147,7 +1168,13 @@ namespace Editor2D
 
         private void BtnPanel_Click(object sender, EventArgs e)
         {
-            Panel2D form = new Panel2D();
+            if (!(cboObjeto2D.SelectedValue is Controle2D))
+            {
+                MessageBox.Show(this, "Primeiro selecione um controle 2d antes de adicionar este controle.", "Controle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Panel2D form = new Panel2D((Controle2D)cboObjeto2D.SelectedValue);
             
             form.Pos = new Vetor2D(200, 200);
             _engine2D.AddObjeto(form);
@@ -1161,9 +1188,45 @@ namespace Editor2D
             
         }
 
-        private void SplitterProp_SplitterMoving(object sender, SplitterEventArgs e)
+        private void GroupCamera_Enter(object sender, EventArgs e)
         {
-            propGrid.Width += e.SplitX;
+            propGrid.SelectedObject = cboCamera.SelectedValue;
+            propGrid.Refresh();
+        }
+
+        private void TabObjeto_Enter(object sender, EventArgs e)
+        {
+            propGrid.SelectedObject = cboObjeto2D.SelectedValue;
+            propGrid.Refresh();
+        }
+
+        private void TabOrigem_Enter(object sender, EventArgs e)
+        {
+            propGrid.SelectedObject = cboOrigem.SelectedValue;
+            propGrid.Refresh();
+        }
+
+        private void TabVertice_Enter(object sender, EventArgs e)
+        {
+            propGrid.SelectedObject = cboVertices.SelectedValue;
+            propGrid.Refresh();
+        }
+
+        private void TabVetor_Enter(object sender, EventArgs e)
+        {
+            // TODO: Implementar cboVetor
+            propGrid.SelectedObject = null;
+            propGrid.Refresh();
+        }
+
+        private void PropGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            
+        }
+
+        private void PropGrid_SelectedObjectsChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

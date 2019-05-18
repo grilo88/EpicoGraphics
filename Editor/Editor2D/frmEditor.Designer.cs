@@ -113,7 +113,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupCamera = new System.Windows.Forms.GroupBox();
             this.btnNovaCamera = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.cboCamera = new System.Windows.Forms.ComboBox();
@@ -126,6 +126,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtCamPosY = new System.Windows.Forms.NumericUpDown();
             this.pnScreen = new System.Windows.Forms.Panel();
+            this.splitterProp = new System.Windows.Forms.Splitter();
             this.propGrid = new System.Windows.Forms.PropertyGrid();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripSelecao = new System.Windows.Forms.ToolStripButton();
@@ -147,7 +148,6 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripDesfazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripRefazer = new System.Windows.Forms.ToolStripDropDownButton();
-            this.splitterProp = new System.Windows.Forms.Splitter();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -177,7 +177,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackLinhaDoTempoAnimacao)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.groupCamera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamAngulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).BeginInit();
@@ -283,7 +283,7 @@
             this.panel1.Controls.Add(this.groupBox5);
             this.panel1.Controls.Add(this.groupBox4);
             this.panel1.Controls.Add(this.groupBox3);
-            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Controls.Add(this.groupCamera);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
@@ -329,6 +329,7 @@
             this.tabObjeto.TabIndex = 0;
             this.tabObjeto.Text = "Objeto";
             this.tabObjeto.UseVisualStyleBackColor = true;
+            this.tabObjeto.Enter += new System.EventHandler(this.TabObjeto_Enter);
             // 
             // lblNome
             // 
@@ -487,6 +488,7 @@
             this.tabOrigem.TabIndex = 3;
             this.tabOrigem.Text = "Origem";
             this.tabOrigem.UseVisualStyleBackColor = true;
+            this.tabOrigem.Enter += new System.EventHandler(this.TabOrigem_Enter);
             // 
             // label22
             // 
@@ -559,6 +561,7 @@
             this.tabVetor.TabIndex = 1;
             this.tabVetor.Text = "Vetor";
             this.tabVetor.UseVisualStyleBackColor = true;
+            this.tabVetor.Enter += new System.EventHandler(this.TabVetor_Enter);
             // 
             // tabVertice
             // 
@@ -579,6 +582,7 @@
             this.tabVertice.TabIndex = 2;
             this.tabVertice.Text = "Vértice";
             this.tabVertice.UseVisualStyleBackColor = true;
+            this.tabVertice.Enter += new System.EventHandler(this.TabVertice_Enter);
             // 
             // button4
             // 
@@ -1049,25 +1053,26 @@
             this.numericUpDown1.Size = new System.Drawing.Size(59, 20);
             this.numericUpDown1.TabIndex = 21;
             // 
-            // groupBox1
+            // groupCamera
             // 
-            this.groupBox1.Controls.Add(this.btnNovaCamera);
-            this.groupBox1.Controls.Add(this.label16);
-            this.groupBox1.Controls.Add(this.cboCamera);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.txtCamAngulo);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.txtCamZoom);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.txtCamPosX);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.txtCamPosY);
-            this.groupBox1.Location = new System.Drawing.Point(9, 190);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(256, 121);
-            this.groupBox1.TabIndex = 27;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Câmera:";
+            this.groupCamera.Controls.Add(this.btnNovaCamera);
+            this.groupCamera.Controls.Add(this.label16);
+            this.groupCamera.Controls.Add(this.cboCamera);
+            this.groupCamera.Controls.Add(this.label9);
+            this.groupCamera.Controls.Add(this.txtCamAngulo);
+            this.groupCamera.Controls.Add(this.label8);
+            this.groupCamera.Controls.Add(this.txtCamZoom);
+            this.groupCamera.Controls.Add(this.label7);
+            this.groupCamera.Controls.Add(this.txtCamPosX);
+            this.groupCamera.Controls.Add(this.label6);
+            this.groupCamera.Controls.Add(this.txtCamPosY);
+            this.groupCamera.Location = new System.Drawing.Point(9, 190);
+            this.groupCamera.Name = "groupCamera";
+            this.groupCamera.Size = new System.Drawing.Size(256, 121);
+            this.groupCamera.TabIndex = 27;
+            this.groupCamera.TabStop = false;
+            this.groupCamera.Text = "Câmera:";
+            this.groupCamera.Enter += new System.EventHandler(this.GroupCamera_Enter);
             // 
             // btnNovaCamera
             // 
@@ -1193,6 +1198,15 @@
             this.pnScreen.Size = new System.Drawing.Size(572, 616);
             this.pnScreen.TabIndex = 1;
             // 
+            // splitterProp
+            // 
+            this.splitterProp.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitterProp.Location = new System.Drawing.Point(341, 25);
+            this.splitterProp.Name = "splitterProp";
+            this.splitterProp.Size = new System.Drawing.Size(3, 591);
+            this.splitterProp.TabIndex = 5;
+            this.splitterProp.TabStop = false;
+            // 
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
@@ -1200,6 +1214,8 @@
             this.propGrid.Name = "propGrid";
             this.propGrid.Size = new System.Drawing.Size(228, 591);
             this.propGrid.TabIndex = 4;
+            this.propGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropGrid_PropertyValueChanged);
+            this.propGrid.SelectedObjectsChanged += new System.EventHandler(this.PropGrid_SelectedObjectsChanged);
             // 
             // toolStrip1
             // 
@@ -1401,16 +1417,6 @@
             this.toolStripRefazer.Size = new System.Drawing.Size(29, 22);
             this.toolStripRefazer.Text = "toolStripRefazer";
             // 
-            // splitterProp
-            // 
-            this.splitterProp.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitterProp.Location = new System.Drawing.Point(341, 25);
-            this.splitterProp.Name = "splitterProp";
-            this.splitterProp.Size = new System.Drawing.Size(3, 591);
-            this.splitterProp.TabIndex = 5;
-            this.splitterProp.TabStop = false;
-            this.splitterProp.SplitterMoving += new System.Windows.Forms.SplitterEventHandler(this.SplitterProp_SplitterMoving);
-            // 
             // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1462,8 +1468,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupCamera.ResumeLayout(false);
+            this.groupCamera.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamAngulo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).EndInit();
@@ -1500,7 +1506,7 @@
         private System.Windows.Forms.NumericUpDown txtPosX;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupCamera;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown txtCamPosX;
         private System.Windows.Forms.Label label6;
