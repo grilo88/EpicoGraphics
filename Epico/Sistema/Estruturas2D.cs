@@ -84,6 +84,8 @@ namespace Epico.Sistema
 
     public sealed class Vertice2D : EixoXY
     {
+        public string Nome { get; set; }
+
         /// <summary>Radiano</summary>
         public float Rad { get; set; }
         /// <summary>Raio</summary>

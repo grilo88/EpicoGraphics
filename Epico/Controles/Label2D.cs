@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Epico.Controles
 {
-    public class Panel2D : Controle2D
+    public class Label2D : Controle2D
     {
-        private string _nomePadrao = "Panel";
+        private string _nomePadrao = "Label";
 
-        public Panel2D(Controle2D parent)
+        public Label2D(Controle2D parent)
         {
             Nome = _nomePadrao;
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));

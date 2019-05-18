@@ -143,6 +143,18 @@ namespace Epico.Sistema
             Pos.Y = obj.Pos.Y;
         }
 
+        public void Focar(Controle2D ctrl)
+        {
+            Pos.X = ctrl.Pos.X + ctrl.Width / 2;
+            Pos.Y = ctrl.Pos.Y + ctrl.Height / 2;
+        }
+
+        public void Focar(EixoXY xy)
+        {
+            Pos.X = xy.X;
+            Pos.Y = xy.Y;
+        }
+
         public void Focar(Origem2D c) => Pos = new Vetor2D(c.GlobalX, c.GlobalY);
         public void Focar(Vertice2D v) => Pos = new Vetor2D(v.GlobalX, v.GlobalY);
 

@@ -27,10 +27,10 @@ namespace Editor2D
         const int _raio_padrao = 50;
 
         Epico2D  _engine2D = new Epico2D();
-        List<Objeto2D> _objs_sel = new List<Objeto2D>();
-        List<Origem2D> _origens_sel = new List<Origem2D>();
-        List<Vertice2D> _vetores_sel = new List<Vertice2D>();
-        List<Vertice2D> _vertices_sel = new List<Vertice2D>();
+        List<Objeto2D> _obj_sel = new List<Objeto2D>();
+        List<Origem2D> _origem_sel = new List<Origem2D>();
+        List<Vertice2D> _vetor_sel = new List<Vertice2D>();
+        List<Vertice2D> _vertice_sel = new List<Vertice2D>();
 
         List<ToolStripButton> _ferramentasTransformacao = new List<ToolStripButton>();
         List<ToolStripButton> _ferramentasSelecao = new List<ToolStripButton>();
@@ -76,7 +76,7 @@ namespace Editor2D
                 txtVerticePosX, txtVerticePosY, txtVerticeRaio, txtVerticeAngulo);
 
             BtnForm2D_Click(sender, e);
-            AtualizarControlesObjeto2D(_objs_sel);
+            AtualizarControlesObjeto2D(_obj_sel);
             AtualizarComboObjetos2D();
 
             debugToolStripMenuItem.Checked = _engine2D.Debug = true;
@@ -347,20 +347,20 @@ namespace Editor2D
 
         private void TxtNome_TextChanged(object sender, EventArgs e)
         {
-            if (_objs_sel.Count == 1 && cboObjeto2D.Focused)
+            if (_obj_sel.Count == 1 && cboObjeto2D.Focused)
             {
-                _objs_sel.First().Nome = cboObjeto2D.Text;
+                _obj_sel.First().Nome = cboObjeto2D.Text;
                 propGrid.Refresh();
             }
         }
 
         private void TxtAngulo_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtAngulo.Focused)
+            if (_obj_sel != null && txtAngulo.Focused)
             {
                 if (float.TryParse(txtAngulo.Text, out float angulo))
                 {
-                    _objs_sel.First().DefinirAngulo(angulo);
+                    _obj_sel.First().DefinirAngulo(angulo);
                     propGrid.Refresh();
                 }
             }
@@ -368,11 +368,11 @@ namespace Editor2D
 
         private void TxtRaio_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtRaio.Focused)
+            if (_obj_sel != null && txtRaio.Focused)
             {
                 if (float.TryParse(txtRaio.Text, out float raio))
                 {
-                    _objs_sel.First().DefinirRaio(raio);
+                    _obj_sel.First().DefinirRaio(raio);
                     propGrid.Refresh();
                 }
             }
@@ -380,11 +380,11 @@ namespace Editor2D
 
         private void TxtPosY_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtPosY.Focused)
+            if (_obj_sel != null && txtPosY.Focused)
             {
                 if (float.TryParse(txtPosY.Text, out float posY))
                 {
-                    _objs_sel.First().PosicionarY(posY);
+                    _obj_sel.First().PosicionarY(posY);
                     propGrid.Refresh();
                 }
             }
@@ -392,11 +392,11 @@ namespace Editor2D
 
         private void TxtPosX_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtPosX.Focused)
+            if (_obj_sel != null && txtPosX.Focused)
             {
                 if (float.TryParse(txtPosX.Text, out float posX))
                 {
-                    _objs_sel.First().PosicionarX(posX);
+                    _obj_sel.First().PosicionarX(posX);
                     propGrid.Refresh();
                 }
             }
@@ -457,22 +457,22 @@ namespace Editor2D
 
         private void TxtEscalaY_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtEscalaY.Focused)
+            if (_obj_sel != null && txtEscalaY.Focused)
             {
                 if (float.TryParse(txtEscalaY.Text, out float escalaY))
                 {
-                    _objs_sel.First().DefinirEscalaY(escalaY);
+                    _obj_sel.First().DefinirEscalaY(escalaY);
                     propGrid.Refresh();
                 }
             }
         }
         private void TxtEscalaX_ValueChanged(object sender, EventArgs e)
         {
-            if (_objs_sel != null && txtEscalaX.Focused)
+            if (_obj_sel != null && txtEscalaX.Focused)
             {
                 if (float.TryParse(txtEscalaX.Text, out float escalaX))
                 {
-                    _objs_sel.First().DefinirEscalaX(escalaX);
+                    _obj_sel.First().DefinirEscalaX(escalaX);
                     propGrid.Refresh();
                 }
             }
@@ -487,9 +487,9 @@ namespace Editor2D
         {
             if (_sair) return;
             
-            if (_objs_sel.Count == 1)
+            if (_obj_sel.Count == 1)
             {
-                if (_engine2D.Camera.Objeto2DVisivelCamera(_objs_sel.First()))
+                if (_engine2D.Camera.Objeto2DVisivelCamera(_obj_sel.First()))
                     txtVisivel.Text = "Sim";
                 else
                     txtVisivel.Text = "Não";
@@ -530,11 +530,11 @@ namespace Editor2D
         {
             if (cboObjeto2D.SelectedValue != null)
             {
-                _objs_sel.ForEach(x => x.Selecionado = false);
-                _objs_sel.Clear();
-                _objs_sel.Add((Objeto2D)cboObjeto2D.SelectedValue);
-                _objs_sel.First().Selecionado = true;
-                AtualizarControlesObjeto2D(_objs_sel);
+                _obj_sel.ForEach(x => x.Selecionado = false);
+                _obj_sel.Clear();
+                _obj_sel.Add((Objeto2D)cboObjeto2D.SelectedValue);
+                _obj_sel.First().Selecionado = true;
+                AtualizarControlesObjeto2D(_obj_sel);
                 
                 //_vertices_sel.ForEach(x => x.sel = false);
                 //_vertices_sel.Clear();
@@ -545,7 +545,7 @@ namespace Editor2D
                 cboVertices.BeginUpdate();
                 cboVertices.DisplayMember = "i";
                 cboVertices.ValueMember = "v";
-                cboVertices.DataSource = _objs_sel.First().Vertices.Select(
+                cboVertices.DataSource = _obj_sel.First().Vertices.Select(
                 (v, i) => new
                 {
                     i = "Vértice " + i,
@@ -558,7 +558,7 @@ namespace Editor2D
                 cboOrigem.BeginUpdate();
                 cboOrigem.DisplayMember = "i";
                 cboOrigem.ValueMember = "c";
-                cboOrigem.DataSource = _objs_sel.First().Origem.Select(
+                cboOrigem.DataSource = _obj_sel.First().Origem.Select(
                 (c, i) => new
                 {
                     i = "Ponto " + i,
@@ -573,17 +573,17 @@ namespace Editor2D
         {
             if (pnScreen.Focused)
             {
-                if (_objs_sel != null)
+                if (_obj_sel != null)
                 {
                     if (e.KeyCode == Keys.Delete)
                     {
-                        for (int i = 0; i < _objs_sel.Count; i++)
+                        for (int i = 0; i < _obj_sel.Count; i++)
                         {
-                            _engine2D.objetos.Remove(_objs_sel[i]);
+                            _engine2D.objetos.Remove(_obj_sel[i]);
                         }
                         
-                        _objs_sel.Clear();
-                        AtualizarControlesObjeto2D(_objs_sel);
+                        _obj_sel.Clear();
+                        AtualizarControlesObjeto2D(_obj_sel);
                     }
                 }
             }
@@ -613,7 +613,7 @@ namespace Editor2D
         {
             #region Cria a Câmera 2D
             Camera2D camera = _engine2D.CriarCamera(picScreen.Width, picScreen.Height);
-            camera.Pos = new Vetor2D(_objs_sel.First().Pos.X, _objs_sel.First().Pos.Y);
+            camera.Pos = new Vetor2D(_obj_sel.First().Pos.X, _obj_sel.First().Pos.Y);
             #endregion
 
             cboCamera.DataSource = _engine2D.Cameras
@@ -698,10 +698,10 @@ namespace Editor2D
 
                     if (toolStripSelecao.Checked)
                     {
-                        _objs_sel.ForEach(x => x.Selecionado = false);
-                        _objs_sel.Clear();
-                        _objs_sel = _engine2D.ObterObjetos2DPelaTela(_engine2D.Camera, selRect).ToList();
-                        _objs_sel.ForEach(x => x.Selecionado = true);
+                        _obj_sel.ForEach(x => x.Selecionado = false);
+                        _obj_sel.Clear();
+                        _obj_sel = _engine2D.ObterObjetos2DPelaTela(_engine2D.Camera, selRect).ToList();
+                        _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
                         var tmp = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, selRect);
@@ -714,13 +714,13 @@ namespace Editor2D
                     else if (toolStripOrigem.Checked)
                     {
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        _origens_sel.ForEach(x => x.Sel = false);
-                        _origens_sel.Clear();
-                        _origens_sel = Util.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _objs_sel, selRect).ToList();
-                        _origens_sel.ForEach(x => x.Sel = true);
+                        _origem_sel.ForEach(x => x.Sel = false);
+                        _origem_sel.Clear();
+                        _origem_sel = Util.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _origem_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
-                            $"{_origens_sel.Count()} origens", new Font("Lucida Console", 10),
+                            $"{_origem_sel.Count()} origens", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
                             new RectangleF(selRect.Location, selRect.Size),
                             new StringFormat(StringFormatFlags.NoWrap));
@@ -728,13 +728,13 @@ namespace Editor2D
                     else if (toolStripVetor.Checked)
                     {
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        _vetores_sel.ForEach(x => x.Sel = false);
-                        _vetores_sel.Clear();
-                        _vetores_sel = Util.ObterVetoresObjeto2DPelaTela(_engine2D.Camera, _objs_sel, selRect).ToList();
-                        _vetores_sel.ForEach(x => x.Sel = true);
+                        _vetor_sel.ForEach(x => x.Sel = false);
+                        _vetor_sel.Clear();
+                        _vetor_sel = Util.ObterVetoresObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _vetor_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
-                            $"{_vetores_sel.Count()} vetores", new Font("Lucida Console", 10),
+                            $"{_vetor_sel.Count()} vetores", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
                             new RectangleF(selRect.Location, selRect.Size),
                             new StringFormat(StringFormatFlags.NoWrap));
@@ -742,13 +742,13 @@ namespace Editor2D
                     else if (toolStripVertice.Checked)
                     {
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        _vertices_sel.ForEach(x => x.Sel = false);
-                        _vertices_sel.Clear();
-                        _vertices_sel = Util.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _objs_sel, selRect).ToList();
-                        _vertices_sel.ForEach(x => x.Sel = true);
+                        _vertice_sel.ForEach(x => x.Sel = false);
+                        _vertice_sel.Clear();
+                        _vertice_sel = Util.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _vertice_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
-                            $"{_vertices_sel.Count()} vértices", new Font("Lucida Console", 10),
+                            $"{_vertice_sel.Count()} vértices", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
                             new RectangleF(selRect.Location, selRect.Size),
                             new StringFormat(StringFormatFlags.NoWrap));
@@ -821,11 +821,11 @@ namespace Editor2D
         {
             if (cboVertices.SelectedValue != null)
             {
-                _vertices_sel.ForEach(x => x.Sel = false);
-                _vertices_sel.Clear();
-                _vertices_sel.Add((Vertice2D)cboVertices.SelectedValue);
-                if (toolStripVertice.Checked) _vertices_sel.First().Sel = true;
-                AtualizarControlesVertice(_vertices_sel);
+                _vertice_sel.ForEach(x => x.Sel = false);
+                _vertice_sel.Clear();
+                _vertice_sel.Add((Vertice2D)cboVertices.SelectedValue);
+                if (toolStripVertice.Checked) _vertice_sel.First().Sel = true;
+                AtualizarControlesVertice(_vertice_sel);
             }
         }
 
@@ -857,26 +857,26 @@ namespace Editor2D
                 {
                     if (selRect.Width == 0 && selRect.Height == 0)
                     {
-                        _vertices_sel.ForEach(x => x.Sel = false);
-                        _vertices_sel.Clear();
-                        _objs_sel.ForEach(x => x.Selecionado = false);
-                        _objs_sel = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, selStart).ToList();
+                        _vertice_sel.ForEach(x => x.Sel = false);
+                        _vertice_sel.Clear();
+                        _obj_sel.ForEach(x => x.Selecionado = false);
+                        _obj_sel = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, selStart).ToList();
                     }
 
-                    if (_objs_sel.Count() == 0)
+                    if (_obj_sel.Count() == 0)
                     {
                         // Nenhum objeto selecionado
                         cboObjeto2D.SelectedIndex = -1;
                         
                     }
-                    else if (_objs_sel.Count == 1)
+                    else if (_obj_sel.Count == 1)
                     {
                         // Único objeto selecionado
-                        cboObjeto2D.SelectedValue = _objs_sel.First();
-                        _objs_sel.First().Selecionado = true;
+                        cboObjeto2D.SelectedValue = _obj_sel.First();
+                        _obj_sel.First().Selecionado = true;
                     }
 
-                    AtualizarControlesObjeto2D(_objs_sel);
+                    AtualizarControlesObjeto2D(_obj_sel);
 
                     selRect = new RectangleF();
                 }
@@ -999,14 +999,14 @@ namespace Editor2D
 
         private void LimparSelecoesGeometricas()
         {
-            _origens_sel.ForEach(x => x.Sel = false);
-            _origens_sel.Clear();
+            _origem_sel.ForEach(x => x.Sel = false);
+            _origem_sel.Clear();
 
-            _vetores_sel.ForEach(x => x.Sel = false);
-            _vetores_sel.Clear();
+            _vetor_sel.ForEach(x => x.Sel = false);
+            _vetor_sel.Clear();
 
-            _vertices_sel.ForEach(x => x.Sel = false);
-            _vertices_sel.Clear();
+            _vertice_sel.ForEach(x => x.Sel = false);
+            _vertice_sel.Clear();
         }
 
         private void TabControlObjeto_Selecting(object sender, TabControlCancelEventArgs e)
@@ -1033,11 +1033,11 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                _origens_sel.ForEach(x => x.Sel = false);
-                _origens_sel.Clear();
-                _origens_sel.Add((Origem2D)cboOrigem.SelectedValue);
-                if (toolStripOrigem.Checked) _origens_sel.First().Sel = true;
-                AtualizarControlesPontoCentro(_origens_sel);
+                _origem_sel.ForEach(x => x.Sel = false);
+                _origem_sel.Clear();
+                _origem_sel.Add((Origem2D)cboOrigem.SelectedValue);
+                if (toolStripOrigem.Checked) _origem_sel.First().Sel = true;
+                AtualizarControlesPontoCentro(_origem_sel);
             }
         }
 
@@ -1069,11 +1069,11 @@ namespace Editor2D
 
         private void TxtOrigemPosX_ValueChanged(object sender, EventArgs e)
         {
-            if (_origens_sel != null && txtOrigemPosX.Focused)
+            if (_origem_sel != null && txtOrigemPosX.Focused)
             {
                 if (float.TryParse(txtOrigemPosX.Text, out float posX))
                 {
-                    _origens_sel.First().X = posX;
+                    _origem_sel.First().X = posX;
                     propGrid.Refresh();
                 }
             }
@@ -1081,11 +1081,11 @@ namespace Editor2D
 
         private void TxtOrigemPosY_ValueChanged(object sender, EventArgs e)
         {
-            if (_origens_sel != null && txtOrigemPosY.Focused)
+            if (_origem_sel != null && txtOrigemPosY.Focused)
             {
                 if (float.TryParse(txtOrigemPosY.Text, out float posY))
                 {
-                    _origens_sel.First().Y = posY;
+                    _origem_sel.First().Y = posY;
                     propGrid.Refresh();
                 }
             }
@@ -1101,13 +1101,13 @@ namespace Editor2D
 
         private void TxtVerticePosX_ValueChanged(object sender, EventArgs e)
         {
-            if (_vertices_sel != null && txtVerticePosX.Focused)
+            if (_vertice_sel != null && txtVerticePosX.Focused)
             {
                 if (float.TryParse(txtVerticePosX.Text, out float posX))
                 {
                     // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
                     // nas novas coordenadas de PosX e PosY
-                    _vertices_sel.First().X = posX;
+                    _vertice_sel.First().X = posX;
                     propGrid.Refresh();
                 }
             }
@@ -1115,13 +1115,13 @@ namespace Editor2D
 
         private void TxtVerticePosY_ValueChanged(object sender, EventArgs e)
         {
-            if (_vertices_sel != null && txtVerticePosY.Focused)
+            if (_vertice_sel != null && txtVerticePosY.Focused)
             {
                 if (float.TryParse(txtVerticePosY.Text, out float posY))
                 {
                     // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
                     // nas novas coordenadas de PosX e PosY
-                    _vertices_sel.First().Y = posY;
+                    _vertice_sel.First().Y = posY;
                     propGrid.Refresh();
                 }
             }
@@ -1174,13 +1174,18 @@ namespace Editor2D
                 return;
             }
 
-            Panel2D form = new Panel2D((Controle2D)cboObjeto2D.SelectedValue);
-            
-            form.Pos = new Vetor2D(200, 200);
-            _engine2D.AddObjeto(form);
+            Panel2D panel = new Panel2D((Controle2D)cboObjeto2D.SelectedValue);
+            panel.MouseDown += Panel_MouseDown;
+            panel.Pos = new Vetor2D(200, 200);
+            _engine2D.AddObjeto(panel);
 
             AtualizarComboObjetos2D();
-            cboObjeto2D.SelectedValue = form;
+            cboObjeto2D.SelectedValue = panel;
+        }
+
+        private void Panel_MouseDown(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void test()

@@ -3,32 +3,83 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Epico.Sistema
 {
-    public class Location
+    public class Location : INotifyPropertyChanged
     {
-        public float X { get; set; }
-        public float Y { get; set; }
+        private float _x;
+        private float _y;
 
+        public float X { get => _x; set
+            {
+                if (value != _x)
+                {
+                    _x = value; OnPropertyChanged();
+                }
+            }
+        }
+        public float Y { get => _y; set
+            {
+                if (value != _y)
+                {
+                    _y = value; OnPropertyChanged();
+                }
+            }
+        }
+
+        public Location() { }
         public Location(float X, float Y)
         {
-            this.X = X;
-            this.Y = Y;
+            _x = X;
+            _y = Y;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string propertyName = "")
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
-    public class Size
+    public class Size : INotifyPropertyChanged
     {
-        public float Width { get; set; }
-        public float Height { get; set; }
+        private float _width;
+        private float _heigth;
 
+        public float Width { get => _width; set
+            {
+                if (value != _width)
+                {
+                    _width = value; OnPropertyChanged();
+                }
+            }
+        }
+        public float Height { get => _heigth; set
+            {
+                if (value != _heigth)
+                {
+                    _heigth = value; OnPropertyChanged();
+                }
+            }
+        }
+
+        public Size() { }
         public Size(float Width, float Height)
         {
-            this.Width = Width;
-            this.Height = Height;
+            _width = Width;
+            _heigth = Height;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string propertyName = "")
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -50,18 +101,38 @@ namespace Epico.Sistema
         [Category("Layout")]
         [Description("As coordenadas do canto superior esquerdo do controle em relação ao canto superior esquerdo do seu recipiente.")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public Location Location { get => _location; set {
+        public Location Location
+        {
+            get => _location; set
+            {
                 _location = value;
+                Location.PropertyChanged += Location_PropertyChanged;
                 AtualizarLayout();
-            } }
+            }
+        }
 
         [Category("Layout")]
         [Description("O tamanho do controle em pixels")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public Size Size { get => _size; set {
+        public Size Size
+        {
+            get => _size; set
+            {
                 _size = value;
+#error assinatura nao funciona
+                Size.PropertyChanged += Size_PropertyChanged;
                 AtualizarLayout();
             }
+        }
+
+        private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Size_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         [Browsable(false)]
@@ -79,6 +150,16 @@ namespace Epico.Sistema
 
         public Controle2D Parent { get; set; }
         public ColecaoControles Controls { get; set; }
+
+        public Controle2D()
+        {
+            Size = new Size();
+            Location = new Location();
+
+            Size.PropertyChanged += Size_PropertyChanged;
+            Location.PropertyChanged += Location_PropertyChanged;
+        }
+
 
         protected virtual void GerarControle(Location local, Size tamanho)
         {
@@ -104,6 +185,7 @@ namespace Epico.Sistema
             AdicionarVertice(_vBottomRight);
             AdicionarVertice(_vBottomLeft);
 
+            // Centraliza o ponto de origem
             Origem[0].X = (_location.X + _size.Width) / 2;
             Origem[0].Y = (_location.Y + _size.Height) / 2;
 
@@ -115,14 +197,32 @@ namespace Epico.Sistema
 
         private void AtualizarLayout()
         {
-            _vTopLeft.X = _location.X;
-            _vTopLeft.Y = _location.Y;
-            _vTopRigth.X = _location.X + _size.Width;
-            _vTopRigth.Y = _location.Y;
-            _vBottomRight.X = _location.X + _size.Width;
-            _vBottomRight.Y = _location.Y + _size.Height;
-            _vBottomLeft.X = _location.X;
-            _vBottomLeft.Y = _location.Y + _size.Height;
+            if (_location != null && _size != null)
+            {
+                if (_vTopLeft != null)
+                {
+                    _vTopLeft.X = _location.X;
+                    _vTopLeft.Y = _location.Y;
+                }
+                if (_vTopRigth != null)
+                {
+                    _vTopRigth.X = _location.X + _size.Width;
+                    _vTopRigth.Y = _location.Y;
+                }
+                if (_vBottomRight != null)
+                {
+                    _vBottomRight.X = _location.X + _size.Width;
+                    _vBottomRight.Y = _location.Y + _size.Height;
+                }
+                if (_vBottomLeft != null)
+                {
+                    _vBottomLeft.X = _location.X;
+                    _vBottomLeft.Y = _location.Y + _size.Height;
+                }
+
+                Pos.X = _location.X;
+                Pos.Y = _location.Y;
+            }
         }
 
         #region Eventos
