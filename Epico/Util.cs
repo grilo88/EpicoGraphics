@@ -122,8 +122,8 @@ namespace Epico
             for (int i = 0; i < engine.objetos.Count; i++)
             {
                 Objeto2D obj = engine.objetos[i];
-#warning obter objetos de acordo com o angulo da camera. Ainda há falhas nesta lógica
-                Objeto2D comp = camera.ObjetoAnguloCamera(obj, true);
+                var comp = obj;
+                //Objeto2D comp = camera.ObjetoAnguloCamera(obj, true);
 
                 float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMax;
                 float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMin;

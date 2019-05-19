@@ -23,6 +23,7 @@ namespace Epico.Sistema
         /// <summary>Posição local na coordenada y</summary>
         public float Y { get; set; }
 
+        [Browsable(false)]
         /// <summary>Seleção</summary>
         public bool Sel { get; set; }
 
@@ -102,8 +103,11 @@ namespace Epico.Sistema
             base.obj = obj;
         }
 
-        public Vertice2D(float x, float y)
+        public Vertice2D(float x, float y) : this(null, x, y) { }
+
+        public Vertice2D(Objeto2D obj, float x, float y)
         {
+            base.obj = obj ?? base.obj;
             base.X = x;
             base.Y = y;
         }

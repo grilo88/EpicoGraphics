@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,8 @@ namespace Epico.Sistema
             {
                 if (value != _x) // Alterou?
                 {
-                    _x = value; OnPropertyChanged();
+                    _x = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -26,7 +28,8 @@ namespace Epico.Sistema
             {
                 if (value != _y) // Alterou?
                 {
-                    _y = value; OnPropertyChanged();
+                    _y = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -68,7 +71,6 @@ namespace Epico.Sistema
             }
         }
 
-        public Size() { }
         public Size(float width, float height)
         {
             _width = width;
@@ -90,14 +92,41 @@ namespace Epico.Sistema
 
     public class Controle2D : Objeto2DRenderizar
     {
+        /// <summary>
+        /// Container é o objeto2d base principal que encapsula todos os controles filhos, ex.: Form2D, Panel2D, 
+        /// quer serve como referência para cálculos e manipulação de OrdemZ local.
+        /// </summary>
+        private Controle2D container;
+
         private Vertice2D _vTopLeft;            // Superior Esquerdo
         private Vertice2D _vTopRigth;           // Superior Direito
         private Vertice2D _vBottomRight;        // Inferior Direito
         private Vertice2D _vBottomLeft;         // Inferior Esquerdo
 
-        private Location _location;
-        private Size _size;
+        private Location _location = new Location(0, 0);
+        private Size _size = new Size(300, 300);
         private Controle2D _parent;
+
+        [Category("Layout")]
+        public bool Visible { get; set; }
+
+        [Category("Layout")]
+        public Vetor2D LocalPos { get; set; }
+
+        public override Vetor2D Pos { get => base.Pos;
+            set {
+                var tmp = value;
+                if (base.Pos == null)
+                    base.Pos = new Vetor2D(this, tmp.X, tmp.Y);
+                else
+                {
+                    base.Pos.X = tmp.X;
+                    base.Pos.Y = tmp.Y;
+                }
+
+                AtualizarLayout();
+            }
+        }
 
         [Category("Layout")]
         [Description("As coordenadas do canto superior esquerdo do controle em relação ao canto superior esquerdo do seu recipiente.")]
@@ -106,7 +135,9 @@ namespace Epico.Sistema
         {
             get => _location; set
             {
-                _location = value;
+                var val = value;
+                _location.X = val.X;
+                _location.Y = val.Y;
                 AtualizarLayout();
             }
         }
@@ -118,19 +149,35 @@ namespace Epico.Sistema
         {
             get => _size; set
             {
-                _size = value;
+                var val = value;
+                _size.Width = val.Width;
+                _size.Height = val.Height;
                 AtualizarLayout();
             }
         }
 
+        [Category("Ordenação")]
+        public int OrdemZ {
+            get {
+                var objs = ObterObjetosDesteContainer().ToList();
+                return objs.FindIndex(x => x == this);
+            } set { } }
+
+        [Category("Ordenação")]
+        public int OrdemZMax { get {
+
+                return ObterObjetosDesteContainer().Count() - 1;
+            } set { } }
+
+
         private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            AtualizarLayout();
         }
 
         private void Size_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            AtualizarLayout();
         }
 
         [Browsable(false)]
@@ -146,11 +193,21 @@ namespace Epico.Sistema
         [Category("Layout")]
         public float Height { get => Size.Height; set => Size.Height = value; }
 
+        public IEnumerable<Controle2D> ObterObjetosDesteContainer()
+        {
+            return _epico.objetos.OfType<Controle2D>()
+                    .Where(x => x.container == this.container);
+        }
+
         public Controle2D Parent { get => _parent; set {
                 _parent = value;
 
                 // Adiciona este controle filho na lista de controles do parent (Controle Pai)
-                if (!_parent.Controls.Contains(this)) _parent.Controls.Add(this);
+                if (!_parent.Controls.Contains(this))
+                {
+                    _parent.Controls.Add(this);
+                    this.container = _parent.container ?? _parent; // Define o container
+                }
             }
         }
 
@@ -163,56 +220,57 @@ namespace Epico.Sistema
         public List<Controle2D> Controles { get => Controls.Cast<Controle2D>().ToList(); }
         public Controle2D()
         {
-            Size = new Size();
-            Location = new Location();
+            if (Pos == null)
+                Pos = new Vetor2D(this, 0, 0);
+            //InicializarSize();
+            //InicializarLocation();
+        }
 
-            Size.PropertyChanged += Size_PropertyChanged;
+        private void InicializarLocation()
+        {
+            // Define posição x e y do objeto 2d
+            Location = new Location(_location.X, _location.Y);
             Location.PropertyChanged += Location_PropertyChanged;
         }
 
-
-        protected virtual void GerarControle(Location local, Size tamanho)
+        private void InicializarSize()
         {
-            _location = local;
-            _size = tamanho;
+            Size = new Size(_size.Width, _size.Height);
+            Size.PropertyChanged += Size_PropertyChanged;
+        }
 
-            _vTopLeft = new Vertice2D(this);
-            _vTopRigth = new Vertice2D(this);
-            _vBottomRight = new Vertice2D(this);
-            _vBottomLeft = new Vertice2D(this);
+        protected virtual void GerarControle(float x, float y, float width, float height)
+        {
+            _location.X = x;
+            _location.Y = y;
+            _size.Width = width;
+            _size.Height = height;
 
-            _vTopLeft.X = _location.X;
-            _vTopLeft.Y = _location.Y;
-            _vTopRigth.X = _location.X + _size.Width;
-            _vTopRigth.Y = _location.Y;
-            _vBottomRight.X = _location.X + _size.Width;
-            _vBottomRight.Y = _location.Y + _size.Height;
-            _vBottomLeft.X = _location.X;
-            _vBottomLeft.Y = _location.Y + _size.Height;
+            InicializarLocation();
+            InicializarSize();
 
-            AdicionarVertice(_vTopLeft);
-            AdicionarVertice(_vTopRigth);
-            AdicionarVertice(_vBottomRight);
-            AdicionarVertice(_vBottomLeft);
+            AdicionarVertice(_vTopLeft = new Vertice2D(this));
+            AdicionarVertice(_vTopRigth = new Vertice2D(this));
+            AdicionarVertice(_vBottomRight = new Vertice2D(this));
+            AdicionarVertice(_vBottomLeft = new Vertice2D(this));
+
+            Mat_render.CorSolida = new RGBA(200, 150, 80, 230);
+            Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
+            Mat_render.LarguraBorda = 1;
+
+            AtualizarLayout();
 
             // Centraliza o ponto de origem
             Origem[0].X = (_location.X + _size.Width) / 2;
             Origem[0].Y = (_location.Y + _size.Height) / 2;
-
-            Mat_render.CorSolida = new RGBA(200, 150, 80, 230);
-            Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
-
-            Mat_render.LarguraBorda = 1;
-
-            AtualizarLayout();
         }
 
         private void AtualizarLayout()
         {
             if (_location != null && _size != null)
             {
-                Pos.X = _location.X;
-                Pos.Y = _location.Y;
+                //Pos.X = _location.X;
+                //Pos.Y = _location.Y;
 
                 if (_vTopLeft != null)
                 {
@@ -233,6 +291,11 @@ namespace Epico.Sistema
                 {
                     _vBottomLeft.X = _location.X;
                     _vBottomLeft.Y = _location.Y + _size.Height;
+                }
+
+                if (Vertices.Length > 0)
+                {
+                    AtualizarXYMinMax();
                 }
             }
         }

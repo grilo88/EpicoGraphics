@@ -12,6 +12,8 @@ namespace Epico.Sistema
     /// </summary>
     public abstract class Objeto2D : ICloneable
     {
+        public Epico2D _epico;
+
         #region Propriedades
         [Category("Design")]
         /// <summary>Id do objeto</summary>
@@ -63,19 +65,41 @@ namespace Epico.Sistema
         /// <summary>Define se o objeto está selecionado em modo Editor</summary>
         public bool Selecionado { get; set; }
 
-        
+        [Category("Ordenação")]
+        [Description("Ordenação de objetos no espaço 2D. Objetos com Ordem Z maiores são renderizados por último deixando-os na frente dos objetos na Ordem Z menores que ele.")]
+        public int GlobalOrdemZ
+        {
+            get => _epico.objetos.FindIndex(x => x == this);
+            set
+            {
+                // Reposiciona o objeto2D na nova ordemZ global
+                int novoIndice = value;
+                int indiceAtual = _epico.objetos.FindIndex(x => x == this);
+                _epico.objetos.RemoveAt(indiceAtual);
+                _epico.objetos.Insert(novoIndice, this);
+            }
+        }
+
+        [Category("Ordenação")]
+        [Description("Último índice de Ordem Z no espaço 2D.")]
+        public int GlobalOrdemZMax { get => _epico.objetos.Count() - 1; }
+
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public Transformacao Transformação { get; set; }
         #endregion
 
         #region Campos
+        [Category("Layout")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Posição do objeto</summary>
-        public Vetor2D Pos;
+        public virtual Vetor2D Pos { get; set; }
+        [Category("Layout")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Escala do objeto</summary>
-        public Vetor2D Escala;
+        public Vetor2D Escala { get; set; }
 
-        private bool _otimizaAtualizaGeometria;
-        private int _quantVertices;
+        //private bool _otimizaAtualizaGeometria;
+        //private int _quantVertices;
         #endregion
 
         #region Arrays
@@ -99,6 +123,11 @@ namespace Epico.Sistema
             Transformação = new Transformacao(this);
         }
 
+        public void AssociarEngine(Epico2D engine)
+        {
+            _epico = engine;
+        }
+
         ///// <summary>
         ///// Atualiza fatores importantes e otimiza os cálculos geométricos durante uma atualização geométrica.
         ///// </summary>
@@ -107,19 +136,19 @@ namespace Epico.Sistema
         //    _otimizaAtualizaGeometria = true;
         //}
 
-        public void EndAtualizarGeometria()
-        {
-            if (_quantVertices != Vertices.Length)
-            {
-                Array.Resize(ref Vertices, _quantVertices);
-            }
+        //public void EndAtualizarGeometria()
+        //{
+        //    if (_quantVertices != Vertices.Length)
+        //    {
+        //        Array.Resize(ref Vertices, _quantVertices);
+        //    }
 
-            AtualizarGeometria(Angulo);
-            AtualizarXYMinMax();
-            //AtualizarRaio();
+        //    AtualizarGeometria(Angulo);
+        //    AtualizarXYMinMax();
+        //    //AtualizarRaio();
 
-            _otimizaAtualizaGeometria = false;
-        }
+        //    _otimizaAtualizaGeometria = false;
+        //}
 
         /// <summary>
         /// Adiciona vértice ao objeto
@@ -140,7 +169,7 @@ namespace Epico.Sistema
             //{
                 Array.Resize(ref Vertices, Vertices.Length + 1);
                 Vertices[Vertices.Length - 1] = v;
-                _quantVertices = Vertices.Length;
+                //_quantVertices = Vertices.Length;
                 AtualizarXYMinMax();
             //}
 
@@ -307,8 +336,8 @@ namespace Epico.Sistema
             float raioMax = Vertices[idx].Raio;
             float diff = raio - raioMax;
 
-            // Define novos raios internos de cada vértice proporcionalmente ao novo raio de ponto máximo da circunferência
-            float percentual = diff / raioMax * 100; // Percentual da diferença
+            // Define raios internos de cada vértice proporcionalmente ao novo raio máximo da circunferência
+            float percentual = diff / raioMax * 100; // Percentual da proporção
             for (int i = 0; i < Vertices.Length; i++)
             {
                 Vertices[i].Raio += Vertices[i].Raio * percentual / 100;
@@ -454,6 +483,16 @@ namespace Epico.Sistema
         {
             object clone = MemberwiseClone();
 
+            // Cria novas instâncias para os elementos
+            ((Objeto2D)clone).Vertices = Vertices
+                .Select(x => new Vertice2D(this, x.X, x.Y)
+                {
+                    Ang = x.Ang,
+                    Nome = x.Nome,
+                    Rad = x.Rad,
+                    Raio = x.Raio,
+                }).ToArray();
+            
 
             return clone;
         }

@@ -1,6 +1,7 @@
 ﻿using Epico.Sistema;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Epico.Controles
@@ -9,11 +10,29 @@ namespace Epico.Controles
     {
         private string _nomePadrao = "Panel";
 
-        public Panel2D(Controle2D parent)
+        public Panel2D(Epico2D engine, Controle2D parent)
         {
+            _epico = engine;
+
             Nome = _nomePadrao;
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
-            GerarControle(new Location(0, 0), new Size(100, 100));
+
+            var list = ObterObjetosDesteContainer()
+                .Select(obj => new { obj, mult = obj.Pos.X * obj.Pos.Y })
+                .OrderByDescending(x => x.mult).ToList();
+
+            var last = ObterObjetosDesteContainer()
+                .Select(obj => new { obj, mult = obj.Pos.X * obj.Pos.Y })
+                .OrderByDescending(x => x.mult).FirstOrDefault();
+
+            Location loc = new Location();
+            if (last != null)
+            {
+                loc.X = last.obj.Pos.X + 20;
+                loc.Y = last.obj.Pos.X + 20;
+            }
+
+            GerarControle(loc.X, loc.Y, 100, 100);
             Mat_render.CorSolida = new RGBA(200, 0, 200, 88);
         }
     }

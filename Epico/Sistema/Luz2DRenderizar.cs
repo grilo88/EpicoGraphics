@@ -12,6 +12,5 @@ namespace Epico.Sistema
     /// </summary>
     public class Luz2DRenderizar : Objeto2D
     {
-        
     }
 }

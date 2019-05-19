@@ -160,26 +160,6 @@ namespace Epico.Sistema
         public void Focar(Origem2D c) => Pos = new Vetor2D(c.GlobalX, c.GlobalY);
         public void Focar(Vertice2D v) => Pos = new Vetor2D(v.GlobalX, v.GlobalY);
 
-#warning O ângulo da câmera não está perfeita, as vezes gira demais ou de menos.
-        private float _grausCamera;
-        private float _anguloRotacionado;
-        public override float Angulo
-        {
-            get
-            {
-                return base.Angulo;
-            }
-            set
-            {
-                float novoAngulo = value;
-                _grausCamera = novoAngulo - base.Angulo;
-
-#warning A ideia é manter a quantidade de graus que houve rotação da camera em relação a Zero
-                _anguloRotacionado = base.Angulo + _grausCamera;
-                base.Angulo = novoAngulo;
-            }
-        }
-
 #region Atributos de otimização do Renderizador
         PointF pontoA = new PointF();
         PointF pontoB = new PointF();
@@ -223,16 +203,15 @@ namespace Epico.Sistema
                             Objeto2D objPosZoom = ZoomPosObjeto2D(obj, ZoomCamera);
                             objZoom.Pos = objPosZoom.Pos;
                         }
-#endregion
+                        #endregion
 
-#region Calcula o ângulo da câmera
+                        #region Aplica ângulo na câmera
                         for (int v = 0; v < obj.Vertices.Count(); v++)
                         {
                             XY globalPos = new XY(
                                 obj.Vertices[v].GlobalX,
                                 obj.Vertices[v].GlobalY);
-#warning O ângulo da câmera não está perfeita, as vezes gira demais ou de menos.
-                            EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, _grausCamera);
+                            EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, Angulo);
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
@@ -366,7 +345,7 @@ namespace Epico.Sistema
                 }
 #endregion
             }
-            _grausCamera = 0;
+            //_grausCamera = 0;
 
 #region Calcula o FPS
             if (Environment.TickCount - _tickFPS >= 1000)
@@ -399,7 +378,7 @@ namespace Epico.Sistema
                     obj.Vertices[v].GlobalY);
 
 #warning Zero não rotaciona, 1 rotaciona
-                EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, _anguloRotacionado);
+                EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, Angulo);
                 obj.Vertices[v].X = xy.X - obj.Pos.X;
                 obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
             }

@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controles\Label2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\MaskedEdit2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\Panel2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controles\PopUpMenu2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\ProgressBar2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles\Textbox2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Epico2D.cs" />

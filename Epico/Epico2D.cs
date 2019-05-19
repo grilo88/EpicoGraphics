@@ -24,8 +24,16 @@ namespace Epico
         public bool Debug { get; set; }
         #endregion
 
-        public List<Objeto2D> objetos { get; set; } = new List<Objeto2D>();
+        public List<Objeto2D> objetos { get; private set; } = new List<Objeto2D>();
         public int MaximoFPS { get; internal set; }
+
+        public T CriarObjeto2D<T>() where T : Objeto2D
+        {
+            object objeto2D = Activator.CreateInstance(typeof(T));
+            ((Objeto2D)objeto2D).AssociarEngine(this);
+            AddObjeto((Objeto2D)objeto2D);
+            return (T)objeto2D;
+        }
 
         public void AddObjeto(Objeto2D objeto2d)
         {
@@ -40,6 +48,7 @@ namespace Epico
 
             objeto2d.Nome += (++number).ToString("D2");
             objetos.Add(objeto2d);
+            objeto2d.AssociarEngine(this);
         }
 
         public Camera2D CriarCamera(int width, int heigth)
@@ -62,6 +71,7 @@ namespace Epico
             )
         {
             Camera2D camera = new Camera2D(this, width, heigth, pixelFormat);
+            camera.AssociarEngine(this);
             Camera2D ambiguo = Cameras.Where(x => x.Nome.StartsWith(camera.Nome)).LastOrDefault();
 
             int number = 0;

@@ -37,7 +37,6 @@
             this.picScreen = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabControlObjeto = new System.Windows.Forms.TabControl();
             this.tabObjeto = new System.Windows.Forms.TabPage();
@@ -125,8 +124,6 @@
             this.txtCamPosX = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.txtCamPosY = new System.Windows.Forms.NumericUpDown();
-            this.pnScreen = new System.Windows.Forms.Panel();
-            this.splitterProp = new System.Windows.Forms.Splitter();
             this.propGrid = new System.Windows.Forms.PropertyGrid();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripSelecao = new System.Windows.Forms.ToolStripButton();
@@ -138,6 +135,7 @@
             this.toolStripAngulo = new System.Windows.Forms.ToolStripButton();
             this.toolStripRaio = new System.Windows.Forms.ToolStripButton();
             this.toolStripEscala = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tmrObjeto2D = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.telaInteiraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -148,8 +146,10 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripDesfazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripRefazer = new System.Windows.Forms.ToolStripDropDownButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.splitter2 = new System.Windows.Forms.Splitter();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
             this.tabObjeto.SuspendLayout();
@@ -182,10 +182,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosY)).BeginInit();
-            this.pnScreen.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnTriangulo
@@ -235,13 +235,15 @@
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picScreen.Location = new System.Drawing.Point(0, 25);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(344, 591);
+            this.picScreen.Size = new System.Drawing.Size(312, 597);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
+            this.picScreen.Click += new System.EventHandler(this.PicScreen_Click);
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
             this.picScreen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicDesign_MouseDown);
             this.picScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicDesign_MouseMove);
             this.picScreen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PicScreen_MouseUp);
+            this.picScreen.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.PicScreen_PreviewKeyDown);
             // 
             // label1
             // 
@@ -261,21 +263,6 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "PosY:";
             // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.pnScreen, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 49);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(878, 622);
-            this.tableLayoutPanel1.TabIndex = 3;
-            // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
@@ -284,10 +271,10 @@
             this.panel1.Controls.Add(this.groupBox4);
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.groupCamera);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 49);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(294, 616);
+            this.panel1.Size = new System.Drawing.Size(294, 622);
             this.panel1.TabIndex = 0;
             // 
             // tabControlObjeto
@@ -1186,33 +1173,12 @@
             this.txtCamPosY.TabIndex = 25;
             this.txtCamPosY.ValueChanged += new System.EventHandler(this.TxtCamPosY_ValueChanged);
             // 
-            // pnScreen
-            // 
-            this.pnScreen.Controls.Add(this.splitterProp);
-            this.pnScreen.Controls.Add(this.picScreen);
-            this.pnScreen.Controls.Add(this.propGrid);
-            this.pnScreen.Controls.Add(this.toolStrip1);
-            this.pnScreen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnScreen.Location = new System.Drawing.Point(303, 3);
-            this.pnScreen.Name = "pnScreen";
-            this.pnScreen.Size = new System.Drawing.Size(572, 616);
-            this.pnScreen.TabIndex = 1;
-            // 
-            // splitterProp
-            // 
-            this.splitterProp.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitterProp.Location = new System.Drawing.Point(341, 25);
-            this.splitterProp.Name = "splitterProp";
-            this.splitterProp.Size = new System.Drawing.Size(3, 591);
-            this.splitterProp.TabIndex = 5;
-            this.splitterProp.TabStop = false;
-            // 
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propGrid.Location = new System.Drawing.Point(344, 25);
+            this.propGrid.Location = new System.Drawing.Point(312, 0);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(228, 591);
+            this.propGrid.Size = new System.Drawing.Size(272, 622);
             this.propGrid.TabIndex = 4;
             this.propGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropGrid_PropertyValueChanged);
             this.propGrid.SelectedObjectsChanged += new System.EventHandler(this.PropGrid_SelectedObjectsChanged);
@@ -1228,10 +1194,11 @@
             this.toolStripMove,
             this.toolStripAngulo,
             this.toolStripRaio,
-            this.toolStripEscala});
+            this.toolStripEscala,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(572, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(312, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -1329,6 +1296,15 @@
             this.toolStripEscala.ToolTipText = "Escala";
             this.toolStripEscala.Click += new System.EventHandler(this.ToolStripEscala_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
             // tmrObjeto2D
             // 
             this.tmrObjeto2D.Enabled = true;
@@ -1417,25 +1393,56 @@
             this.toolStripRefazer.Size = new System.Drawing.Size(29, 22);
             this.toolStripRefazer.Text = "toolStripRefazer";
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.splitter1);
+            this.panel2.Controls.Add(this.picScreen);
+            this.panel2.Controls.Add(this.toolStrip1);
+            this.panel2.Controls.Add(this.propGrid);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(294, 49);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(584, 622);
+            this.panel2.TabIndex = 6;
+            // 
+            // splitter1
+            // 
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter1.Location = new System.Drawing.Point(309, 25);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 597);
+            this.splitter1.TabIndex = 5;
+            this.splitter1.TabStop = false;
+            // 
+            // splitter2
+            // 
+            this.splitter2.Location = new System.Drawing.Point(294, 49);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(3, 622);
+            this.splitter2.TabIndex = 7;
+            this.splitter2.TabStop = false;
+            // 
             // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 671);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.splitter2);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmEditor";
-            this.Text = "Form1";
+            this.Text = "Editor2D Épico - [Versão Experimental]";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEditor_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.FrmEditor_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tabControlObjeto.ResumeLayout(false);
             this.tabObjeto.ResumeLayout(false);
@@ -1474,14 +1481,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosY)).EndInit();
-            this.pnScreen.ResumeLayout(false);
-            this.pnScreen.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1495,7 +1502,6 @@
         private System.Windows.Forms.PictureBox picScreen;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblNome;
         private System.Windows.Forms.Label label4;
@@ -1534,7 +1540,6 @@
         private System.Windows.Forms.ComboBox cboEfeitoAnimacao;
         private System.Windows.Forms.TrackBar trackLinhaDoTempoAnimacao;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Panel pnScreen;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem telaInteiraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem telaCheiaToolStripMenuItem;
@@ -1605,7 +1610,10 @@
         private System.Windows.Forms.Button btnPanel;
         private System.Windows.Forms.Button btnForm2D;
         private System.Windows.Forms.PropertyGrid propGrid;
-        private System.Windows.Forms.Splitter splitterProp;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.Splitter splitter2;
     }
 }
 

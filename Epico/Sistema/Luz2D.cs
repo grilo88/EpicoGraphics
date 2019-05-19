@@ -14,6 +14,7 @@ namespace Epico.Sistema
         public byte Intensidade { get; set; } = 128;
         public Luz2D()
         {
+            
             Cor = new RGBA(Intensidade, 255, 255, 255); // Branco
         }
 
