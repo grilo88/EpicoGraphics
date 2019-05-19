@@ -491,6 +491,7 @@ namespace Epico.Sistema
                     Nome = x.Nome,
                     Rad = x.Rad,
                     Raio = x.Raio,
+                    Sel = x.Sel
                 }).ToArray();
             
 

@@ -54,6 +54,8 @@ namespace Epico.Sistema
         public float Right => Pos.X + ResWidth / 2;
         public float Top => Pos.Y - ResHeigth / 2;
         public float Bottom => Pos.Y + ResHeigth / 2;
+
+        public bool EfeitoQuadroDuplicado { get; set; }
         #endregion
 
         public Camera2D(Epico2D engine, int width, int height)
@@ -183,7 +185,11 @@ namespace Epico.Sistema
 
             if (ResWidth > 0 && ResHeigth > 0) // Janela não minimizada?
             {
-                g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
+                if (EfeitoQuadroDuplicado)
+                    g.FillRectangle(new SolidBrush(Color.FromArgb(50, 0, 0, 0)), new Rectangle(0, 0, ResWidth, ResHeigth));
+                else
+                    g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
+
 
                 // Obtém a posição da tela da câmera
                 TelaPos.Y = Pos.Y - ResHeigth / 2;
@@ -369,7 +375,6 @@ namespace Epico.Sistema
 
         public Objeto2D ObjetoAnguloCamera(Objeto2D obj, bool clonar = true)
         {
-#warning obter objetos de acordo com o angulo da camera. Ainda há falhas nesta lógica
             Objeto2D clone = clonar ? (Objeto2D)obj.Clone() : obj;
             for (int v = 0; v < obj.Vertices.Count(); v++)
             {
@@ -377,7 +382,6 @@ namespace Epico.Sistema
                     obj.Vertices[v].GlobalX,
                     obj.Vertices[v].GlobalY);
 
-#warning Zero não rotaciona, 1 rotaciona
                 EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, Angulo);
                 obj.Vertices[v].X = xy.X - obj.Pos.X;
                 obj.Vertices[v].Y = xy.Y - obj.Pos.Y;

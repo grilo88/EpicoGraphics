@@ -130,8 +130,17 @@ namespace Epico
                 float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMax;
                 float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMin;
 
-                if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
-                    if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
+                EixoXY xyMax = Util.RotacionarPonto2D(camera.Pos, new XY(xMaxTela, yMaxTela), -camera.Angulo);
+                EixoXY xyMin = Util.RotacionarPonto2D(camera.Pos, new XY(xMinTela, yMinTela), -camera.Angulo);
+
+                //if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
+                //    if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
+                //    {
+                //        yield return engine.objetos[i];
+                //    }
+
+                if (ponto.X >= xyMin.X && ponto.X <= xyMax.X)
+                    if (ponto.Y >= xyMin.Y && ponto.Y <= xyMax.Y)
                     {
                         yield return engine.objetos[i];
                     }

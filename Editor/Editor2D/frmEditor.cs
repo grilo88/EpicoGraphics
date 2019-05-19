@@ -1250,5 +1250,28 @@ namespace Editor2D
         {
 
         }
+
+        private void BtnButton_Click(object sender, EventArgs e)
+        {
+            if (!(cboObjeto2D.SelectedValue is Controle2D))
+            {
+                MessageBox.Show(this, "Primeiro selecione um controle 2d antes de adicionar este controle.", "Controle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Button2D obj = new Button2D(_engine2D, (Controle2D)cboObjeto2D.SelectedValue);
+            obj.MouseDown += Panel_MouseDown;
+            obj.Pos = new Vetor2D(obj, 200, 200);
+            _engine2D.AddObjeto(obj);
+
+            AtualizarComboObjetos2D();
+            cboObjeto2D.SelectedValue = obj;
+        }
+
+        private void MultiplicarQuadrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            multiplicarQuadrosToolStripMenuItem.Checked = !multiplicarQuadrosToolStripMenuItem.Checked;
+            _engine2D.Camera.EfeitoQuadroDuplicado = multiplicarQuadrosToolStripMenuItem.Checked;
+        }
     }
 }

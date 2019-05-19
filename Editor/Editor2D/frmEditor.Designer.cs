@@ -93,6 +93,7 @@
             this.btnDeformado = new System.Windows.Forms.Button();
             this.tabDesenho = new System.Windows.Forms.TabPage();
             this.tabControles = new System.Windows.Forms.TabPage();
+            this.btnButton = new System.Windows.Forms.Button();
             this.btnPanel = new System.Windows.Forms.Button();
             this.btnForm2D = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -101,6 +102,7 @@
             this.btnLuzPonto = new System.Windows.Forms.Button();
             this.btnLuzDirecional = new System.Windows.Forms.Button();
             this.btnLuzDestaque = new System.Windows.Forms.Button();
+            this.tabOutros = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.trackLinhaDoTempoAnimacao = new System.Windows.Forms.TrackBar();
@@ -149,6 +151,9 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
+            this.portaDeVisãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -279,6 +284,8 @@
             // 
             // tabControlObjeto
             // 
+            this.tabControlObjeto.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlObjeto.Controls.Add(this.tabObjeto);
             this.tabControlObjeto.Controls.Add(this.tabOrigem);
             this.tabControlObjeto.Controls.Add(this.tabVetor);
@@ -292,6 +299,7 @@
             // 
             // tabObjeto
             // 
+            this.tabObjeto.AutoScroll = true;
             this.tabObjeto.Controls.Add(this.lblNome);
             this.tabObjeto.Controls.Add(this.txtPosX);
             this.tabObjeto.Controls.Add(this.txtPosY);
@@ -668,6 +676,8 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.tabModelagem);
             this.groupBox5.Location = new System.Drawing.Point(9, 9);
             this.groupBox5.Name = "groupBox5";
@@ -678,19 +688,23 @@
             // 
             // tabModelagem
             // 
+            this.tabModelagem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabModelagem.Controls.Add(this.tabPrimitivos);
             this.tabModelagem.Controls.Add(this.tabAvancado);
             this.tabModelagem.Controls.Add(this.tabDesenho);
             this.tabModelagem.Controls.Add(this.tabControles);
             this.tabModelagem.Controls.Add(this.tabLuzes);
+            this.tabModelagem.Controls.Add(this.tabOutros);
             this.tabModelagem.Location = new System.Drawing.Point(6, 19);
             this.tabModelagem.Name = "tabModelagem";
             this.tabModelagem.SelectedIndex = 0;
-            this.tabModelagem.Size = new System.Drawing.Size(244, 150);
+            this.tabModelagem.Size = new System.Drawing.Size(246, 150);
             this.tabModelagem.TabIndex = 0;
             // 
             // tabPrimitivos
             // 
+            this.tabPrimitivos.AutoScroll = true;
             this.tabPrimitivos.Controls.Add(this.BtnRetangulo);
             this.tabPrimitivos.Controls.Add(this.BtnTrianguloRetangulo);
             this.tabPrimitivos.Controls.Add(this.BtnLosango);
@@ -704,7 +718,7 @@
             this.tabPrimitivos.Location = new System.Drawing.Point(4, 22);
             this.tabPrimitivos.Name = "tabPrimitivos";
             this.tabPrimitivos.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPrimitivos.Size = new System.Drawing.Size(236, 124);
+            this.tabPrimitivos.Size = new System.Drawing.Size(238, 124);
             this.tabPrimitivos.TabIndex = 0;
             this.tabPrimitivos.Text = "Primitivos";
             this.tabPrimitivos.UseVisualStyleBackColor = true;
@@ -779,7 +793,7 @@
             this.tabAvancado.Location = new System.Drawing.Point(4, 22);
             this.tabAvancado.Name = "tabAvancado";
             this.tabAvancado.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAvancado.Size = new System.Drawing.Size(236, 124);
+            this.tabAvancado.Size = new System.Drawing.Size(238, 124);
             this.tabAvancado.TabIndex = 3;
             this.tabAvancado.Text = "Avançado";
             this.tabAvancado.UseVisualStyleBackColor = true;
@@ -839,13 +853,14 @@
             this.tabDesenho.Location = new System.Drawing.Point(4, 22);
             this.tabDesenho.Name = "tabDesenho";
             this.tabDesenho.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDesenho.Size = new System.Drawing.Size(236, 124);
+            this.tabDesenho.Size = new System.Drawing.Size(238, 124);
             this.tabDesenho.TabIndex = 1;
             this.tabDesenho.Text = "Desenho";
             this.tabDesenho.UseVisualStyleBackColor = true;
             // 
             // tabControles
             // 
+            this.tabControles.Controls.Add(this.btnButton);
             this.tabControles.Controls.Add(this.btnPanel);
             this.tabControles.Controls.Add(this.btnForm2D);
             this.tabControles.Controls.Add(this.button3);
@@ -853,14 +868,24 @@
             this.tabControles.Location = new System.Drawing.Point(4, 22);
             this.tabControles.Name = "tabControles";
             this.tabControles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControles.Size = new System.Drawing.Size(236, 124);
+            this.tabControles.Size = new System.Drawing.Size(238, 124);
             this.tabControles.TabIndex = 2;
             this.tabControles.Text = "Controles";
             this.tabControles.UseVisualStyleBackColor = true;
             // 
+            // btnButton
+            // 
+            this.btnButton.Location = new System.Drawing.Point(158, 6);
+            this.btnButton.Name = "btnButton";
+            this.btnButton.Size = new System.Drawing.Size(75, 23);
+            this.btnButton.TabIndex = 4;
+            this.btnButton.Text = "Button";
+            this.btnButton.UseVisualStyleBackColor = true;
+            this.btnButton.Click += new System.EventHandler(this.BtnButton_Click);
+            // 
             // btnPanel
             // 
-            this.btnPanel.Location = new System.Drawing.Point(87, 6);
+            this.btnPanel.Location = new System.Drawing.Point(81, 6);
             this.btnPanel.Name = "btnPanel";
             this.btnPanel.Size = new System.Drawing.Size(75, 23);
             this.btnPanel.TabIndex = 3;
@@ -904,7 +929,7 @@
             this.tabLuzes.Location = new System.Drawing.Point(4, 22);
             this.tabLuzes.Name = "tabLuzes";
             this.tabLuzes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLuzes.Size = new System.Drawing.Size(236, 124);
+            this.tabLuzes.Size = new System.Drawing.Size(238, 124);
             this.tabLuzes.TabIndex = 4;
             this.tabLuzes.Text = "Luzes";
             this.tabLuzes.UseVisualStyleBackColor = true;
@@ -939,8 +964,20 @@
             this.btnLuzDestaque.UseVisualStyleBackColor = true;
             this.btnLuzDestaque.Click += new System.EventHandler(this.BtnLuzDestaque_Click);
             // 
+            // tabOutros
+            // 
+            this.tabOutros.Location = new System.Drawing.Point(4, 22);
+            this.tabOutros.Name = "tabOutros";
+            this.tabOutros.Padding = new System.Windows.Forms.Padding(3);
+            this.tabOutros.Size = new System.Drawing.Size(238, 124);
+            this.tabOutros.TabIndex = 5;
+            this.tabOutros.Text = "Outros";
+            this.tabOutros.UseVisualStyleBackColor = true;
+            // 
             // groupBox4
             // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.label15);
             this.groupBox4.Controls.Add(this.trackLinhaDoTempoAnimacao);
             this.groupBox4.Controls.Add(this.label14);
@@ -1015,6 +1052,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.numericUpDown1);
             this.groupBox3.Location = new System.Drawing.Point(9, 591);
@@ -1042,6 +1081,8 @@
             // 
             // groupCamera
             // 
+            this.groupCamera.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupCamera.Controls.Add(this.btnNovaCamera);
             this.groupCamera.Controls.Add(this.label16);
             this.groupCamera.Controls.Add(this.cboCamera);
@@ -1315,7 +1356,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.telaInteiraToolStripMenuItem,
-            this.debugToolStripMenuItem});
+            this.debugToolStripMenuItem,
+            this.portaDeVisãoToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(878, 24);
@@ -1351,7 +1393,7 @@
             this.fPSToolStripMenuItem.Checked = true;
             this.fPSToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.fPSToolStripMenuItem.Name = "fPSToolStripMenuItem";
-            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fPSToolStripMenuItem.Text = "FPS";
             this.fPSToolStripMenuItem.Click += new System.EventHandler(this.FPSToolStripMenuItem_Click);
             // 
@@ -1360,7 +1402,7 @@
             this.desligarZoomToolStripMenuItem.Checked = true;
             this.desligarZoomToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.desligarZoomToolStripMenuItem.Name = "desligarZoomToolStripMenuItem";
-            this.desligarZoomToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.desligarZoomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.desligarZoomToolStripMenuItem.Text = "Desligar Zoom";
             this.desligarZoomToolStripMenuItem.Click += new System.EventHandler(this.DesligarZoomToolStripMenuItem_Click);
             // 
@@ -1421,6 +1463,29 @@
             this.splitter2.Size = new System.Drawing.Size(3, 622);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
+            // 
+            // portaDeVisãoToolStripMenuItem
+            // 
+            this.portaDeVisãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.efeitosToolStripMenuItem});
+            this.portaDeVisãoToolStripMenuItem.Name = "portaDeVisãoToolStripMenuItem";
+            this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.portaDeVisãoToolStripMenuItem.Text = "Porta de Visão";
+            // 
+            // efeitosToolStripMenuItem
+            // 
+            this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.multiplicarQuadrosToolStripMenuItem});
+            this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.efeitosToolStripMenuItem.Text = "Efeitos";
+            // 
+            // multiplicarQuadrosToolStripMenuItem
+            // 
+            this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Text = "Multiplicar Quadros";
+            this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
             // frmEditor
             // 
@@ -1614,6 +1679,11 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Splitter splitter2;
+        private System.Windows.Forms.Button btnButton;
+        private System.Windows.Forms.TabPage tabOutros;
+        private System.Windows.Forms.ToolStripMenuItem portaDeVisãoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem efeitosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem multiplicarQuadrosToolStripMenuItem;
     }
 }
 

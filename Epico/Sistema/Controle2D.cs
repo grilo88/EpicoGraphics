@@ -96,7 +96,7 @@ namespace Epico.Sistema
         /// Container é o objeto2d base principal que encapsula todos os controles filhos, ex.: Form2D, Panel2D, 
         /// quer serve como referência para cálculos e manipulação de OrdemZ local.
         /// </summary>
-        private Controle2D container;
+        public Controle2D Container { get; private set; }
 
         private Vertice2D _vTopLeft;            // Superior Esquerdo
         private Vertice2D _vTopRigth;           // Superior Direito
@@ -196,7 +196,7 @@ namespace Epico.Sistema
         public IEnumerable<Controle2D> ObterObjetosDesteContainer()
         {
             return _epico.objetos.OfType<Controle2D>()
-                    .Where(x => x.container == this.container);
+                    .Where(x => x.Container == this.Container);
         }
 
         public Controle2D Parent { get => _parent; set {
@@ -206,7 +206,7 @@ namespace Epico.Sistema
                 if (!_parent.Controls.Contains(this))
                 {
                     _parent.Controls.Add(this);
-                    this.container = _parent.container ?? _parent; // Define o container
+                    this.Container = _parent.Container ?? _parent; // Define o container
                 }
             }
         }
@@ -298,6 +298,24 @@ namespace Epico.Sistema
                     AtualizarXYMinMax();
                 }
             }
+        }
+
+        private XY _proxPosCtrl = new XY(10, 10);
+
+        /// <summary>
+        /// Nova posição em cascata para controles adicionados com duplo clique
+        /// </summary>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        public XY ProximoPosControle()
+        {
+            if (_proxPosCtrl.X + 50 > Container.Width) _proxPosCtrl.X = 10;
+            if (_proxPosCtrl.Y + 50 > Container.Height) _proxPosCtrl.Y = 10;
+
+            _proxPosCtrl.X += 20;
+            _proxPosCtrl.Y += 20;
+
+            return _proxPosCtrl;
         }
 
         #region Eventos

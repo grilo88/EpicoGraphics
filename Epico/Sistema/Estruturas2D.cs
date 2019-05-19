@@ -70,7 +70,7 @@ namespace Epico.Sistema
         }
 
         /// <summary>
-        /// Utilizado ao gerar a forma geométrica
+        /// Novo vetor 2D
         /// </summary>
         /// <param name="obj">Objeto2D da qual o Vetor2D está associado</param>
         /// <param name="x">Local x</param>
@@ -81,6 +81,30 @@ namespace Epico.Sistema
             base.X = x;
             base.Y = y;
         }
+
+        public float Magnitude
+        {
+            get { return (float)Math.Sqrt(X * X + Y * Y); }
+        }
+
+        public void Normalize()
+        {
+            float magnitude = Magnitude;
+            X = X / magnitude;
+            Y = Y / magnitude;
+        }
+
+        public Vetor2D ObterNormalizado()
+        {
+            float magnitude = Magnitude;
+            return new Vetor2D(X / magnitude, Y / magnitude);
+        }
+
+        public float Produto(Vetor2D vetor)
+        {
+            return this.X * vetor.X + this.Y * vetor.Y;
+        }
+
     }
 
     public sealed class Vertice2D : EixoXY
