@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 #if Editor2D || NetCore || NetStandard2
 using System.Drawing;
@@ -22,6 +23,8 @@ namespace Epico.Sistema
         readonly Epico2D engine;
         Bitmap render;
         Graphics g;
+
+        //Stopwatch sw = new Stopwatch();
 
         #region Campos
         public int ResWidth;
@@ -165,7 +168,6 @@ namespace Epico.Sistema
 #region Atributos de otimização do Renderizador
         PointF pontoA = new PointF();
         PointF pontoB = new PointF();
-        PointF TelaPos = new PointF();
         long _tickRender;
 
         readonly Font font_debug = new Font("Lucida Console", 12,
@@ -180,6 +182,9 @@ namespace Epico.Sistema
 
         public Bitmap Renderizar()
         {
+            //sw.Stop();
+            //TempoDelta = sw.ElapsedMilliseconds;
+            //sw.Start();
             TempoDelta = DateTime.Now.Ticks - _tickRender; // Calcula o tempo delta (tempo de atraso)
             _tickRender = DateTime.Now.Ticks;
 
@@ -190,11 +195,8 @@ namespace Epico.Sistema
                 else
                     g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
 
-
                 // Obtém a posição da tela da câmera
-                TelaPos.Y = Pos.Y - ResHeight / 2;
-                TelaPos.X = Pos.X - ResWidth / 2;
-
+                
                 for (int i = 0; i < engine.objetos.Count; i++)
                 {
                     Objeto2DRenderizar objEspaco = engine.objetos[i] as Objeto2DRenderizar;
@@ -239,8 +241,8 @@ namespace Epico.Sistema
                             {
                                 GraphicsPath preenche = new GraphicsPath();
                                 preenche.AddLines(obj.Vertices.ToList().Select(ponto => new PointF(
-                                    -TelaPos.X + ponto.GlobalX,
-                                    -TelaPos.Y + ponto.GlobalY)).ToArray());
+                                    -Left + ponto.GlobalX,
+                                    -Top + ponto.GlobalY)).ToArray());
                                 g.FillPath(new SolidBrush(Color.FromArgb(obj.Mat_render.CorSolida.A, obj.Mat_render.CorSolida.R, obj.Mat_render.CorSolida.G, obj.Mat_render.CorSolida.B)), preenche);
                             }
 
@@ -276,10 +278,10 @@ namespace Epico.Sistema
                                     }
 
                                     // Desenha as linhas entre as vértices na câmera
-                                    pontoA.X = -TelaPos.X + v1.GlobalX;
-                                    pontoA.Y = -TelaPos.Y + v1.GlobalY;
-                                    pontoB.X = -TelaPos.X + v2.GlobalX;
-                                    pontoB.Y = -TelaPos.Y + v2.GlobalY;
+                                    pontoA.X = -Left + v1.GlobalX;
+                                    pontoA.Y = -Top + v1.GlobalY;
+                                    pontoB.X = -Left + v2.GlobalX;
+                                    pontoB.Y = -Top + v2.GlobalY;
 
                                     g.DrawLine(pen, pontoA, pontoB);
                                 }
@@ -290,8 +292,8 @@ namespace Epico.Sistema
                                 if (obj.Vertices[v].Sel)
                                 {
                                     float width = 5;
-                                    float x = -TelaPos.X + obj.Vertices[v].GlobalX;
-                                    float y = -TelaPos.Y + obj.Vertices[v].GlobalY;
+                                    float x = -Left + obj.Vertices[v].GlobalX;
+                                    float y = -Top + obj.Vertices[v].GlobalY;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 0, 0) /*Vermelho*/), rect);
                                 }
@@ -303,8 +305,8 @@ namespace Epico.Sistema
                                 if (obj.Origem[c].Sel)
                                 {
                                     float width = 5;
-                                    float x = -TelaPos.X + obj.Origem[c].GlobalX;
-                                    float y = -TelaPos.Y + obj.Origem[c].GlobalY;
+                                    float x = -Left + obj.Origem[c].GlobalX;
+                                    float y = -Top + obj.Origem[c].GlobalY;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 255, 0) /*Amarelo*/), rect);
                                 }
@@ -359,7 +361,6 @@ namespace Epico.Sistema
                 }
 #endregion
             }
-            //_grausCamera = 0;
 
 #region Calcula o FPS
             if (Environment.TickCount - _tickFPS >= 1000)
