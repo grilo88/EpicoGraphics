@@ -58,6 +58,25 @@ namespace Epico
         }
 
         /// <summary>
+        /// Obtém a posição no espaço 2D através da coordenada x e y da tela
+        /// </summary>
+        /// <param name="cam"></param>
+        /// <param name="posTela"></param>
+        /// <returns></returns>
+        public static EixoXY ObterPosEspaco2DPelaTela(
+            this Camera2D cam, EixoXY posTela)
+        {
+            var camTop = cam.Pos.Y - (cam.ResHeight / 2);
+            var camLeft = cam.Pos.X - (cam.ResWidth / 2);
+
+            float x = camLeft + posTela.X;
+            float y = camTop + posTela.Y;
+
+            EixoXY novoEixo = Util.RotacionarPonto2D(cam.Pos, new XY(x, y), cam.Angulo);
+            return novoEixo;
+        }
+
+        /// <summary>
         /// Obtém objeto 2d através do espaço global.
         /// </summary>
         /// <param name="ponto"></param>
@@ -87,7 +106,7 @@ namespace Epico
         /// </summary>
         /// <param name="ponto"></param>
         /// <returns></returns>
-        public static Objeto2D ObterObjeto2DPelaTela(this Epico2D engine, Camera2D camera, PointF ponto)
+        public static Objeto2D ObterObjeto2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
         {
             for (int i = 0; i < engine.objetos.Count; i++)
             {
@@ -95,8 +114,8 @@ namespace Epico
 
                 float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMax;
                 float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMin;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMax;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMin;
+                float yMaxTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.YMax;
+                float yMinTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.YMin;
 
                 if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
                     if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
@@ -107,44 +126,11 @@ namespace Epico
             return null;
         }
 
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, PointF ponto)
+        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(
+            this Epico2D engine, Camera2D camera, EixoXY ponto)
         {
-            return ObterObjetos2DPelaTela(engine, camera, new XY(ponto.X, ponto.Y));
-        }
 
-        /// <summary>
-        /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
-        /// </summary>
-        /// <param name="ponto"></param>
-        /// <returns></returns>
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
-        {
-            for (int i = 0; i < engine.objetos.Count; i++)
-            {
-                Objeto2D obj = engine.objetos[i];
-                var comp = obj;
-                //Objeto2D comp = camera.ObjetoAnguloCamera(obj, true);
-
-                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMax;
-                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + comp.Pos.X + comp.XMin;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMax;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + comp.Pos.Y + comp.YMin;
-
-                EixoXY xyMax = Util.RotacionarPonto2D(camera.Pos, new XY(xMaxTela, yMaxTela), -camera.Angulo);
-                EixoXY xyMin = Util.RotacionarPonto2D(camera.Pos, new XY(xMinTela, yMinTela), -camera.Angulo);
-
-                //if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
-                //    if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
-                //    {
-                //        yield return engine.objetos[i];
-                //    }
-
-                if (ponto.X >= xyMin.X && ponto.X <= xyMax.X)
-                    if (ponto.Y >= xyMin.Y && ponto.Y <= xyMax.Y)
-                    {
-                        yield return engine.objetos[i];
-                    }
-            }
+            return ObterObjetos2DPelaTela(engine, camera, new Vertice2D(ponto.X, ponto.Y));
         }
 
         public static Objeto2D ObterUnicoObjeto2DPelaTela(this Epico2D engine, Camera2D camera, EixoXY ponto)
@@ -153,77 +139,83 @@ namespace Epico
         }
 
         /// <summary>
-        /// Obtém objetos 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
+        /// Obtém objetos no espaço 2D conforme a seleção pela tela da câmera
         /// </summary>
-        /// <param name="ponto"></param>
+        /// <param name="engine"></param>
+        /// <param name="cam"></param>
+        /// <param name="verticesTela"></param>
         /// <returns></returns>
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D camera, RectangleF rect)
+        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this Epico2D engine, Camera2D cam, params Vertice2D[] verticesTela)
         {
+            for (int i = 0; i < verticesTela.Length; i++)
+            {
+                // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
+                EixoXY xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                verticesTela[i].X = xy.X;
+                verticesTela[i].Y = xy.Y;
+            }
+
             for (int i = 0; i < engine.objetos.Count; i++)
             {
-                Objeto2D obj = engine.objetos[i];
-
-                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMax;
-                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMin;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMax;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + obj.YMin;
-
-                // Testa se o objeto está colidindo com a região do retângulo
-                if ((xMinTela >= rect.X || xMaxTela >= rect.X) && (xMinTela <= rect.X + rect.Width || xMaxTela <= rect.X + rect.Width))
-                    if ((yMinTela >= rect.Y || yMaxTela >= rect.Y) && (yMinTela <= rect.Y + rect.Height || yMaxTela <= rect.Y + rect.Height))
-                    {
-                        yield return engine.objetos[i];
-                    }
+                if (IntersecaoEntrePoligonos(verticesTela,
+                    engine.objetos[i].Vertices.Select(x => new Vertice2D(x.GlobalX, x.GlobalY)).ToArray()))
+                {
+                    yield return engine.objetos[i];
+                }
             }
         }
 
-        public static IEnumerable<Vertice2D> ObterVerticesObjeto2DPelaTela(Camera2D camera, List<Objeto2D> objs, RectangleF rect)
+        public static IEnumerable<Vertice2D> ObterVerticesObjeto2DPelaTela(this Camera2D cam, List<Objeto2D> objs, params Vertice2D[] verticesTela)
         {
+            for (int i = 0; i < verticesTela.Length; i++)
+            {
+                // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
+                EixoXY xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                verticesTela[i].X = xy.X;
+                verticesTela[i].Y = xy.Y;
+            }
+
             for (int o = 0; o < objs.Count; o++)
             {
                 Objeto2D obj = objs[o];
-
                 for (int i = 0; i < obj.Vertices.Length; i++)
                 {
-                    Vertice2D v = obj.Vertices[i];
-
-                    float xTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + v.X;
-                    float yTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + v.Y;
-
-                    // Testa se as vértices estão colidindo com a região do retângulo
-                    if (xTela >= rect.X && xTela <= rect.X + rect.Width)
-                        if (yTela >= rect.Y && yTela <= rect.Y + rect.Height)
-                        {
-                            yield return v;
-                        }
+                    Vertice2D vertice = obj.Vertices[i];
+                    if (IntersecaoEntrePoligonos(verticesTela,
+                        new Vertice2D(vertice.GlobalX, vertice.GlobalY)))
+                    {
+                        yield return vertice;
+                    }
                 }
             }
         }
 
-        public static IEnumerable<Origem2D> ObterOrigensObjeto2DPelaTela(Camera2D camera, List<Objeto2D> objs, RectangleF rect)
+        public static IEnumerable<Origem2D> ObterOrigensObjeto2DPelaTela(this Camera2D cam, List<Objeto2D> objs, params Vertice2D[] verticesTela)
         {
+            for (int i = 0; i < verticesTela.Length; i++)
+            {
+                // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
+                EixoXY xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                verticesTela[i].X = xy.X;
+                verticesTela[i].Y = xy.Y;
+            }
+
             for (int o = 0; o < objs.Count; o++)
             {
                 Objeto2D obj = objs[o];
-
                 for (int i = 0; i < obj.Origem.Count; i++)
                 {
-                    Origem2D c = obj.Origem[i];
-
-                    float xTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + c.X;
-                    float yTela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + c.Y;
-
-                    // Testa se as vértices estão colidindo com a região do retângulo
-                    if (xTela >= rect.X && xTela <= rect.X + rect.Width)
-                        if (yTela >= rect.Y && yTela <= rect.Y + rect.Height)
-                        {
-                            yield return c;
-                        }
+                    Origem2D origem = obj.Origem[i];
+                    if (IntersecaoEntrePoligonos(verticesTela, 
+                        new Vertice2D(origem.GlobalX, origem.GlobalY)))
+                    {
+                        yield return origem;
+                    }
                 }
             }
         }
 
-        public static IEnumerable<Vertice2D> ObterVetoresObjeto2DPelaTela(Camera2D camera, List<Objeto2D> objs, RectangleF rect)
+        public static IEnumerable<Vertice2D> ObterVetoresObjeto2DPelaTela(this Camera2D camera, List<Objeto2D> objs, RectangleF rect)
         {
             for (int o = 0; o < objs.Count; o++)
             {
@@ -244,10 +236,10 @@ namespace Epico
                     }
 
                     float x1Tela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + v1.X;
-                    float y1Tela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + v1.Y;
+                    float y1Tela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + v1.Y;
 
                     float x2Tela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + v2.X;
-                    float y2Tela = -(camera.Pos.Y - camera.ResHeigth / 2) + obj.Pos.Y + v2.Y;
+                    float y2Tela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + v2.Y;
 
                     // Testa se o vetor está colidindo com a região do retângulo
                     if (Util.IntersecaoRetaRetangulo(new Vetor2D(x1Tela, y1Tela), new Vetor2D(x2Tela, y2Tela), rect))
@@ -261,40 +253,87 @@ namespace Epico
             }
         }
 
-        public static bool IntersecaoRetaRetangulo(Vetor2D a, Vetor2D b, RectangleF rect)
+        public static bool IntersecaoRetaRetangulo(Vetor2D pontoA, Vetor2D pontoB, RectangleF rect)
         {
-            return IntersecaoRetaRetangulo(a, b, rect.X, rect.Y, rect.Right, rect.Bottom);
+            return IntersecaoRetaRetangulo(pontoA, pontoB, rect.X, rect.Y, rect.Right, rect.Bottom);
+        }
+
+        public static bool IntersecaoEntreDoisPoligonos(Objeto2D a, Objeto2D b)
+        {
+            return IntersecaoEntrePoligonos(
+                a.Vertices.Select(x => new Vertice2D(a.Pos.GlobalX, a.Pos.GlobalY)).ToArray(),
+                b.Vertices.Select(x => new Vertice2D(b.Pos.GlobalX, b.Pos.GlobalY)).ToArray());
+        }
+
+        /// <summary>
+        /// Checa se ocorre a interseção entre dois polígonos
+        /// </summary>
+        /// <param name="a">Vértices de posições X e Y globais</param>
+        /// <param name="b">Vértices de posições X e Y globais</param>
+        /// <returns></returns>
+        public static bool IntersecaoEntrePoligonos(Vertice2D[] a, params Vertice2D[] b)
+        {
+            foreach (Vertice2D[] vPoligono in new[] { a, b })
+            {
+                for (int i1 = 0; i1 < vPoligono.Count(); i1++)
+                {
+                    int i2 = (i1 + 1) % vPoligono.Count();
+                    Vertice2D p1 = vPoligono[i1];
+                    Vertice2D p2 = vPoligono[i2];
+
+                    EixoXY normal = new XY(p2.Y - p1.Y, p1.X - p2.X);
+
+                    float? minA = null, maxA = null;
+                    foreach (var p in a)
+                    {
+                        var projetado = normal.X * p.X + normal.Y * p.Y;
+                        if (minA == null || projetado < minA) minA = projetado;
+                        if (maxA == null || projetado > maxA) maxA = projetado;
+                    }
+
+                    float? minB = null, maxB = null;
+                    foreach (var p in b)
+                    {
+                        float projetado = normal.X * p.X + normal.Y * p.Y;
+                        if (minB == null || projetado < minB) minB = projetado;
+                        if (maxB == null || projetado > maxB) maxB = projetado;
+                    }
+
+                    if (maxA < minB || maxB < minA) return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
         /// Interseção entre uma reta e um retângulo
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="pontoA"></param>
+        /// <param name="pontoB"></param>
         /// <param name="minX"></param>
         /// <param name="minY"></param>
         /// <param name="maxX"></param>
         /// <param name="maxY"></param>
         /// <returns></returns>
-        public static bool IntersecaoRetaRetangulo(Vetor2D a, Vetor2D b, float minX, float minY, float maxX, float maxY)
+        public static bool IntersecaoRetaRetangulo(Vetor2D pontoA, Vetor2D pontoB, float minX, float minY, float maxX, float maxY)
         {
             // Completamente fora
-            if ((a.X <= minX && b.X <= minX) || (a.Y <= minY && b.Y <= minY) ||
-                (a.X >= maxX && b.X >= maxX) || (a.Y >= maxY && b.Y >= maxY))
+            if ((pontoA.X <= minX && pontoB.X <= minX) || (pontoA.Y <= minY && pontoB.Y <= minY) ||
+                (pontoA.X >= maxX && pontoB.X >= maxX) || (pontoA.Y >= maxY && pontoB.Y >= maxY))
                 return false;
 
-            float m = (b.Y - a.Y) / (b.X - a.X);
+            float m = (pontoB.Y - pontoA.Y) / (pontoB.X - pontoA.X);
 
-            float y = m * (minX - a.X) + a.Y;
+            float y = m * (minX - pontoA.X) + pontoA.Y;
             if (y >= minY && y <= maxY) return true;
 
-            y = m * (maxX - a.X) + a.Y;
+            y = m * (maxX - pontoA.X) + pontoA.Y;
             if (y >= minY && y <= maxY) return true;
 
-            float x = (minY - a.Y) / m + a.X;
+            float x = (minY - pontoA.Y) / m + pontoA.X;
             if (x >= minX && x <= maxX) return true;
 
-            x = (maxY - a.Y) / m + a.X;
+            x = (maxY - pontoA.Y) / m + pontoA.X;
             if (x >= minX && x <= maxX) return true;
 
             return false;
@@ -303,29 +342,29 @@ namespace Epico
         /// <summary>
         /// Detecta interseção entre dois segmentos de retas
         /// </summary>
-        /// <param name="a">Ponto A do segmento 1</param>
-        /// <param name="b">Ponto B do segmento 1</param>
-        /// <param name="c">Ponto A do segmento 2</param>
-        /// <param name="d">Ponto B do segmento 2</param>
+        /// <param name="pontoA1">Ponto A do segmento 1</param>
+        /// <param name="pontoB1">Ponto B do segmento 1</param>
+        /// <param name="pontoA2">Ponto A do segmento 2</param>
+        /// <param name="pontoB2">Ponto B do segmento 2</param>
         /// <param name="intersecao">Ponto de interseção entre as retas</param>
-        /// <param name="linhas_intersecao">Linha de interseção</param>
+        /// <param name="linhas_intersecao">Linha de interseção?</param>
         /// <param name="aa">Ponto A da linha de interseç+ão</param>
         /// <param name="bb">Ponto B da linha de interseção</param>
         /// <returns></returns>
-        public static bool IntersecaoEntreDuasRetas(Vertice2D a, Vertice2D b, Vertice2D c, Vertice2D d,
+        public static bool IntersecaoEntreDuasRetas(Vertice2D pontoA1, Vertice2D pontoB1, Vertice2D pontoA2, Vertice2D pontoB2,
             out Vertice2D intersecao, out bool linhas_intersecao, out Vertice2D aa, out Vertice2D bb)
         {
             // Obtém os parâmetros dos segmentos
-            float dxAB = b.X - a.X;
-            float dyAB = b.Y - a.Y;
-            float dxCD = d.X - c.X;
-            float dyCD = d.Y - c.Y;
+            float dxAB = pontoB1.X - pontoA1.X;
+            float dyAB = pontoB1.Y - pontoA1.Y;
+            float dxCD = pontoB2.X - pontoA2.X;
+            float dyCD = pontoB2.Y - pontoA2.Y;
 
             // Resolve para t1 e t2
             float denominador = (dyAB * dxCD - dxAB * dyCD);
 
             float t1 =
-                ((a.X - c.X) * dyCD + (c.Y - a.Y) * dxCD) / denominador;
+                ((pontoA1.X - pontoA2.X) * dyCD + (pontoA2.Y - pontoA1.Y) * dxCD) / denominador;
             if (float.IsInfinity(t1))
             {
                 // As linhas são paralelas (ou próximas o suficiente)
@@ -337,10 +376,10 @@ namespace Epico
             }
             linhas_intersecao = true;
 
-            float t2 = ((c.X - a.X) * dyAB + (a.Y - c.Y) * dxAB) / -denominador;
+            float t2 = ((pontoA2.X - pontoA1.X) * dyAB + (pontoA1.Y - pontoA2.Y) * dxAB) / -denominador;
 
             // Ponto de interseção
-            intersecao = new Vertice2D(a.X + dxAB * t1, a.Y + dyAB * t1);
+            intersecao = new Vertice2D(pontoA1.X + dxAB * t1, pontoA1.Y + dyAB * t1);
 
             // Os segmentos se cruzam se t1 e t2 estiverem entre 0 e 1
             bool colisao =
@@ -352,8 +391,8 @@ namespace Epico
             if (t2 < 0) t2 = 0; else if (t2 > 1) t2 = 1;
 
             // Linha de interseção
-            aa = new Vertice2D(a.X + dxAB * t1, a.Y + dyAB * t1);
-            bb = new Vertice2D(c.X + dxCD * t2, c.Y + dyCD * t2);
+            aa = new Vertice2D(pontoA1.X + dxAB * t1, pontoA1.Y + dyAB * t1);
+            bb = new Vertice2D(pontoA2.X + dxCD * t2, pontoA2.Y + dyCD * t2);
 
             return colisao;
         }

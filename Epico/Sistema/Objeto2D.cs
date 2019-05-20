@@ -493,7 +493,12 @@ namespace Epico.Sistema
                     Raio = x.Raio,
                     Sel = x.Sel
                 }).ToArray();
-            
+            // Cria novas instâncias para os elementos
+            ((Objeto2D)clone).Origem = Origem
+                .Select(x => new Origem2D(this, x.X, x.Y)
+                {
+                    Sel = x.Sel
+                }).ToList();
 
             return clone;
         }

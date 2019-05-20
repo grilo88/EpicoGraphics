@@ -69,7 +69,7 @@ namespace Editor.win32
                 }
 
                 if (_epico2D.Camera.ResWidth != imageView.Size.Width ||
-                    _epico2D.Camera.ResHeigth != imageView.Size.Height)
+                    _epico2D.Camera.ResHeight != imageView.Size.Height)
                 {
                     _epico2D.Camera.RedefinirResolucao(imageView.Size.Width, imageView.Size.Height);
                 }

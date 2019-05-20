@@ -25,7 +25,7 @@ namespace Epico.Sistema
 
         #region Campos
         public int ResWidth;
-        public int ResHeigth;
+        public int ResHeight;
 #if Editor2D || NetStandard2 || NetCore
         public PixelFormat FormatoPixel = PixelFormat.Format32bppArgb;
         public InterpolationMode ModoInterpolacao = InterpolationMode.Default;
@@ -52,8 +52,8 @@ namespace Epico.Sistema
 
         public float Left => Pos.X - ResWidth / 2;
         public float Right => Pos.X + ResWidth / 2;
-        public float Top => Pos.Y - ResHeigth / 2;
-        public float Bottom => Pos.Y + ResHeigth / 2;
+        public float Top => Pos.Y - ResHeight / 2;
+        public float Bottom => Pos.Y + ResHeight / 2;
 
         public bool EfeitoQuadroDuplicado { get; set; }
         #endregion
@@ -75,7 +75,7 @@ namespace Epico.Sistema
             Nome = "Camera";
             FormatoPixel = formatoPixel;
             ResWidth = width;
-            ResHeigth = heigth;
+            ResHeight = heigth;
             render = new Bitmap(width, heigth, formatoPixel);
 #if Editor2D || NetCore || NetStandard2
             g = Graphics.FromImage(render);
@@ -100,7 +100,7 @@ namespace Epico.Sistema
 
                 FormatoPixel = pixelFormat;
                 ResWidth = width;
-                ResHeigth = height;
+                ResHeight = height;
                 render = new Bitmap(width, height, pixelFormat);
 #if Editor2D || NetCore || NetStandard2
                 g = Graphics.FromImage(render);
@@ -183,16 +183,16 @@ namespace Epico.Sistema
             TempoDelta = DateTime.Now.Ticks - _tickRender; // Calcula o tempo delta (tempo de atraso)
             _tickRender = DateTime.Now.Ticks;
 
-            if (ResWidth > 0 && ResHeigth > 0) // Janela não minimizada?
+            if (ResWidth > 0 && ResHeight > 0) // Janela não minimizada?
             {
                 if (EfeitoQuadroDuplicado)
-                    g.FillRectangle(new SolidBrush(Color.FromArgb(50, 0, 0, 0)), new Rectangle(0, 0, ResWidth, ResHeigth));
+                    g.FillRectangle(new SolidBrush(Color.FromArgb(50, 0, 0, 0)), new Rectangle(0, 0, ResWidth, ResHeight));
                 else
                     g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
 
 
                 // Obtém a posição da tela da câmera
-                TelaPos.Y = Pos.Y - ResHeigth / 2;
+                TelaPos.Y = Pos.Y - ResHeight / 2;
                 TelaPos.X = Pos.X - ResWidth / 2;
 
                 for (int i = 0; i < engine.objetos.Count; i++)
@@ -217,15 +217,23 @@ namespace Epico.Sistema
                             XY globalPos = new XY(
                                 obj.Vertices[v].GlobalX,
                                 obj.Vertices[v].GlobalY);
-                            EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, Angulo);
+                            EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, -Angulo);
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
-#endregion
-
+                        for (int c = 0; c < obj.Origem.Count(); c++)
+                        {
+                            XY globalPos = new XY(
+                                obj.Origem[c].GlobalX,
+                                obj.Origem[c].GlobalY);
+                            EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, -Angulo);
+                            obj.Origem[c].X = xy.X - obj.Pos.X;
+                            obj.Origem[c].Y = xy.Y - obj.Pos.Y;
+                        }
+                        #endregion
                         obj.AtualizarXYMinMax();
 
-                        if (Objeto2DVisivelCamera(obj))
+                        if (Objeto2DVisivelCamera(objEspaco))
                         {
                             if (obj.Mat_render.CorSolida.A > 0) // Pinta objeto materialmente visível
                             {
@@ -373,55 +381,22 @@ namespace Epico.Sistema
             return render;
         }
 
-        public Objeto2D ObjetoAnguloCamera(Objeto2D obj, bool clonar = true)
+        /// <summary>
+        /// Checa se o objeto 2D está visível na câmera
+        /// </summary>
+        /// <param name="objEspaco">Objeto 2D antes da fase de projeção de tela</param>
+        /// <returns></returns>
+        public bool Objeto2DVisivelCamera(Objeto2D objEspaco)
         {
-            Objeto2D clone = clonar ? (Objeto2D)obj.Clone() : obj;
-            for (int v = 0; v < obj.Vertices.Count(); v++)
-            {
-                XY globalPos = new XY(
-                    obj.Vertices[v].GlobalX,
-                    obj.Vertices[v].GlobalY);
+            Vertice2D[] rectCam = new Vertice2D[4];
+            rectCam[0] = new Vertice2D(Util.RotacionarPonto2D(Pos, new XY(Left, Top), Angulo));          // Superior Esquerda
+            rectCam[1] = new Vertice2D(Util.RotacionarPonto2D(Pos, new XY(Right, Top), Angulo));         // Superior Direita
+            rectCam[2] = new Vertice2D(Util.RotacionarPonto2D(Pos, new XY(Right, Bottom), Angulo));      // Inferior Direita
+            rectCam[3] = new Vertice2D(Util.RotacionarPonto2D(Pos, new XY(Left, Bottom), Angulo));       // Inferior Esquerda
 
-                EixoXY xy = Util.RotacionarPonto2D(Pos, globalPos, Angulo);
-                obj.Vertices[v].X = xy.X - obj.Pos.X;
-                obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
-            }
-            return clone;
+            return Util.IntersecaoEntrePoligonos(rectCam, 
+                objEspaco.Vertices.Select(x => new Vertice2D(x.GlobalX, x.GlobalY)).ToArray());
         }
-
-        public bool Objeto2DVisivelCamera(Objeto2D obj)
-        {
-            TelaPos.Y = Pos.Y - ResHeigth / 2;
-            TelaPos.X = Pos.X - ResWidth / 2;
-
-            float pontoXMax = -TelaPos.X + obj.GlobalXMax;
-            float pontoXMin = -TelaPos.X + obj.GlobalXMin;
-            float pontoYMax = -TelaPos.Y + obj.GlobalYMax;
-            float pontoYMin = -TelaPos.Y + obj.GlobalYMin;
-
-            if (pontoXMax >= 0 && pontoXMin <= ResWidth)
-                if (pontoYMax >= 0 && pontoYMin <= ResHeigth)
-                {
-                    return true;
-                }
-            return false;
-        }
-
-        //public bool Objeto2DVisivel(Objeto2D obj)
-        //{
-        //    float xMax = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMax;
-        //    float xMin = -(Pos.X - ResWidth / 2) + obj.Pos.X + obj.XMin;
-        //    float yMax = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMax;
-        //    float yMin = -(Pos.Y - ResHeigth / 2) + obj.Pos.Y + obj.YMin;
-
-        //    if (xMax >= 0 && xMin <= ResWidth)
-        //        if (yMax >= 0 && yMin <= ResHeigth)
-        //        {
-        //            return true;
-        //        }
-
-        //    return false;
-        //}
 
         /// <summary>
         /// Trabalha o Zoom orientado a escala do objeto
@@ -431,6 +406,7 @@ namespace Epico.Sistema
         /// <returns></returns>
         private Objeto2D ZoomEscalaObjeto2D(Objeto2D obj, float zoom)
         {
+#warning Falhas nesta lógica
             for (int i = 0; i < obj.Vertices.Length; i++)
             {
                 obj.Vertices[i].X = (float)(Math.Sin(obj.Vertices[i].Rad + Util.Angulo2Radiano(obj.Angulo)) * obj.Vertices[i].Raio * zoom);
@@ -449,6 +425,7 @@ namespace Epico.Sistema
         /// <returns></returns>
         private Objeto2D ZoomPosObjeto2D(Objeto2D obj, float zoom)
         {
+#warning Falhas nesta lógica
             // TODO: Precisa rever este conceito. Há erro no cálculo!
 
             float radZoom = Util.Angulo2Radiano(Util.AnguloEntreDoisPontos(Pos, obj.Pos));

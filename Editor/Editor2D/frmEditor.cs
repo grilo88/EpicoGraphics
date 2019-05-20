@@ -115,12 +115,12 @@ namespace Editor2D
                     float distCursor = Util.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
                     float angCursor = Util.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
-                    _engine2D.Camera.Pos.X += (float)(Math.Cos(Util.Angulo2Radiano(angCursor - _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
-                    _engine2D.Camera.Pos.Y += (float)(Math.Sin(Util.Angulo2Radiano(angCursor - _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
+                    _engine2D.Camera.Pos.X += (float)(Math.Cos(Util.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
+                    _engine2D.Camera.Pos.Y += (float)(Math.Sin(Util.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
                 }
 
                 if (_engine2D.Camera.ResWidth != picScreen.ClientRectangle.Width ||
-                    _engine2D.Camera.ResHeigth != picScreen.ClientRectangle.Height)
+                    _engine2D.Camera.ResHeight != picScreen.ClientRectangle.Height)
                 {
                     _engine2D.Camera.RedefinirResolucao(picScreen.ClientRectangle.Width, picScreen.ClientRectangle.Height);
                 }
@@ -682,18 +682,26 @@ namespace Editor2D
             {
                 if (selRect.Width > 0 && selRect.Height > 0) // Retângulo
                 {
-                    // Desenha o retângulo multi-seleção
+                    // Desenha o retângulo multi-seleção na tela
                     e.Graphics.FillRectangle(selBrush, selRect);
+
+                    #region Retângulo de colisão para o mundo 2D
+                    Vertice2D[] rect = new Vertice2D[4];
+                    rect[0] = new Vertice2D(selRect.X, selRect.Y);                                      // Superior Esquerdo
+                    rect[1] = new Vertice2D(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
+                    rect[2] = new Vertice2D(selRect.X + selRect.Width, selRect.Y + selRect.Height);     // Inferior Direito
+                    rect[3] = new Vertice2D(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
+                    #endregion
 
                     if (toolStripSelecao.Checked)
                     {
                         _obj_sel.ForEach(x => x.Selecionado = false);
                         _obj_sel.Clear();
-                        _obj_sel = _engine2D.ObterObjetos2DPelaTela(_engine2D.Camera, selRect).ToList();
+                        _obj_sel = _engine2D.ObterObjetos2DPelaTela(_engine2D.Camera, rect).ToList();
                         _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        var tmp = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, selRect);
+                        var tmp = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, rect);
                         e.Graphics.DrawString(
                             $"{tmp.Count()} objetos", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
@@ -705,7 +713,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _origem_sel.ForEach(x => x.Sel = false);
                         _origem_sel.Clear();
-                        _origem_sel = Util.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _origem_sel = Util.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
                         _origem_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -733,7 +741,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
-                        _vertice_sel = Util.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _vertice_sel = Util.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
                         _vertice_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -1272,6 +1280,11 @@ namespace Editor2D
         {
             multiplicarQuadrosToolStripMenuItem.Checked = !multiplicarQuadrosToolStripMenuItem.Checked;
             _engine2D.Camera.EfeitoQuadroDuplicado = multiplicarQuadrosToolStripMenuItem.Checked;
+        }
+
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

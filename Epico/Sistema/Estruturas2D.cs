@@ -128,12 +128,18 @@ namespace Epico.Sistema
         }
 
         public Vertice2D(float x, float y) : this(null, x, y) { }
+        public Vertice2D(EixoXY xy) : this(null, xy.X, xy.Y) { }
 
         public Vertice2D(Objeto2D obj, float x, float y)
         {
             base.obj = obj ?? base.obj;
             base.X = x;
             base.Y = y;
+        }
+
+        public static Vertice2D operator +(Vertice2D a, EixoXY b)
+        {
+            return new Vertice2D(a.X + b.X, a.Y + b.Y);
         }
     }
 }

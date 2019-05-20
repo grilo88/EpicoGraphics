@@ -145,15 +145,15 @@
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.desligarZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.portaDeVisãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripDesfazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripRefazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.portaDeVisãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -243,7 +243,6 @@
             this.picScreen.Size = new System.Drawing.Size(312, 597);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
-            this.picScreen.Click += new System.EventHandler(this.PicScreen_Click);
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
             this.picScreen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicDesign_MouseDown);
             this.picScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PicDesign_MouseMove);
@@ -1393,7 +1392,7 @@
             this.fPSToolStripMenuItem.Checked = true;
             this.fPSToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.fPSToolStripMenuItem.Name = "fPSToolStripMenuItem";
-            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fPSToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.fPSToolStripMenuItem.Text = "FPS";
             this.fPSToolStripMenuItem.Click += new System.EventHandler(this.FPSToolStripMenuItem_Click);
             // 
@@ -1402,9 +1401,32 @@
             this.desligarZoomToolStripMenuItem.Checked = true;
             this.desligarZoomToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.desligarZoomToolStripMenuItem.Name = "desligarZoomToolStripMenuItem";
-            this.desligarZoomToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.desligarZoomToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.desligarZoomToolStripMenuItem.Text = "Desligar Zoom";
             this.desligarZoomToolStripMenuItem.Click += new System.EventHandler(this.DesligarZoomToolStripMenuItem_Click);
+            // 
+            // portaDeVisãoToolStripMenuItem
+            // 
+            this.portaDeVisãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.efeitosToolStripMenuItem});
+            this.portaDeVisãoToolStripMenuItem.Name = "portaDeVisãoToolStripMenuItem";
+            this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.portaDeVisãoToolStripMenuItem.Text = "Porta de Visão";
+            // 
+            // efeitosToolStripMenuItem
+            // 
+            this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.multiplicarQuadrosToolStripMenuItem});
+            this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.efeitosToolStripMenuItem.Text = "Efeitos";
+            // 
+            // multiplicarQuadrosToolStripMenuItem
+            // 
+            this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Text = "Multiplicar Quadros";
+            this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
             // toolStrip2
             // 
@@ -1463,29 +1485,6 @@
             this.splitter2.Size = new System.Drawing.Size(3, 622);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
-            // 
-            // portaDeVisãoToolStripMenuItem
-            // 
-            this.portaDeVisãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.efeitosToolStripMenuItem});
-            this.portaDeVisãoToolStripMenuItem.Name = "portaDeVisãoToolStripMenuItem";
-            this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
-            this.portaDeVisãoToolStripMenuItem.Text = "Porta de Visão";
-            // 
-            // efeitosToolStripMenuItem
-            // 
-            this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.multiplicarQuadrosToolStripMenuItem});
-            this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
-            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.efeitosToolStripMenuItem.Text = "Efeitos";
-            // 
-            // multiplicarQuadrosToolStripMenuItem
-            // 
-            this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
-            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.multiplicarQuadrosToolStripMenuItem.Text = "Multiplicar Quadros";
-            this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
             // frmEditor
             // 
