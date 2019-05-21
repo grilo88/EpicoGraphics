@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Editor2D
 {
@@ -78,7 +79,7 @@ namespace Editor2D
                 txtOrigemPosX, txtOrigemPosY,
                 txtVerticePosX, txtVerticePosY, txtVerticeRaio, txtVerticeAngulo);
 
-            BtnForm2D_Click(sender, e);
+            //BtnForm2D_Click(sender, e);
             AtualizarControlesObjeto2D(_obj_sel);
             AtualizarComboObjetos2D();
 
@@ -1285,6 +1286,79 @@ namespace Editor2D
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void AndePeloEspaço2DToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoopAndePeloEspaco(_engine2D, this);
+        }
+
+        private async void LoopAndePeloEspaco(Epico2D engine, Form owner)
+        {
+            float AngPerson = 0;
+            Triangulo person = new Triangulo(50);
+            person.Nome = "Ator";
+            person.Mat_render.CorSolida = new RGBA(255, 0, 255, 255);
+            person.Pos.X = 100;
+            person.Pos.Y = 100;
+            engine.AddObjeto(person);
+            person.CriarArestasConvexo();
+
+            engine.Camera.Focar(person);
+
+            int frente = 0, esquerda = 0;
+            owner.KeyPreview = true;
+
+            owner.KeyDown += (sender, e) =>
+            {
+                if (e.KeyCode == Keys.Up) frente = 5;
+                if (e.KeyCode == Keys.Down) frente = -5;
+                if (e.KeyCode == Keys.Left) esquerda = -5;
+                if (e.KeyCode == Keys.Right) esquerda = 5;
+            };
+            owner.KeyUp += (sender, e) =>
+            {
+                if (e.KeyCode == Keys.Up) frente = 0;
+                if (e.KeyCode == Keys.Down) frente = 0;
+                if (e.KeyCode == Keys.Left) esquerda = 0;
+                if (e.KeyCode == Keys.Right) esquerda = 0;
+            };
+
+            await Task.Factory.StartNew(() =>
+            {
+                Colisao2D colisao = new Colisao2D();
+
+                while (!_sair)
+                {
+                    AngPerson += esquerda * (float)(engine.Camera.TempoDelta * 0.0000000005);
+
+                    Vetor2D movimento = new Vetor2D(person);
+                    movimento.X += (float)(Math.Cos(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * 0.0000000005);
+                    movimento.Y += (float)(Math.Sin(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * 0.0000000005);
+
+                    // Detecção de colisão
+                    for (int i = 0; i < engine.objetos.Count(); i++)
+                    {
+                        Objeto2D obj = engine.objetos[i];
+
+                        // Ignora o próprio personagem
+                        if (obj == person) continue;
+
+                        // Testa a colisão com os polígonos
+                        ColisaoPoligonoConvexoResultado r = colisao.PoligonoConvexo(
+                            person, obj, movimento);
+
+                        if (r.Interceptar)
+                        {
+                            person.Pos = movimento + r.TranslacaoMinimaVetor.Global;
+                            break;
+                        }
+                    }
+
+                    person.DefinirAngulo(AngPerson);
+                    person.Pos += movimento;
+                }
+            });
         }
     }
 }

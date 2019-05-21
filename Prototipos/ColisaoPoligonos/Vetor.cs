@@ -47,12 +47,12 @@ namespace ColisaoPoligonos
             return new Vetor(X / magnitude, Y / magnitude);
         }
 
-        public float PontoProduto(Vetor vetor)
+        public float ProdutoPontual(Vetor vetor)
         {
             return this.X * vetor.X + this.Y * vetor.Y;
         }
 
-        public float DistanciaPara(Vetor vetor)
+        public float DistanciaAte(Vetor vetor)
         {
             return (float)Math.Sqrt(Math.Pow(vetor.X - this.X, 2) + Math.Pow(vetor.Y - this.Y, 2));
         }

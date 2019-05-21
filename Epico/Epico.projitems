@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Retangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Triangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\TrianguloRetangulo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Colisao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\Projetor2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\Animacao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\Avancado2D.cs" />

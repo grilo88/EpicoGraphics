@@ -154,6 +154,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
+            this.jogosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.andePeloEspaço2DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -1356,7 +1358,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.telaInteiraToolStripMenuItem,
             this.debugToolStripMenuItem,
-            this.portaDeVisãoToolStripMenuItem});
+            this.portaDeVisãoToolStripMenuItem,
+            this.jogosToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(878, 24);
@@ -1485,6 +1488,21 @@
             this.splitter2.Size = new System.Drawing.Size(3, 622);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
+            // 
+            // jogosToolStripMenuItem
+            // 
+            this.jogosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.andePeloEspaço2DToolStripMenuItem});
+            this.jogosToolStripMenuItem.Name = "jogosToolStripMenuItem";
+            this.jogosToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.jogosToolStripMenuItem.Text = "Jogos";
+            // 
+            // andePeloEspaço2DToolStripMenuItem
+            // 
+            this.andePeloEspaço2DToolStripMenuItem.Name = "andePeloEspaço2DToolStripMenuItem";
+            this.andePeloEspaço2DToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.andePeloEspaço2DToolStripMenuItem.Text = "Ande pelo Espaço 2D";
+            this.andePeloEspaço2DToolStripMenuItem.Click += new System.EventHandler(this.AndePeloEspaço2DToolStripMenuItem_Click);
             // 
             // frmEditor
             // 
@@ -1683,6 +1701,8 @@
         private System.Windows.Forms.ToolStripMenuItem portaDeVisãoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem efeitosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem multiplicarQuadrosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem jogosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem andePeloEspaço2DToolStripMenuItem;
     }
 }
 

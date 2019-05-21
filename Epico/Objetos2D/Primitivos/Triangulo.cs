@@ -8,7 +8,7 @@ namespace Epico.Objetos2D.Primitivos
         public Triangulo(float raio)
         {
             Nome = "Triângulo";
-            GerarGeometriaRadial(10, raio, 3);
+            GerarGeometriaRadial(0, raio, 3);
         }
     }
 }

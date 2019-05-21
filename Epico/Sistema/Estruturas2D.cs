@@ -15,7 +15,7 @@ namespace Epico.Sistema
         /// <summary>
         /// Objeto 2D da qual esta posição2D está associada
         /// </summary>
-        protected Objeto2D obj;
+        public Objeto2D obj;
 
         /// <summary>Posição local na coordenada x</summary>
         public float X { get; set; }
@@ -32,7 +32,44 @@ namespace Epico.Sistema
 
         /// <summary>Posição global na coordenada Y</summary>
         public float GlobalY => obj.Pos.Y + Y;
+
+        public EixoXY Global => new XY(GlobalX, GlobalY);
+
+        public static EixoXY operator -(EixoXY a, EixoXY b)
+        {
+            return new XY(a.X - b.X, a.Y - b.Y);
+        }
+
+        public float ProdutoPontual(EixoXY vetor)
+        {
+            return this.X * vetor.X + this.Y * vetor.Y;
+        }
+
+        public float Magnitude
+        {
+            get => (float)Math.Sqrt(X * X + Y * Y);
+        }
+
+        public EixoXY ObterNormalizado()
+        {
+            float magnitude = Magnitude;
+
+            return new XY(X / magnitude, Y / magnitude);
+        }
+
+        public void Normalizar()
+        {
+            float magnitude = Magnitude;
+            X /= magnitude;
+            Y /= magnitude;
+        }
+
+        public float DistanciaAte(EixoXY vetor)
+        {
+            return (float)Math.Sqrt(Math.Pow(vetor.X - this.X, 2) + Math.Pow(vetor.Y - this.Y, 2));
+        }
     }
+
 
     public sealed class XY : EixoXY
     {
@@ -62,6 +99,23 @@ namespace Epico.Sistema
 
     public sealed class Vetor2D : EixoXY
     {
+        public Vetor2D() { }
+
+        public Vetor2D(Objeto2D obj) { base.obj = obj; }
+
+        public Vetor2D(EixoXY xy)
+        {
+            base.X = xy.X;
+            base.Y = xy.Y;
+        }
+
+        public Vetor2D(Objeto2D obj, EixoXY eixo)
+        {
+            base.obj = obj;
+            base.X = eixo.X;
+            base.Y = eixo.Y;
+        }
+
         public Vetor2D(float x, float y)
         {
             base.obj = obj;
@@ -82,29 +136,87 @@ namespace Epico.Sistema
             base.Y = y;
         }
 
-        public float Magnitude
+
+        public static Vetor2D operator +(Vetor2D a, Vetor2D b)
         {
-            get { return (float)Math.Sqrt(X * X + Y * Y); }
+            return new Vetor2D(a.obj, a.X + b.X, a.Y + b.Y);
         }
 
-        public void Normalize()
+        public static Vetor2D operator +(Vetor2D a, EixoXY b)
         {
-            float magnitude = Magnitude;
-            X = X / magnitude;
-            Y = Y / magnitude;
+            return new Vetor2D(a.obj, a.X + b.X, a.Y + b.Y);
         }
 
-        public Vetor2D ObterNormalizado()
+        public static Vetor2D operator -(Vetor2D a)
         {
-            float magnitude = Magnitude;
-            return new Vetor2D(X / magnitude, Y / magnitude);
+            return new Vetor2D(a.obj, -a.X, -a.Y);
         }
 
-        public float Produto(Vetor2D vetor)
+        public static Vetor2D operator -(Vetor2D a, Vetor2D b)
         {
-            return this.X * vetor.X + this.Y * vetor.Y;
+            return new Vetor2D(a.obj, a.X - b.X, a.Y - b.Y);
         }
 
+        
+
+        public static Vetor2D operator *(Vetor2D a, float b)
+        {
+            return new Vetor2D(a.obj, a.X * b, a.Y * b);
+        }
+
+        public static Vetor2D operator *(Vetor2D a, int b)
+        {
+            return new Vetor2D(a.obj, a.X * b, a.Y * b);
+        }
+
+        public static Vetor2D operator *(Vetor2D a, double b)
+        {
+            return new Vetor2D(a.obj, (float)(a.X * b), (float)(a.Y * b));
+        }
+
+        public override bool Equals(object obj)
+        {
+            Vetor2D v = (Vetor2D)obj;
+
+            return X == v.X && Y == v.Y;
+        }
+
+        public bool Equals(Vetor2D v)
+        {
+            return X == v.X && Y == v.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode();
+        }
+
+        public static bool operator ==(Vetor2D a, Vetor2D b)
+        {
+            return a.X == b.X && a.Y == b.Y;
+        }
+
+        public static bool operator !=(Vetor2D a, Vetor2D b)
+        {
+            return a.X != b.X || a.Y != b.Y;
+        }
+
+        public override string ToString()
+        {
+            return X + ", " + Y;
+        }
+
+        public string ToString(bool arredondado)
+        {
+            if (arredondado)
+            {
+                return (int)Math.Round(X) + ", " + (int)Math.Round(Y);
+            }
+            else
+            {
+                return ToString();
+            }
+        }
     }
 
     public sealed class Vertice2D : EixoXY
@@ -135,11 +247,6 @@ namespace Epico.Sistema
             base.obj = obj ?? base.obj;
             base.X = x;
             base.Y = y;
-        }
-
-        public static Vertice2D operator +(Vertice2D a, EixoXY b)
-        {
-            return new Vertice2D(a.X + b.X, a.Y + b.Y);
         }
     }
 }

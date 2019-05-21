@@ -117,7 +117,7 @@ namespace ColisaoPoligonos
 
                 if (r.Interceptar)
                 {
-                    jogadorTransladacao = velocidade + r.TransladacaoMinimaVetor;
+                    jogadorTransladacao = velocidade + r.TranslacaoMinimaVetor;
                     break;
                 }
             }
@@ -131,7 +131,7 @@ namespace ColisaoPoligonos
         {
             public bool Interceptar; // Os polígonos vão se cruzar no tempo?
             public bool Intersecao; // Os polígonos estão se cruzando atualmente?
-            public Vetor TransladacaoMinimaVetor; // A transladação a aplicar ao polígono A para empurrar os polígonos.
+            public Vetor TranslacaoMinimaVetor; // A translação a aplicar ao polígono A para empurrar os polígonos.
         }
 
         // Verifique se o polígono A vai colidir com o polígono B na velocidade dada
@@ -144,7 +144,7 @@ namespace ColisaoPoligonos
             int arestaCountA = poligonoA.Arestas.Count;
             int arestaCountB = poligonoB.Arestas.Count;
             float minIntervalDistance = float.PositiveInfinity;
-            Vetor EixoTransladacao = new Vetor();
+            Vetor EixoTranslacao = new Vetor();
             Vetor aresta;
 
             // Loop através de todas as bordas de ambos os polígonos
@@ -176,7 +176,7 @@ namespace ColisaoPoligonos
                 // ===== 2. Agora, encontre os polígonos que irão se *cruzar* =====
 
                 // Projetar a velocidade no eixo atual
-                float velocidadeProjecao = eixo.PontoProduto(velocidade);
+                float velocidadeProjecao = eixo.ProdutoPontual(velocidade);
 
                 // Obter a projeção do polígono A durante o movimento
                 if (velocidadeProjecao < 0)
@@ -202,16 +202,16 @@ namespace ColisaoPoligonos
                 if (distanciaDoIntervalo < minIntervalDistance)
                 {
                     minIntervalDistance = distanciaDoIntervalo;
-                    EixoTransladacao = eixo;
+                    EixoTranslacao = eixo;
 
                     Vetor d = poligonoA.Centro - poligonoB.Centro;
-                    if (d.PontoProduto(EixoTransladacao) < 0) EixoTransladacao = -EixoTransladacao;
+                    if (d.ProdutoPontual(EixoTranslacao) < 0) EixoTranslacao = -EixoTranslacao;
                 }
             }
 
             // O vetor de transladação mínimo pode ser usado para pressionar os polígonos. 
-            // Primeiro move os polígonos pela sua velocidade e, em seguida, move polygonA por TransladacaoMinimaVetor.
-            if (resultado.Interceptar) resultado.TransladacaoMinimaVetor = EixoTransladacao * minIntervalDistance;
+            // Primeiro move os polígonos pela sua velocidade e, em seguida, move PoligonoA por TransladacaoMinimaVetor.
+            if (resultado.Interceptar) resultado.TranslacaoMinimaVetor = EixoTranslacao * minIntervalDistance;
 
             return resultado;
         }
@@ -233,12 +233,12 @@ namespace ColisaoPoligonos
         public void ProjecaoPoligono(Vetor eixo, Poligono poligono, ref float min, ref float max)
         {
             // Para projetar um ponto em um eixo, use o produto escalar
-            float d = eixo.PontoProduto(poligono.Pontos[0]);
+            float d = eixo.ProdutoPontual(poligono.Pontos[0]);
             min = d;
             max = d;
             for (int i = 0; i < poligono.Pontos.Count; i++)
             {
-                d = poligono.Pontos[i].PontoProduto(eixo);
+                d = poligono.Pontos[i].ProdutoPontual(eixo);
                 if (d < min)
                 {
                     min = d;

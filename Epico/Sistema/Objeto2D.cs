@@ -107,6 +107,8 @@ namespace Epico.Sistema
         public List<Origem2D> Origem { get; set; } = new List<Origem2D>();
         /// <summary>Vértices do objeto</summary>
         public Vertice2D[] Vertices = new Vertice2D[0];
+        public List<Vetor2D> Arestas = new List<Vetor2D>();
+
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Animações do objeto</summary>
         public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
@@ -169,11 +171,53 @@ namespace Epico.Sistema
             //{
                 Array.Resize(ref Vertices, Vertices.Length + 1);
                 Vertices[Vertices.Length - 1] = v;
+            Vertices[Vertices.Length - 1].obj = this;
                 //_quantVertices = Vertices.Length;
                 AtualizarXYMinMax();
             //}
 
             //_quantVertices = Vertices.Length;
+        }
+
+        /// <summary>
+        /// Obtém o centro do objeto
+        /// </summary>
+        public Vetor2D Centro
+        {
+            get
+            {
+                float totalX = 0;
+                float totalY = 0;
+                for (int i = 0; i < Vertices.Length; i++)
+                {
+                    totalX += Vertices[i].X;
+                    totalY += Vertices[i].Y;
+                }
+
+                return new Vetor2D(this, totalX / (float)Vertices.Length, totalY / (float)Vertices.Length);
+            }
+        }
+
+        /// <summary>
+        /// Cria arestas convexa para o objeto2D para fins diversos
+        /// </summary>
+        public void CriarArestasConvexo()
+        {
+            Vetor2D p1, p2;
+            Arestas.Clear();
+            for (int i = 0; i < Vertices.Length; i++)
+            {
+                p1 = new Vetor2D(this, Vertices[i].X, Vertices[i].Y);
+                if (i + 1 >= Vertices.Length)
+                {
+                    p2 = new Vetor2D(this, Vertices[0].X, Vertices[0].Y);
+                }
+                else
+                {
+                    p2 = new Vetor2D(this, Vertices[i + 1].X, Vertices[i + 1].Y);
+                }
+                Arestas.Add(p2 - p1);
+            }
         }
 
         public virtual void Animar(string nome)
@@ -196,29 +240,19 @@ namespace Epico.Sistema
         /// Move o objeto incrementando as posições x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Mover(Vetor2D pos)
-        {
-            Pos.X += pos.X;
-            Pos.Y += pos.Y;
-        }
+        public virtual void Mover(Vetor2D pos) => Pos += pos;
 
         /// <summary>
         /// Move o objeto incrementando a posição x
         /// </summary>
         /// <param name="x"></param>
-        public virtual void MoverX(float x)
-        {
-            Pos.X = x;
-        }
+        public virtual void MoverX(float x) => Pos.X = x;
 
         /// <summary>
         /// Move o objeto incrementando a posição y
         /// </summary>
         /// <param name="y"></param>
-        public virtual void MoverY(float y)
-        {
-            Pos.Y = y;
-        }
+        public virtual void MoverY(float y) => Pos.Y = y;
 
         /// <summary>
         /// Posiciona o objeto na posição x e y
@@ -235,20 +269,13 @@ namespace Epico.Sistema
         /// Posiciona o objeto na posição x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Posicionar(Vetor2D pos)
-        {
-            Pos.X = pos.X;
-            Pos.Y = pos.Y;
-        }
+        public virtual void Posicionar(Vetor2D pos) => Pos = pos;
 
         /// <summary>
         /// Posiciona o objeto na posição x
         /// </summary>
         /// <param name="x"></param>
-        public virtual void PosicionarX(float x)
-        {
-            Pos.X = x;
-        }
+        public virtual void PosicionarX(float x) => Pos.X = x;
 
         /// <summary>
         /// Posiciona o objeto na posição y
