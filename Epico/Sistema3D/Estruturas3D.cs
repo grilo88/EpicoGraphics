@@ -123,6 +123,7 @@ namespace Epico.Sistema3D
 
         public Vetor3D(EixoXYZ xyz)
         {
+            base.obj = xyz.obj;
             base.X = xyz.X;
             base.Y = xyz.Y;
             base.Z = xyz.Z;

@@ -45,6 +45,7 @@
             this.ClientSize = new System.Drawing.Size(571, 532);
             this.Name = "frmPrincipal";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.FrmPrincipal_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.FrmPrincipal_Paint);
             this.ResumeLayout(false);
 

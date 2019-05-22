@@ -78,5 +78,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Biblioteca\Epico.net45.x86\Epico.net45.x86.csproj">
+      <Project>{8a6c0627-f7f5-43db-b684-c504674423d7}</Project>
+      <Name>Epico.net45.x86</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

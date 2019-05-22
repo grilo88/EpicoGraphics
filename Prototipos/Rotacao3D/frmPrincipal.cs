@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Epico.Sistema3D;
+using Epico;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Epico.Sistema2D;
 
 namespace Rotacao3D
 {
@@ -19,92 +23,85 @@ namespace Rotacao3D
             DoubleBuffered = true;
         }
 
-        struct Vetor3D
+        Vetor3D cameraPos = new Vetor3D();
+        List<Vertice3D> Vertices = new List<Vertice3D>();
+        Vetor2D pontoTela = new Vetor2D();
+
+        private Vetor3D Centro()
         {
-            public float X, Y, Z;
-            public Vetor3D(float X, float Y, float Z)
-            {
-                this.X = X;
-                this.Y = Y;
-                this.Z = Z;
-            }
+            float TotalX = Vertices.Sum(x => x.X);
+            float TotalY = Vertices.Sum(x => x.Y);
+            float TotalZ = Vertices.Sum(x => x.Z);
+
+            return new Vetor3D(TotalX / Vertices.Count(), TotalY / Vertices.Count(), TotalZ / Vertices.Count());
         }
 
-        Vetor3D pontoA = new Vetor3D(0, 0, 0);
-        Vetor3D pontoB = new Vetor3D(-50, 0, 0);
-        Vetor3D pontoC = new Vetor3D(0, 50, 0);
-        Vetor3D pontoD = new Vetor3D(-50, 50, 50);
-        Vetor3D pontoE = new Vetor3D(-50, 50, 50);
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+            // Parte Inferior
+            Vertices.Add(new Vertice3D(0, 0, 0));
+            Vertices.Add(new Vertice3D(0, 50, 0));
+            Vertices.Add(new Vertice3D(50, 50, 0));
+            Vertices.Add(new Vertice3D(50, 0, 0));
+
+            // Parte Superior
+            Vertices.Add(new Vertice3D(0, 0, 50));
+            Vertices.Add(new Vertice3D(0, 50, 50));
+            Vertices.Add(new Vertice3D(50, 50, 50));
+            Vertices.Add(new Vertice3D(50, 0, 50));
+        }
 
         private void FrmPrincipal_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
+            // O fator de zoom é definido com a largura do monitor para impedir que o cubo seja distorcido
+            float zoom = (float)(Screen.PrimaryScreen.Bounds.Width / 1.5);
 
+            //Calcule a posição da câmera Z para permanecer constante apesar da rotação            
+            Vetor3D pontoAncora = new Vetor3D(Vertices[4]); //anchor point
+            float cameraZ = -(((pontoAncora.X - Centro().X) * zoom) / Centro().X) + pontoAncora.Z;
+            cameraPos = new Vetor3D(Centro().X, Centro().Y, cameraZ);
+
+            g = Graphics.FromImage(tmpBmp);
+
+            // Converter pontos 3D para 2D
+            Vetor3D vec;
+            for (int i = 0; i < Vertices.Count(); i++)
+            {
+                vec = new Vetor3D(Vertices[i]);
+                if (vec.Z - cameraPos.Z >= 0)
+                {
+                    point3D[i].X = (int)(-(vec.X - cameraPos.X) / (-0.1f) * zoom) + pontoTela.X;
+                    point3D[i].Y = (int)((vec.Y - cameraPos.Y) / (-0.1f) * zoom) + pontoTela.Y;
+                }
+                else
+                {
+                    tmpOrigin.X = (int)((Centro().X - cameraPos.X) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.X;
+                    tmpOrigin.Y = (int)(-(Centro().Y - cameraPos.Y) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.Y;
+
+                    point3D[i].X = ((vec.X - cameraPos.X) / (vec.Z - cameraPos.Z) * zoom + Centro().X);
+                    point3D[i].Y = (-(vec.Y - cameraPos.Y) / (vec.Z - cameraPos.Z) * zoom + Centro().Y);
+
+                    point3D[i].X = (int)point3D[i].X;
+                    point3D[i].Y = (int)point3D[i].Y;
+                }
+            }
+
+            for (int i = 1; i < Vertices.Count(); i++)
+            {
+                PointF pontoA = new PointF(Vertices[i].X, Vertices[i].Y);
+                PointF pontoB = new PointF(Vertices[i].X, Vertices[i].Y);
+
+                g.DrawLine(new Pen(new SolidBrush(Color.Black)), pontoA, pontoB);
+            }
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
             Refresh();
-        }
-
-        Vetor3D RotateX(Vetor3D point3D, double degrees)
-        {
-            //Here we use Euler's matrix formula for rotating a 3D point x degrees around the x-axis
-
-            //[ a  b  c ] [ x ]   [ x*a + y*b + z*c ]
-            //[ d  e  f ] [ y ] = [ x*d + y*e + z*f ]
-            //[ g  h  i ] [ z ]   [ x*g + y*h + z*i ]
-
-            //[ 1    0        0   ]
-            //[ 0   cos(x)  sin(x)]
-            //[ 0   -sin(x) cos(x)]
-
-            float rad = (float)((Math.PI * degrees) / 180.0f);
-            float cosDegrees = (float)Math.Cos(rad);
-            float sinDegrees = (float)Math.Sin(rad);
-
-            float y = (point3D.Y * cosDegrees) + (point3D.Z * sinDegrees);
-            float z = (point3D.Y * -sinDegrees) + (point3D.Z * cosDegrees);
-
-            return new Vetor3D(point3D.X, y, z);
-        }
-
-        Vetor3D RotateY(Vetor3D point3D, double degrees)
-        {
-            //Y-axis
-
-            //[ cos(x)   0    sin(x)]
-            //[   0      1      0   ]
-            //[-sin(x)   0    cos(x)]
-
-            float rad = (float)((Math.PI * degrees) / 180.0); //Radians
-            float cosDegrees = (float)Math.Cos(rad);
-            float sinDegrees = (float)Math.Sin(rad);
-
-            float x = (point3D.X * cosDegrees) + (point3D.Z * sinDegrees);
-            float z = (point3D.X * -sinDegrees) + (point3D.Z * cosDegrees);
-
-            return new Vetor3D(x, point3D.Y, z);
-        }
-
-        Vetor3D RotateZ(Vetor3D point3D, double degrees)
-        {
-            //Z-axis
-
-            //[ cos(x)  sin(x) 0]
-            //[ -sin(x) cos(x) 0]
-            //[    0     0     1]
-
-            float rad = (float)((Math.PI * degrees) / 180.0); //Radians
-            float cosDegrees = (float)Math.Cos(rad);
-            float sinDegrees = (float)Math.Sin(rad);
-
-            float x = (point3D.X * cosDegrees) + (point3D.Y * sinDegrees);
-            float y = (point3D.X * -sinDegrees) + (point3D.Y * cosDegrees);
-
-            return new Vetor3D(x, y, point3D.Z);
         }
     }
 }

@@ -23,19 +23,19 @@ namespace Epico
             return new XYZ(rotX, rotY, rotZ);
         }
 
-        public static T EulerRotacionarX<T>(this T vetor, EixoXYZ origem, float graus) where T : EixoXYZ
+        public static T EulerRotacionarX<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
         {
-            return EulerRotacionarX((T)vetor.Subtrair(origem), graus);
+            return EulerRotacionarX((T)vetor.Subtrair(pivo), graus);
         }
 
-        public static T EulerRotacionarY<T>(this T vetor, EixoXYZ origem, float graus) where T : EixoXYZ
+        public static T EulerRotacionarY<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
         {
-            return EulerRotacionarY((T)vetor.Subtrair(origem), graus);
+            return EulerRotacionarY((T)vetor.Subtrair(pivo), graus);
         }
 
-        public static T EulerRotacionarZ<T>(this T vetor, EixoXYZ origem, float graus) where T : EixoXYZ
+        public static T EulerRotacionarZ<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
         {
-            return EulerRotacionarZ((T)vetor.Subtrair(origem), graus);
+            return EulerRotacionarZ((T)vetor.Subtrair(pivo), graus);
         }
 
         public static T EulerRotacionarX<T>(this T vetor, float graus) where T : EixoXYZ
@@ -44,13 +44,9 @@ namespace Epico
             float rad = Angulo2Radiano(graus);
             float rotY = vetor.Y * (float)Math.Cos(rad) + vetor.Z * (float)Math.Sin(rad);
             float rotZ = vetor.Y * -(float)Math.Sin(rad) + vetor.Z * (float)Math.Cos(rad);
-
-            object ret = Activator.CreateInstance(typeof(T));
-            ((EixoXYZ)ret).obj = vetor.obj;
-            ((EixoXYZ)ret).X = vetor.X;
-            ((EixoXYZ)ret).Y = rotY;
-            ((EixoXYZ)ret).Z = rotZ;
-            return (T)ret;
+            vetor.Y = rotY;
+            vetor.Z = rotZ;
+            return vetor;
         }
 
         public static T EulerRotacionarY<T>(this T vetor, float graus) where T : EixoXYZ
@@ -59,13 +55,9 @@ namespace Epico
             float rad = Angulo2Radiano(graus);
             float rotX = vetor.X * (float)Math.Cos(rad) + vetor.Z * (float)Math.Sin(rad);
             float rotZ = vetor.X * -(float)Math.Sin(rad) + vetor.Z * (float)Math.Cos(rad);
-            
-            object ret = Activator.CreateInstance(typeof(T));
-            ((EixoXYZ)ret).obj = vetor.obj; 
-            ((EixoXYZ)ret).X = rotX;
-            ((EixoXYZ)ret).Y = vetor.Y;
-            ((EixoXYZ)ret).Z = rotZ;
-            return (T)ret;
+            vetor.X = rotX;
+            vetor.Z = rotZ;
+            return vetor;
         }
 
         public static T EulerRotacionarZ<T>(this T vetor, float graus) where T : EixoXYZ
@@ -74,13 +66,9 @@ namespace Epico
             float rad = Angulo2Radiano(graus);
             float rotX = vetor.X * (float)Math.Cos(rad) + vetor.Y * (float)Math.Sin(rad);
             float rotY = vetor.X * -(float)Math.Sin(rad) + vetor.Y * (float)Math.Cos(rad);
-
-            object ret = Activator.CreateInstance(typeof(T));
-            ((EixoXYZ)ret).obj = vetor.obj;
-            ((EixoXYZ)ret).X = rotX;
-            ((EixoXYZ)ret).Y = rotY;
-            ((EixoXYZ)ret).Z = vetor.Z;
-            return (T)ret;
+            vetor.X = rotX;
+            vetor.Y = rotY;
+            return vetor;
         }
     }
 }
