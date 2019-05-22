@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     public class Location : INotifyPropertyChanged
     {
@@ -195,7 +195,7 @@ namespace EpicoGraphics.Sistema2D
 
         public IEnumerable<Controle2D> ObterObjetosDesteContainer()
         {
-            return _epico.objetos.OfType<Controle2D>()
+            return _epico.objetos2D.OfType<Controle2D>()
                     .Where(x => x.Container == this.Container);
         }
 

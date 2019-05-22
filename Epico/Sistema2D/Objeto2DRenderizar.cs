@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     /// <summary>
     /// Objetos que herdarem este tipo serão materializados na Câmera

@@ -1,6 +1,6 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
-using EpicoGraphics;
+using Epico;
 
 namespace Editor.win32
 {

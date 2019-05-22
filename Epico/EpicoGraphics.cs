@@ -1,9 +1,10 @@
-﻿using EpicoGraphics.Sistema2D;
+﻿using Epico.Sistema2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Epico.Sistema3D;
 
 #if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
@@ -12,7 +13,7 @@ using System.Drawing.Imaging;
 using Eto.Drawing;
 #endif
 
-namespace EpicoGraphics
+namespace Epico
 {
     public class EpicoGraphics
     {
@@ -24,7 +25,8 @@ namespace EpicoGraphics
         public bool Debug { get; set; }
         #endregion
 
-        public List<Objeto2D> objetos { get; private set; } = new List<Objeto2D>();
+        public List<Objeto2D> objetos2D { get; private set; } = new List<Objeto2D>();
+        public List<Objeto3D> objetos3D { get; private set; } = new List<Objeto3D>();
         public int MaximoFPS { get; internal set; }
 
         public T CriarObjeto2D<T>() where T : Objeto2D
@@ -37,7 +39,7 @@ namespace EpicoGraphics
 
         public void AddObjeto2D(Objeto2D objeto2d)
         {
-            Objeto2D ambiguo = objetos.Where(x => x.Nome.StartsWith(objeto2d.Nome)).LastOrDefault();
+            Objeto2D ambiguo = objetos2D.Where(x => x.Nome.StartsWith(objeto2d.Nome)).LastOrDefault();
 
             int number = 0;
             if (ambiguo != null)
@@ -47,7 +49,7 @@ namespace EpicoGraphics
             }
 
             objeto2d.Nome += (++number).ToString("D2");
-            objetos.Add(objeto2d);
+            objetos2D.Add(objeto2d);
             objeto2d.AssociarEngine(this);
         }
 

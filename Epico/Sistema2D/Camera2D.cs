@@ -1,4 +1,4 @@
-﻿using EpicoGraphics.Luzes;
+﻿using Epico.Luzes;
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using Eto.Drawing;
 #endif
 
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     public sealed class Camera2D : Objeto2D, IDisposable
     {
@@ -197,9 +197,9 @@ namespace EpicoGraphics.Sistema2D
 
                 // Obtém a posição da tela da câmera
                 
-                for (int i = 0; i < engine.objetos.Count; i++)
+                for (int i = 0; i < engine.objetos2D.Count; i++)
                 {
-                    Objeto2DRenderizar objEspaco = engine.objetos[i] as Objeto2DRenderizar;
+                    Objeto2DRenderizar objEspaco = engine.objetos2D[i] as Objeto2DRenderizar;
                     if (objEspaco != null)
                     {
                         Objeto2DRenderizar obj = (Objeto2DRenderizar)objEspaco.Clone();
@@ -316,9 +316,9 @@ namespace EpicoGraphics.Sistema2D
                 }
 
                 // A iluminação deve ser renderizada após pintar todos os objetos.
-                for (int i = 0; i < engine.objetos.Count; i++)
+                for (int i = 0; i < engine.objetos2D.Count; i++)
                 {
-                    Luz2DRenderizar luz = engine.objetos[i] as Luz2DRenderizar;
+                    Luz2DRenderizar luz = engine.objetos2D[i] as Luz2DRenderizar;
                     if (luz != null)
                     {
                         if (luz is LuzPonto)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     // Estrutura que armazena os resultados da função PolygonCollision
     public struct ColisaoPoligonoConvexoResultado

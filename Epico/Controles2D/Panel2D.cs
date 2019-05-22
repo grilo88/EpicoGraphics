@@ -1,10 +1,10 @@
-﻿using EpicoGraphics.Sistema2D;
+﻿using Epico.Sistema2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EpicoGraphics.Controles
+namespace Epico.Controles
 {
     public class Panel2D : Controle2D
     {

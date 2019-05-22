@@ -1,7 +1,7 @@
-﻿using EpicoGraphics.Sistema2D;
+﻿using Epico.Sistema2D;
 using System;
 
-namespace EpicoGraphics.Objetos2D.Primitivos
+namespace Epico.Objetos2D.Primitivos
 {
     public class Triangulo : Primitivo2D
     {

@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using EpicoGraphics;
-using EpicoGraphics.Objetos2D.Avancados;
+using Epico;
+using Epico.Objetos2D.Avancados;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,17 +22,17 @@ namespace VideoStreamWebApp.Controllers
         private bool quadroDisponivel = false;
         private Bitmap frame = null;
         private string BOUNDARY = "frame";
-        EpicoGraphics.EpicoGraphics epico;
+        Epico.EpicoGraphics epico;
 
         /// <summary>
         /// Inicializa o motor de renderização
         /// </summary>
         public VideoController()
         {
-            epico = new EpicoGraphics.EpicoGraphics();
+            epico = new Epico.EpicoGraphics();
             Estrela obj = new Estrela();
-            obj.Mat_render.CorBorda = new EpicoGraphics.Sistema2D.RGBA(255, 0, 0, 0);
-            obj.Mat_render.CorSolida = new EpicoGraphics.Sistema2D.RGBA(255, 0, 150, 200);
+            obj.Mat_render.CorBorda = new Epico.Sistema2D.RGBA(255, 0, 0, 0);
+            obj.Mat_render.CorSolida = new Epico.Sistema2D.RGBA(255, 0, 150, 200);
             epico.AddObjeto2D(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);

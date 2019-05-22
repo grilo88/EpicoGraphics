@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema3D
+namespace Epico.Sistema3D
 {
     /// <summary>
     /// Tipo abstrato que envolve tanto objetos visíveis e invisíveis do simulador
@@ -59,7 +59,7 @@ namespace EpicoGraphics.Sistema3D
         /// <summary>Cor de representação abstrata do objeto</summary>
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Padrão")]
-        public RGBA Cor { get; set; }
+        public Sistema2D.RGBA Cor { get; set; }
 
         [Category("Design")]
         /// <summary>Define se o objeto está selecionado em modo Editor</summary>
@@ -69,20 +69,20 @@ namespace EpicoGraphics.Sistema3D
         [Description("Ordenação de objetos no espaço 2D. Objetos com Ordem Z maiores são renderizados por último deixando-os na frente dos objetos na Ordem Z menores que ele.")]
         public int GlobalOrdemZ
         {
-            get => _epico.objetos.FindIndex(x => x == this);
+            get => _epico.objetos3D.FindIndex(x => x == this);
             set
             {
                 // Reposiciona o objeto2D na nova ordemZ global
                 int novoIndice = value;
-                int indiceAtual = _epico.objetos.FindIndex(x => x == this);
-                _epico.objetos.RemoveAt(indiceAtual);
-                _epico.objetos.Insert(novoIndice, this);
+                int indiceAtual = _epico.objetos3D.FindIndex(x => x == this);
+                _epico.objetos3D.RemoveAt(indiceAtual);
+                _epico.objetos3D.Insert(novoIndice, this);
             }
         }
 
         [Category("Ordenação")]
         [Description("Último índice de Ordem Z no espaço 2D.")]
-        public int GlobalOrdemZMax { get => _epico.objetos.Count() - 1; }
+        public int GlobalOrdemZMax { get => _epico.objetos2D.Count() - 1; }
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public Transformacao Transformação { get; set; }
@@ -92,11 +92,11 @@ namespace EpicoGraphics.Sistema3D
         [Category("Layout")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Posição do objeto</summary>
-        public virtual Vetor2D Pos { get; set; }
+        public virtual Vetor3D Pos { get; set; }
         [Category("Layout")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Escala do objeto</summary>
-        public Vetor2D Escala { get; set; }
+        public Vetor3D Escala { get; set; }
 
         //private bool _otimizaAtualizaGeometria;
         //private int _quantVertices;
@@ -104,25 +104,24 @@ namespace EpicoGraphics.Sistema3D
 
         #region Arrays
         /// <summary>Ponto(s) de origem do objeto</summary>
-        public List<Origem2D> Origem { get; set; } = new List<Origem2D>();
+        public List<Origem3D> Origem { get; set; } = new List<Origem3D>();
         /// <summary>Vértices do objeto</summary>
-        public Vertice2D[] Vertices = new Vertice2D[0];
-        public List<Vetor2D> Arestas = new List<Vetor2D>();
+        public Vertice3D[] Vertices = new Vertice3D[0];
+        public List<Vetor3D> Arestas = new List<Vetor3D>();
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Animações do objeto</summary>
         public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Pivôs do objeto</summary>
-        public List<Pivo2D> Pivos { get; set; } = new List<Pivo2D>();
+        //public List<Pivo3D> Pivos { get; set; } = new List<Pivo3D>();
         #endregion
 
         public Objeto3D()
         {
-            Pos = new Vetor3D(this, 0, 0);
-            Escala = new Vetor3D(this, 1, 1);
-            Origem.Add(new Origem3D(this, 0, 0)); // Adiciona o ponto central principal
-            Transformação = new Transformacao3D(this);
+            Pos = new Vetor3D(this, 0, 0, 0);
+            Escala = new Vetor3D(this, 1, 1, 1);
+            Origem.Add(new Origem3D(this, 0, 0, 0)); // Adiciona o ponto central principal
         }
 
         public void AssociarEngine(EpicoGraphics engine)
@@ -156,7 +155,7 @@ namespace EpicoGraphics.Sistema3D
         /// Adiciona vértice ao objeto
         /// </summary>
         /// <param name="v"></param>
-        public void AdicionarVertice(Vertice2D v)
+        public void AdicionarVertice(Vertice3D v)
         {
             //if (_otimizaAtualizaGeometria)
             //{
@@ -182,19 +181,21 @@ namespace EpicoGraphics.Sistema3D
         /// <summary>
         /// Obtém o centro do objeto
         /// </summary>
-        public Vetor2D Centro
+        public Vetor3D Centro
         {
             get
             {
                 float totalX = 0;
                 float totalY = 0;
+                float totalZ = 0;
                 for (int i = 0; i < Vertices.Length; i++)
                 {
                     totalX += Vertices[i].X;
                     totalY += Vertices[i].Y;
+                    totalZ += Vertices[i].Z;
                 }
 
-                return new Vetor2D(this, totalX / (float)Vertices.Length, totalY / (float)Vertices.Length);
+                return new Vetor3D(this, totalX / (float)Vertices.Length, totalY / (float)Vertices.Length, totalZ / (float)Vertices.Length);
             }
         }
 
@@ -203,18 +204,18 @@ namespace EpicoGraphics.Sistema3D
         /// </summary>
         public void CriarArestasConvexo()
         {
-            Vetor2D p1, p2;
+            Vetor3D p1, p2;
             Arestas.Clear();
             for (int i = 0; i < Vertices.Length; i++)
             {
-                p1 = new Vetor2D(this, Vertices[i].X, Vertices[i].Y);
+                p1 = new Vetor3D(this, Vertices[i].X, Vertices[i].Y, Vertices[i].Z);
                 if (i + 1 >= Vertices.Length)
                 {
-                    p2 = new Vetor2D(this, Vertices[0].X, Vertices[0].Y);
+                    p2 = new Vetor3D(this, Vertices[0].X, Vertices[0].Y, Vertices[0].Z);
                 }
                 else
                 {
-                    p2 = new Vetor2D(this, Vertices[i + 1].X, Vertices[i + 1].Y);
+                    p2 = new Vetor3D(this, Vertices[i + 1].X, Vertices[i + 1].Y, Vertices[i + 1].Z);
                 }
                 Arestas.Add(p2 - p1);
             }
@@ -240,7 +241,7 @@ namespace EpicoGraphics.Sistema3D
         /// Move o objeto incrementando as posições x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Mover(Vetor2D pos) => Pos += pos;
+        public virtual void Mover(Vetor3D pos) => Pos += pos;
 
         /// <summary>
         /// Move o objeto incrementando a posição x
@@ -269,7 +270,7 @@ namespace EpicoGraphics.Sistema3D
         /// Posiciona o objeto na posição x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Posicionar(Vetor2D pos) => Pos = pos;
+        public virtual void Posicionar(Vetor3D pos) => Pos = pos;
 
         /// <summary>
         /// Posiciona o objeto na posição x
@@ -491,9 +492,10 @@ namespace EpicoGraphics.Sistema3D
             // Vértices
             for (int i = 0; i < Vertices.Length; i++)
             {
-                EixoXY eixo = Util2D.RotacionarPonto2D(Origem[0], Vertices[i], graus);
+                EixoXYZ eixo = Util3D.RotacionarPonto3D(Origem[0], Vertices[i], graus);
                 Vertices[i].X = eixo.X;
                 Vertices[i].Y = eixo.Y;
+                Vertices[i].Z = eixo.Z;
             }
 
             // Arestas
@@ -501,9 +503,10 @@ namespace EpicoGraphics.Sistema3D
             {
                 for (int i = 0; i < Arestas.Count; i++)
                 {
-                    EixoXY eixo = Util2D.RotacionarPonto2D(Centro, Arestas[i], graus);
+                    EixoXYZ eixo = Util3D.RotacionarPonto3D(Centro, Arestas[i], graus);
                     Arestas[i].X = eixo.X;
                     Arestas[i].Y = eixo.Y;
+                    Arestas[i].Z = eixo.Z;
                 }
             }
 
@@ -524,8 +527,8 @@ namespace EpicoGraphics.Sistema3D
             object clone = MemberwiseClone();
 
             // Cria novas instâncias para os elementos
-            ((Objeto2D)clone).Vertices = Vertices
-                .Select(x => new Vertice2D(this, x.X, x.Y)
+            ((Objeto3D)clone).Vertices = Vertices
+                .Select(x => new Vertice3D(this, x.X, x.Y, x.Z)
                 {
                     Ang = x.Ang,
                     Nome = x.Nome,
@@ -534,8 +537,8 @@ namespace EpicoGraphics.Sistema3D
                     Sel = x.Sel
                 }).ToArray();
             // Cria novas instâncias para os elementos
-            ((Objeto2D)clone).Origem = Origem
-                .Select(x => new Origem2D(this, x.X, x.Y)
+            ((Objeto3D)clone).Origem = Origem
+                .Select(x => new Origem3D(this, x.X, x.Y, x.Z)
                 {
                     Sel = x.Sel
                 }).ToList();

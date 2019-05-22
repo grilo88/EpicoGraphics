@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     public class Pivo2D
     {

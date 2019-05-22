@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema2D
+namespace Epico.Sistema2D
 {
     /// <summary>
     /// Tipo abstrato que envolve tanto objetos visíveis e invisíveis do simulador
@@ -69,20 +69,20 @@ namespace EpicoGraphics.Sistema2D
         [Description("Ordenação de objetos no espaço 2D. Objetos com Ordem Z maiores são renderizados por último deixando-os na frente dos objetos na Ordem Z menores que ele.")]
         public int GlobalOrdemZ
         {
-            get => _epico.objetos.FindIndex(x => x == this);
+            get => _epico.objetos2D.FindIndex(x => x == this);
             set
             {
                 // Reposiciona o objeto2D na nova ordemZ global
                 int novoIndice = value;
-                int indiceAtual = _epico.objetos.FindIndex(x => x == this);
-                _epico.objetos.RemoveAt(indiceAtual);
-                _epico.objetos.Insert(novoIndice, this);
+                int indiceAtual = _epico.objetos2D.FindIndex(x => x == this);
+                _epico.objetos2D.RemoveAt(indiceAtual);
+                _epico.objetos2D.Insert(novoIndice, this);
             }
         }
 
         [Category("Ordenação")]
         [Description("Último índice de Ordem Z no espaço 2D.")]
-        public int GlobalOrdemZMax { get => _epico.objetos.Count() - 1; }
+        public int GlobalOrdemZMax { get => _epico.objetos2D.Count() - 1; }
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public Transformacao Transformação { get; set; }

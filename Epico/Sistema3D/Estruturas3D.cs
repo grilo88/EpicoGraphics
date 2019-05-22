@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema3D
+namespace Epico.Sistema3D
 {
     /// <summary>
-    /// Classe abstrata que indica a existência dos eixos X e Y
+    /// Classe abstrata que indica a existência dos eixos XYZ
     /// </summary>
     public abstract class EixoXYZ
     {
@@ -35,6 +35,14 @@ namespace EpicoGraphics.Sistema3D
         public float GlobalY => obj.Pos.Y + Y;
         /// <summary>Posição global na coordenada Z</summary>
         public float GlobalZ => obj.Pos.Z + Z;
+
+        public EixoXYZ Subtrair(EixoXYZ origem)
+        {
+            X -= origem.X;
+            Y -= origem.Y;
+            Z -= origem.Z;
+            return this;
+        }
 
         public EixoXYZ Global => new XYZ(GlobalX, GlobalY, GlobalZ);
 

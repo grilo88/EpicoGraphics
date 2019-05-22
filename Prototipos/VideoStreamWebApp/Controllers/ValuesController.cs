@@ -4,8 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using EpicoGraphics;
-using EpicoGraphics.Objetos2D.Avancados;
+using Epico;
+using Epico.Objetos2D.Avancados;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VideoStreamWebApp.Controllers
@@ -18,11 +18,11 @@ namespace VideoStreamWebApp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            EpicoGraphics.EpicoGraphics epico = new EpicoGraphics.EpicoGraphics();
+            Epico.EpicoGraphics epico = new Epico.EpicoGraphics();
             Estrela obj = new Estrela();
             
-            obj.Mat_render.CorBorda = new EpicoGraphics.Sistema2D.RGBA(255, 0, 0, 0);
-            obj.Mat_render.CorSolida = new EpicoGraphics.Sistema2D.RGBA(255, 0, 150, 200);
+            obj.Mat_render.CorBorda = new Epico.Sistema2D.RGBA(255, 0, 0, 0);
+            obj.Mat_render.CorSolida = new Epico.Sistema2D.RGBA(255, 0, 150, 200);
             epico.AddObjeto2D(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);

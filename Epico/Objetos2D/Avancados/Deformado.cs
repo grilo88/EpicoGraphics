@@ -1,7 +1,7 @@
-﻿using EpicoGraphics.Sistema2D;
+﻿using Epico.Sistema2D;
 using System;
 
-namespace EpicoGraphics.Objetos2D.Avancados
+namespace Epico.Objetos2D.Avancados
 {
     public class Deformado : Avancado2D
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpicoGraphics.Sistema2D.Entrada
+namespace Epico.Sistema2D.Entrada
 {
     public class Teclado
     {

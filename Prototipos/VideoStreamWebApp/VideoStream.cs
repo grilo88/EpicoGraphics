@@ -1,5 +1,5 @@
-﻿using EpicoGraphics;
-using EpicoGraphics.Objetos2D.Avancados;
+﻿using Epico;
+using Epico.Objetos2D.Avancados;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -43,14 +43,14 @@ namespace VideoStreamWebApp
 </body>
 </html>
              */
-        EpicoGraphics.EpicoGraphics epico;
+        Epico.EpicoGraphics epico;
 
         public ImageStream()
         {
-            epico = new EpicoGraphics.EpicoGraphics();
+            epico = new Epico.EpicoGraphics();
             Estrela obj = new Estrela();
-            obj.Mat_render.CorBorda = new EpicoGraphics.Sistema2D.RGBA(255, 0, 0, 0);
-            obj.Mat_render.CorSolida = new EpicoGraphics.Sistema2D.RGBA(255, 0, 150, 200);
+            obj.Mat_render.CorBorda = new Epico.Sistema2D.RGBA(255, 0, 0, 0);
+            obj.Mat_render.CorSolida = new Epico.Sistema2D.RGBA(255, 0, 150, 200);
             epico.AddObjeto2D(obj);
             epico.CriarCamera(640, 480);
             epico.Camera.Focar(obj);

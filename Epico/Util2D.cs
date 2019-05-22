@@ -1,4 +1,4 @@
-﻿using EpicoGraphics.Sistema2D;
+﻿using Epico.Sistema2D;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +12,7 @@ using System.Drawing;
 using Eto.Drawing;
 #endif
 
-namespace EpicoGraphics
+namespace Epico
 {
     public static class Util2D
     {
@@ -83,9 +83,9 @@ namespace EpicoGraphics
         /// <returns></returns>
         public static Objeto2D ObterObjeto2DPeloEspaco(this EpicoGraphics engine, Vetor2D ponto)
         {
-            for (int i = 0; i < engine.objetos.Count; i++)
+            for (int i = 0; i < engine.objetos2D.Count; i++)
             {
-                Objeto2D obj = engine.objetos[i];
+                Objeto2D obj = engine.objetos2D[i];
 
                 float xMax = obj.Pos.X + obj.XMax;
                 float xMin = obj.Pos.X + obj.XMin;
@@ -95,7 +95,7 @@ namespace EpicoGraphics
                 if (ponto.X >= xMin && ponto.X <= xMax)
                     if (ponto.Y >= yMin && ponto.Y <= yMax)
                     {
-                        return engine.objetos[i];
+                        return engine.objetos2D[i];
                     }
             }
             return null;
@@ -108,9 +108,9 @@ namespace EpicoGraphics
         /// <returns></returns>
         public static Objeto2D ObterObjeto2DPelaTela(this EpicoGraphics engine, Camera2D camera, EixoXY ponto)
         {
-            for (int i = 0; i < engine.objetos.Count; i++)
+            for (int i = 0; i < engine.objetos2D.Count; i++)
             {
-                Objeto2D obj = engine.objetos[i];
+                Objeto2D obj = engine.objetos2D[i];
 
                 float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMax;
                 float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMin;
@@ -120,7 +120,7 @@ namespace EpicoGraphics
                 if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
                     if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
                     {
-                        return engine.objetos[i];
+                        return engine.objetos2D[i];
                     }
             }
             return null;
@@ -155,12 +155,12 @@ namespace EpicoGraphics
                 verticesTela[i].Y = xy.Y;
             }
 
-            for (int i = 0; i < engine.objetos.Count; i++)
+            for (int i = 0; i < engine.objetos2D.Count; i++)
             {
                 if (IntersecaoEntrePoligonos(verticesTela,
-                    engine.objetos[i].Vertices.Select(x => new Vertice2D(x.GlobalX, x.GlobalY)).ToArray()))
+                    engine.objetos2D[i].Vertices.Select(x => new Vertice2D(x.GlobalX, x.GlobalY)).ToArray()))
                 {
-                    yield return engine.objetos[i];
+                    yield return engine.objetos2D[i];
                 }
             }
         }

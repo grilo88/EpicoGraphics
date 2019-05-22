@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EpicoGraphics
+namespace Epico
 {
     public class Projetor2D
     {
