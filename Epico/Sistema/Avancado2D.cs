@@ -20,6 +20,8 @@ namespace Epico.Sistema
                 v.Y = (float)(Math.Cos(i * rad + Util.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);
             }
+
+            CriarArestasConvexo();
         }
     }
 }

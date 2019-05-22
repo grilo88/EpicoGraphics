@@ -487,11 +487,24 @@ namespace Epico.Sistema
         {
             float graus = novoAngulo - Angulo;
             Angulo = novoAngulo;
+
+            // Vértices
             for (int i = 0; i < Vertices.Length; i++)
             {
                 EixoXY eixo = Util.RotacionarPonto2D(Origem[0], Vertices[i], graus);
                 Vertices[i].X = eixo.X;
                 Vertices[i].Y = eixo.Y;
+            }
+
+            // Arestas
+            if (Arestas.Count > 0)
+            {
+                for (int i = 0; i < Arestas.Count; i++)
+                {
+                    EixoXY eixo = Util.RotacionarPonto2D(Centro, Arestas[i], graus);
+                    Arestas[i].X = eixo.X;
+                    Arestas[i].Y = eixo.Y;
+                }
             }
 
             AtualizarXYMinMax();

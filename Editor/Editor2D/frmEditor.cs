@@ -1327,14 +1327,15 @@ namespace Editor2D
             await Task.Factory.StartNew(() =>
             {
                 Colisao2D colisao = new Colisao2D();
+                double fatorTempo = 0.00000003;
 
                 while (!_sair)
                 {
-                    AngPerson += esquerda * (float)(engine.Camera.TempoDelta * 0.0000000005);
+                    AngPerson += esquerda * (float)(engine.Camera.TempoDelta * (fatorTempo / 1.5));
 
                     Vetor2D movimento = new Vetor2D(person);
-                    movimento.X += (float)(Math.Cos(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * 0.0000000005);
-                    movimento.Y += (float)(Math.Sin(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * 0.0000000005);
+                    movimento.X += (float)(Math.Cos(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
+                    movimento.Y += (float)(Math.Sin(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
 
                     // Detecção de colisão
                     for (int i = 0; i < engine.objetos.Count(); i++)
@@ -1356,7 +1357,9 @@ namespace Editor2D
                     }
 
                     person.DefinirAngulo(AngPerson);
+                    engine.Camera.Angulo = AngPerson + 180;
                     person.Pos += movimento;
+                    engine.Camera.Focar(person);
                 }
             });
         }

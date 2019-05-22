@@ -9,6 +9,7 @@ namespace Epico.Objetos2D.Primitivos
         {
             Nome = "Quadrado";
             GerarGeometriaRadial(45, raio, 4);
+            
         }
     }
 }

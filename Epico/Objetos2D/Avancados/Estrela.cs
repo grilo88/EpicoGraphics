@@ -99,6 +99,8 @@ namespace Epico.Objetos2D.Avancados
                 v.Rad = i * rad;
                 AdicionarVertice(v);
             }
+
+            CriarArestasConvexo();
         }
     }
 }

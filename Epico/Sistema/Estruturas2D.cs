@@ -68,6 +68,11 @@ namespace Epico.Sistema
         {
             return (float)Math.Sqrt(Math.Pow(vetor.X - this.X, 2) + Math.Pow(vetor.Y - this.Y, 2));
         }
+
+        public static Vetor2D operator *(EixoXY a, float b)
+        {
+            return new Vetor2D(a.obj, a.X * b, a.Y * b);
+        }
     }
 
 
