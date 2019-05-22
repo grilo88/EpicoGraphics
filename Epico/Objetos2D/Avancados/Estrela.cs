@@ -1,11 +1,11 @@
-﻿using Epico.Sistema;
+﻿using EpicoGraphics.Sistema2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Epico.Objetos2D.Avancados
+namespace EpicoGraphics.Objetos2D.Avancados
 {
     public sealed class Estrela : Avancado2D
     {
@@ -86,14 +86,14 @@ namespace Epico.Objetos2D.Avancados
 
                 if (i % 2 == 0)
                 {
-                    v.X = (float)(Math.Cos(i * rad + Util.Angulo2Radiano(angulo)) * raio_min);
-                    v.Y = (float)(Math.Sin(i * rad + Util.Angulo2Radiano(angulo)) * raio_min);
+                    v.X = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * raio_min);
+                    v.Y = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio_min);
                     v.Raio = raio_min;
                 }
                 else
                 {
-                    v.X = (float)(Math.Cos(i * rad + Util.Angulo2Radiano(angulo)) * raio_max);
-                    v.Y = (float)(Math.Sin(i * rad + Util.Angulo2Radiano(angulo)) * raio_max);
+                    v.X = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * raio_max);
+                    v.Y = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio_max);
                     v.Raio = raio_max;
                 }
                 v.Rad = i * rad;

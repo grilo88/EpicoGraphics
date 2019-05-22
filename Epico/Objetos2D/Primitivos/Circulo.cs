@@ -1,7 +1,7 @@
-﻿using Epico.Sistema;
+﻿using EpicoGraphics.Sistema2D;
 using System;
 
-namespace Epico.Objetos2D.Primitivos
+namespace EpicoGraphics.Objetos2D.Primitivos
 {
     public class Circulo : Primitivo2D
     {

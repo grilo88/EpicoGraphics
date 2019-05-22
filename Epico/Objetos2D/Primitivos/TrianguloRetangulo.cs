@@ -1,7 +1,7 @@
-﻿using Epico.Sistema;
+﻿using EpicoGraphics.Sistema2D;
 using System;
 
-namespace Epico.Objetos2D.Primitivos
+namespace EpicoGraphics.Objetos2D.Primitivos
 {
     public sealed class TrianguloRetangulo : Primitivo2D
     {
@@ -18,8 +18,8 @@ namespace Epico.Objetos2D.Primitivos
             for (int i = 0; i < lados; i++)
             {
                 Vertice2D v = new Vertice2D(this);
-                v.X = (float)(Math.Sin(i * rad + Util.Angulo2Radiano(angulo)) * raio);
-                v.Y = (float)(Math.Cos(i * rad + Util.Angulo2Radiano(angulo)) * raio);
+                v.X = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
+                v.Y = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);
             }
         }

@@ -1,10 +1,10 @@
-﻿using Epico;
-using Epico.Controles;
-using Epico.Controles;
-using Epico.Luzes;
-using Epico.Objetos2D.Avancados;
-using Epico.Objetos2D.Primitivos;
-using Epico.Sistema;
+﻿using EpicoGraphics;
+using EpicoGraphics.Controles;
+using EpicoGraphics.Controles;
+using EpicoGraphics.Luzes;
+using EpicoGraphics.Objetos2D.Avancados;
+using EpicoGraphics.Objetos2D.Primitivos;
+using EpicoGraphics.Sistema2D;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,7 +28,7 @@ namespace Editor2D
         bool _sair = false;
         const int _raio_padrao = 50;
 
-        Epico2D  _engine2D = new Epico2D();
+        EpicoGraphics  _engine2D = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
         List<Origem2D> _origem_sel = new List<Origem2D>();
         List<Vertice2D> _vetor_sel = new List<Vertice2D>();
@@ -113,11 +113,11 @@ namespace Editor2D
                 {
                     EixoXY xyCamDrag = new XY(cameraDrag.X, cameraDrag.Y);
                     EixoXY xyCursor = new XY(Cursor.Position.X, Cursor.Position.Y);
-                    float distCursor = Util.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
-                    float angCursor = Util.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
+                    float distCursor = Util2D.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
+                    float angCursor = Util2D.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
-                    _engine2D.Camera.Pos.X += (float)(Math.Cos(Util.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
-                    _engine2D.Camera.Pos.Y += (float)(Math.Sin(Util.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
+                    _engine2D.Camera.Pos.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
+                    _engine2D.Camera.Pos.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine2D.Camera.Angulo)) * distCursor * _engine2D.Camera.TempoDelta * 0.000001);
                 }
 
                 if (_engine2D.Camera.ResWidth != picScreen.ClientRectangle.Width ||
@@ -702,7 +702,7 @@ namespace Editor2D
                         _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        var tmp = Util.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, rect);
+                        var tmp = Util2D.ObterObjetos2DPelaTela(_engine2D, _engine2D.Camera, rect);
                         e.Graphics.DrawString(
                             $"{tmp.Count()} objetos", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
@@ -714,7 +714,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _origem_sel.ForEach(x => x.Sel = false);
                         _origem_sel.Clear();
-                        _origem_sel = Util.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
+                        _origem_sel = Util2D.ObterOrigensObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
                         _origem_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -728,7 +728,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _vetor_sel.ForEach(x => x.Sel = false);
                         _vetor_sel.Clear();
-                        _vetor_sel = Util.ObterVetoresObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
+                        _vetor_sel = Util2D.ObterVetoresObjeto2DPelaTela(_engine2D.Camera, _obj_sel, selRect).ToList();
                         _vetor_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -742,7 +742,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
-                        _vertice_sel = Util.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
+                        _vertice_sel = Util2D.ObterVerticesObjeto2DPelaTela(_engine2D.Camera, _obj_sel, rect).ToList();
                         _vertice_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -858,7 +858,7 @@ namespace Editor2D
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
                         _obj_sel.ForEach(x => x.Selecionado = false);
-                        Objeto2D objSel = Util.ObterUnicoObjeto2DPelaTela(_engine2D, _engine2D.Camera, new XY(selStart.X, selStart.Y));
+                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_engine2D, _engine2D.Camera, new XY(selStart.X, selStart.Y));
                         _obj_sel = new List<Objeto2D>();
                         if (objSel != null) _obj_sel.Add(objSel);
                     }
@@ -1293,7 +1293,7 @@ namespace Editor2D
             LoopAndePeloEspaco(_engine2D, this);
         }
 
-        private async void LoopAndePeloEspaco(Epico2D engine, Form owner)
+        private async void LoopAndePeloEspaco(EpicoGraphics engine, Form owner)
         {
             float AngPerson = 0;
             Triangulo person = new Triangulo(50);
@@ -1334,8 +1334,8 @@ namespace Editor2D
                     AngPerson += esquerda * (float)(engine.Camera.TempoDelta * (fatorTempo / 1.5));
 
                     Vetor2D movimento = new Vetor2D(person);
-                    movimento.X += (float)(Math.Cos(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
-                    movimento.Y += (float)(Math.Sin(Util.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
+                    movimento.X += (float)(Math.Cos(Util2D.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
+                    movimento.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
 
                     // Detecção de colisão
                     for (int i = 0; i < engine.objetos.Count(); i++)

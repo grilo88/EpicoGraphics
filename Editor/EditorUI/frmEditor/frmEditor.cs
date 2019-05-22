@@ -1,12 +1,12 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
-using Epico;
+using EpicoGraphics;
 
 namespace Editor.win32
 {
     public partial class frmEditor : Form
     {
-        Epico2D _epico2D = new Epico2D();
+        EpicoGraphics _epico2D = new EpicoGraphics();
         bool _sair = false;
 
         PointF cameraDrag;

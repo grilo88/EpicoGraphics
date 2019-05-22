@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Epico.Sistema
+namespace EpicoGraphics.Sistema2D
 {
     public class Centro2D
     {

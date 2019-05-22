@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Epico", "Epico\Epico.shproj", "{B5456BA6-0254-41CA-9316-AE4B80B9E5C5}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "EpicoGraphics", "Epico\EpicoGraphics.shproj", "{B5456BA6-0254-41CA-9316-AE4B80B9E5C5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nucleo", "Nucleo", "{23268639-C48B-4D15-9EF8-32365EF7DF8A}"
 EndProject
@@ -54,6 +54,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epico.netcore2.0.x86", "Biblioteca\Epico.netcore2.0.x86\Epico.netcore2.0.x86.csproj", "{1F276E80-AD5C-4F05-AE36-66562F1DB345}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColisaoPoligonos", "Prototipos\ColisaoPoligonos\ColisaoPoligonos.csproj", "{B2F15B6B-33DA-4629-A403-C6AA4B0D273B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rotacao3D", "Prototipos\Rotacao3D\Rotacao3D.csproj", "{51A44E77-C246-4C50-B333-685D17FC5F94}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -145,6 +147,10 @@ Global
 		{B2F15B6B-33DA-4629-A403-C6AA4B0D273B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2F15B6B-33DA-4629-A403-C6AA4B0D273B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2F15B6B-33DA-4629-A403-C6AA4B0D273B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51A44E77-C246-4C50-B333-685D17FC5F94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51A44E77-C246-4C50-B333-685D17FC5F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51A44E77-C246-4C50-B333-685D17FC5F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51A44E77-C246-4C50-B333-685D17FC5F94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +179,7 @@ Global
 		{F1646404-C3B9-42B7-9115-D78C7E25A559} = {439C52C6-880A-402F-AF1A-0E6E480F0983}
 		{1F276E80-AD5C-4F05-AE36-66562F1DB345} = {4015CCF9-63BA-48B4-8C90-EF24F34C2910}
 		{B2F15B6B-33DA-4629-A403-C6AA4B0D273B} = {439C52C6-880A-402F-AF1A-0E6E480F0983}
+		{51A44E77-C246-4C50-B333-685D17FC5F94} = {439C52C6-880A-402F-AF1A-0E6E480F0983}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D7D1649-9BEB-41E4-8EC4-2EEDB8B60200}

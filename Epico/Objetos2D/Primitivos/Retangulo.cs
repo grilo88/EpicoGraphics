@@ -1,7 +1,7 @@
-﻿using Epico.Sistema;
+﻿using EpicoGraphics.Sistema2D;
 using System;
 
-namespace Epico.Objetos2D.Avancados
+namespace EpicoGraphics.Objetos2D.Avancados
 {
     public class Retangulo : Primitivo2D
     {
@@ -19,8 +19,8 @@ namespace Epico.Objetos2D.Avancados
             for (int i = 0; i < lados; i++)
             {
                 Vertice2D v = new Vertice2D(this);
-                v.X = (float)(Math.Cos(i * rad + Util.Angulo2Radiano(angulo)) * (raio * 1.5));
-                v.Y = (float)(Math.Sin(i * rad + Util.Angulo2Radiano(angulo)) * raio);
+                v.X = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * (raio * 1.5));
+                v.Y = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);
             }
         }
