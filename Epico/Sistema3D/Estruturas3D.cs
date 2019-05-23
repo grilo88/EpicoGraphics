@@ -5,6 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#if EtoForms
+using Eto.Drawing;
+#else
+using System.Drawing;
+#endif
+
 namespace Epico.Sistema3D
 {
     /// <summary>
@@ -80,9 +86,14 @@ namespace Epico.Sistema3D
             return (float)Math.Sqrt(Math.Pow(vetor.X - this.X, 2) + Math.Pow(vetor.Y - this.Y, 2));
         }
 
-        public static Vetor3D operator *(EixoXYZ a, float b)
+        public static EixoXYZ operator *(EixoXYZ a, float b)
         {
-            return new Vetor3D(a.obj, a.X * b, a.Y * b, a.Z * b);
+            object obj = Activator.CreateInstance(a.GetType());
+            ((EixoXYZ)obj).obj = a.obj;
+            ((EixoXYZ)obj).X = a.X * b;
+            ((EixoXYZ)obj).Y = a.Y * b;
+            ((EixoXYZ)obj).Z = a.Z * b;
+            return (EixoXYZ)obj;
         }
     }
 
@@ -231,7 +242,7 @@ namespace Epico.Sistema3D
         {
             if (arredondado)
             {
-                return (int)Math.Round(X) + ", " + (int)Math.Round(Y) + ", " +(int)Math.Round(Z);
+                return (int)Math.Round(X) + ", " + (int)Math.Round(Y) + ", " + (int)Math.Round(Z);
             }
             else
             {
@@ -270,5 +281,32 @@ namespace Epico.Sistema3D
             base.Y = y;
             base.Z = z;
         }
+
+        /// <summary>
+        /// Distância delta ao quadrado entre este e outros vértices
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public float QuadradoDeltaXY(Vertice3D t)
+        {
+            float dx = (X - t.X);
+            float dy = (Y - t.Y);
+            return (dx * dx) + (dy * dy);
+        }
+
+        /// <summary>
+        /// Retângulo dentro da região?
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
+        public bool DentroXY(RectangleF region)
+        {
+            if (X < region.Left) return false;
+            if (X > region.Right) return false;
+            if (Y < region.Top) return false;
+            if (Y > region.Bottom) return false;
+            return true;
+        }
+
     }
 }

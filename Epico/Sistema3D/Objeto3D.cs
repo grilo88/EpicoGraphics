@@ -107,7 +107,10 @@ namespace Epico.Sistema3D
         public List<Origem3D> Origem { get; set; } = new List<Origem3D>();
         /// <summary>Vértices do objeto</summary>
         public Vertice3D[] Vertices = new Vertice3D[0];
+        /// <summary>Arestas do objeto</summary>
         public List<Vetor3D> Arestas = new List<Vetor3D>();
+        /// <summary>Triângulos do objeto</summary>
+        public List<Triangulo3D> Triangulos = new List<Triangulo3D>();
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Animações do objeto</summary>
@@ -520,6 +523,11 @@ namespace Epico.Sistema3D
         public void DefinirPosYCentro(float y)
         {
             Origem.First().Y = y;
+        }
+
+        public void GerarTriangulacaoDelaunay()
+        {
+
         }
 
         public virtual object Clone()
