@@ -82,7 +82,7 @@ namespace Epico.Objetos2D.Avancados
             float rad = (float)(Math.PI * 2 / lados);
             for (int i = 0; i < lados; i++)
             {
-                Vertice2D v = new Vertice2D(this);
+                Vertice2 v = new Vertice2(this);
 
                 if (i % 2 == 0)
                 {

@@ -98,10 +98,10 @@ namespace Epico.Sistema2D
         /// </summary>
         public Controle2D Container { get; private set; }
 
-        private Vertice2D _vTopLeft;            // Superior Esquerdo
-        private Vertice2D _vTopRigth;           // Superior Direito
-        private Vertice2D _vBottomRight;        // Inferior Direito
-        private Vertice2D _vBottomLeft;         // Inferior Esquerdo
+        private Vertice2 _vTopLeft;            // Superior Esquerdo
+        private Vertice2 _vTopRigth;           // Superior Direito
+        private Vertice2 _vBottomRight;        // Inferior Direito
+        private Vertice2 _vBottomLeft;         // Inferior Esquerdo
 
         private Location _location = new Location(0, 0);
         private Size _size = new Size(300, 300);
@@ -111,13 +111,13 @@ namespace Epico.Sistema2D
         public bool Visible { get; set; }
 
         [Category("Layout")]
-        public Vetor2D LocalPos { get; set; }
+        public Vetor2 LocalPos { get; set; }
 
-        public override Vetor2D Pos { get => base.Pos;
+        public override Eixos Pos { get => base.Pos;
             set {
                 var tmp = value;
                 if (base.Pos == null)
-                    base.Pos = new Vetor2D(this, tmp.X, tmp.Y);
+                    base.Pos = new Vetor2(this, tmp.X, tmp.Y);
                 else
                 {
                     base.Pos.X = tmp.X;
@@ -221,7 +221,7 @@ namespace Epico.Sistema2D
         public Controle2D()
         {
             if (Pos == null)
-                Pos = new Vetor2D(this, 0, 0);
+                Pos = new Vetor2(this, 0, 0);
             //InicializarSize();
             //InicializarLocation();
         }
@@ -249,10 +249,10 @@ namespace Epico.Sistema2D
             InicializarLocation();
             InicializarSize();
 
-            AdicionarVertice(_vTopLeft = new Vertice2D(this));
-            AdicionarVertice(_vTopRigth = new Vertice2D(this));
-            AdicionarVertice(_vBottomRight = new Vertice2D(this));
-            AdicionarVertice(_vBottomLeft = new Vertice2D(this));
+            AdicionarVertice(_vTopLeft = new Vertice2(this));
+            AdicionarVertice(_vTopRigth = new Vertice2(this));
+            AdicionarVertice(_vBottomRight = new Vertice2(this));
+            AdicionarVertice(_vBottomLeft = new Vertice2(this));
 
             Mat_render.CorSolida = new RGBA(200, 150, 80, 230);
             Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
@@ -293,21 +293,21 @@ namespace Epico.Sistema2D
                     _vBottomLeft.Y = _location.Y + _size.Height;
                 }
 
-                if (Vertices.Length > 0)
+                if (Vertices.Count > 0)
                 {
                     AtualizarXYMinMax();
                 }
             }
         }
 
-        private XY _proxPosCtrl = new XY(10, 10);
+        private Vetor2 _proxPosCtrl = new Vetor2(10, 10);
 
         /// <summary>
         /// Nova posição em cascata para controles adicionados com duplo clique
         /// </summary>
         /// <param name="container"></param>
         /// <returns></returns>
-        public XY ProximoPosControle()
+        public Vetor2 ProximoPosControle()
         {
             if (_proxPosCtrl.X + 50 > Container.Width) _proxPosCtrl.X = 10;
             if (_proxPosCtrl.Y + 50 > Container.Height) _proxPosCtrl.Y = 10;

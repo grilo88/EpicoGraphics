@@ -133,6 +133,7 @@ namespace Rotacao3D
                 }
             }
 
+            // Renderização
             for (int i = 1; i < Vertices.Count() + 1; i++)
             {
                 PointF pontoA, pontoB;
@@ -176,9 +177,9 @@ namespace Rotacao3D
         {
             for (int i = 0; i < Vertices.Count(); i++)
             {
-                Vertices[i].EulerRotacionarX(grausX);
-                Vertices[i].EulerRotacionarY(grausY);
-                Vertices[i].EulerRotacionarZ(grausZ);
+                Vertices[i].EulerRotacionarX(new Vetor3D(0, 0, 0), grausX);
+                Vertices[i].EulerRotacionarY(new Vetor3D(0, 0, 0), grausY);
+                Vertices[i].EulerRotacionarZ(new Vetor3D(0, 0, 0), grausZ);
             }
         }
 
@@ -201,17 +202,21 @@ namespace Rotacao3D
 
         private void NumZ_ValueChanged(object sender, EventArgs e)
         {
-            NovoAnguloZ((float)NumZ.Value);
+            AngZ = (float)NumZ.Value;
+        }
+
+        private void FrmPrincipal_SizeChanged(object sender, EventArgs e)
+        {
         }
 
         private void NumX_ValueChanged(object sender, EventArgs e)
         {
-            NovoAnguloX((float)NumX.Value);
+            AngX = (float)NumX.Value;
         }
 
         private void NumY_ValueChanged(object sender, EventArgs e)
         {
-            NovoAnguloY((float)NumY.Value);
+            AngY = (float)NumY.Value;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,6 +43,8 @@ namespace Epico.Sistema3D
         /// <summary>Posição global na coordenada Z</summary>
         public float GlobalZ => obj.Pos.Z + Z;
 
+        public abstract EixoXYZ GetInstance();
+
         public EixoXYZ Subtrair(EixoXYZ origem)
         {
             X -= origem.X;
@@ -54,10 +57,13 @@ namespace Epico.Sistema3D
 
         public static EixoXYZ operator -(EixoXYZ a, EixoXYZ b)
         {
-            return new XYZ(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+            a.X -= b.X;
+            a.Y -= b.Y;
+            a.Z -= b.Z;
+            return a;
         }
 
-        public float ProdutoPontual(EixoXYZ vetor)
+        public float Produto(EixoXYZ vetor)
         {
             return this.X * vetor.X + this.Y * vetor.Y + this.Z * vetor.Z;
         }
@@ -67,18 +73,28 @@ namespace Epico.Sistema3D
             get => (float)Math.Sqrt(X * X + Y * Y + Z * Z);
         }
 
+        /// <summary>
+        /// Obtém os eixos dimensionais normalizados deste ponto
+        /// </summary>
+        /// <returns></returns>
         public EixoXYZ ObterNormalizado()
         {
-            float magnitude = Magnitude;
-            return new XYZ(X / magnitude, Y / magnitude, Z / magnitude);
+            EixoXYZ eixo = GetInstance();
+            eixo.obj = this.obj;
+            eixo.X = X / Magnitude;
+            eixo.Y = Y / Magnitude;
+            eixo.Z = Z / Magnitude;
+            return eixo;
         }
 
-        public void Normalizar()
+        /// <summary>
+        /// Normaliza os eixos dimensionais deste ponto
+        /// </summary>
+        public void NormalizarEixos()
         {
-            float magnitude = Magnitude;
-            X /= magnitude;
-            Y /= magnitude;
-            Z /= magnitude;
+            X /= Magnitude;
+            Y /= Magnitude;
+            Z /= Magnitude;
         }
 
         public float DistanciaAte(EixoXYZ vetor)
@@ -88,12 +104,11 @@ namespace Epico.Sistema3D
 
         public static EixoXYZ operator *(EixoXYZ a, float b)
         {
-            object obj = Activator.CreateInstance(a.GetType());
-            ((EixoXYZ)obj).obj = a.obj;
-            ((EixoXYZ)obj).X = a.X * b;
-            ((EixoXYZ)obj).Y = a.Y * b;
-            ((EixoXYZ)obj).Z = a.Z * b;
-            return (EixoXYZ)obj;
+            EixoXYZ obj = a.GetInstance();
+            obj.X = a.X * b;
+            obj.Y = a.Y * b;
+            obj.Z = a.Z * b;
+            return obj;
         }
     }
 
@@ -107,10 +122,16 @@ namespace Epico.Sistema3D
             base.Y = y;
             base.Z = z;
         }
+
+        public override EixoXYZ GetInstance()
+        {
+            return new XYZ();
+        }
     }
 
     public sealed class Origem3D : EixoXYZ
     {
+        public Origem3D() { }
         /// <summary>
         /// Utilizado ao gerar a forma geométrica
         /// </summary>
@@ -123,6 +144,11 @@ namespace Epico.Sistema3D
             base.X = x;
             base.Y = y;
             base.Z = z;
+        }
+
+        public override EixoXYZ GetInstance()
+        {
+            return new Origem3D();
         }
     }
 
@@ -249,6 +275,11 @@ namespace Epico.Sistema3D
                 return ToString();
             }
         }
+
+        public override EixoXYZ GetInstance()
+        {
+            return new Vetor3D();
+        }
     }
 
     public sealed class Vertice3D : EixoXYZ
@@ -262,10 +293,12 @@ namespace Epico.Sistema3D
         /// <summary>Ângulo</summary>
         public float Ang { get; set; }
 
+        public Vertice3D() { }
+
         /// <summary>
         /// Utilizado ao gerar a forma geométrica
         /// </summary>
-        /// <param name="obj">Objeto2D da qual o Vertice2D está associado</param>
+        /// <param name="obj">Objeto2D da qual o Vertice2 está associado</param>
         public Vertice3D(Objeto3D obj)
         {
             base.obj = obj;
@@ -307,6 +340,5 @@ namespace Epico.Sistema3D
             if (Y > region.Bottom) return false;
             return true;
         }
-
     }
 }

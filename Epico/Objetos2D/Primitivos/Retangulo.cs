@@ -10,7 +10,6 @@ namespace Epico.Objetos2D.Avancados
         {
             Nome = "Retângulo";
             GerarGeometriaRadial(45, raio, 4);
-
         }
 
         protected override void GerarGeometriaRadial(float angulo, float raio, int lados)
@@ -18,7 +17,7 @@ namespace Epico.Objetos2D.Avancados
             float rad = (float)(Math.PI * 2 / lados);
             for (int i = 0; i < lados; i++)
             {
-                Vertice2D v = new Vertice2D(this);
+                Vertice2 v = new Vertice2(this);
                 v.X = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * (raio * 1.5));
                 v.Y = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);

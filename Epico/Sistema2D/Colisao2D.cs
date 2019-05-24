@@ -9,13 +9,13 @@ namespace Epico.Sistema2D
     {
         public bool Interceptar; // Os polígonos vão se cruzar no tempo?
         public bool Intersecao; // Os polígonos estão se cruzando atualmente?
-        public Vetor2D TranslacaoMinimaVetor; // A translação a aplicar ao polígono A para empurrar os polígonos.
+        public Vetor2 TranslacaoMinimaVetor; // A translação a aplicar ao polígono A para empurrar os polígonos.
     }
 
     public class Colisao2D
     {
         public ColisaoPoligonoConvexoResultado PoligonoConvexo(
-            Objeto2D objetoA, Objeto2D objetoB, Vetor2D movimento)
+            Objeto2D objetoA, Objeto2D objetoB, Vetor2 movimento)
         {
             ColisaoPoligonoConvexoResultado resultado = new ColisaoPoligonoConvexoResultado();
             resultado.Intersecao = true;
@@ -24,8 +24,8 @@ namespace Epico.Sistema2D
             int arestaQuantA = objetoA.Arestas.Count;
             int arestaQuantB = objetoB.Arestas.Count;
             float minIntervalDistance = float.PositiveInfinity;
-            Vetor2D EixoTranslacao = new Vetor2D();
-            Vetor2D aresta;
+            Vetor2 EixoTranslacao = new Vetor2();
+            Vetor2 aresta;
 
             // Loop através de todas as bordas de ambos os polígonos
             for (int indiceAresta = 0; indiceAresta < arestaQuantA + arestaQuantB; indiceAresta++)
@@ -38,8 +38,8 @@ namespace Epico.Sistema2D
                 // ===== 1. Descobrir se os polígonos estão se cruzando atualmente =====
 
                 // Encontre o eixo perpendicular à borda atual
-                Vetor2D eixo = new Vetor2D(objetoA, -aresta.Y, aresta.X);
-                eixo.Normalizar();
+                Vetor2 eixo = new Vetor2(objetoA, -aresta.Y, aresta.X);
+                eixo.Normalizar<Eixos>();
 
                 // Encontre a projeção do polígono no eixo atual
                 float minA = 0; float minB = 0; float maxA = 0; float maxB = 0;
@@ -52,7 +52,7 @@ namespace Epico.Sistema2D
                 // ===== 2. Agora, encontre os polígonos que irão se *cruzar* =====
 
                 // Projetar a velocidade no eixo atual
-                float velocidadeProjecao = eixo.ProdutoPontual(movimento);
+                float velocidadeProjecao = eixo.Produto(movimento);
 
                 // Obter a projeção do polígono A durante o movimento
                 if (velocidadeProjecao < 0)
@@ -80,8 +80,8 @@ namespace Epico.Sistema2D
                     minIntervalDistance = distanciaDoIntervalo;
                     EixoTranslacao = eixo;
 
-                    Vetor2D d = new Vetor2D(objetoA, objetoA.Centro.Global - objetoB.Centro.Global);
-                    if (d.ProdutoPontual(EixoTranslacao) < 0) EixoTranslacao = -EixoTranslacao;
+                    Vetor2 d = new Vetor2(objetoA, (Vetor2)(objetoA.Centro.Global - objetoB.Centro.Global));
+                    if (d.Produto(EixoTranslacao) < 0) EixoTranslacao = -EixoTranslacao;
                 }
             }
 
@@ -106,15 +106,15 @@ namespace Epico.Sistema2D
         }
 
         // Calcule a projeção de um polígono em um eixo e retorne-o como um intervalo [min, max]
-        public void ProjecaoPoligono(EixoXY global_eixo, Objeto2D poligono, ref float min, ref float max)
+        public void ProjecaoPoligono(Eixos global_eixo, Objeto2D poligono, ref float min, ref float max)
         {
             // Para projetar um ponto em um eixo, use o produto escalar
-            float d = global_eixo.ProdutoPontual(poligono.Vertices[0].Global);
+            float d = global_eixo.Produto(poligono.Vertices[0].Global);
             min = d;
             max = d;
-            for (int i = 0; i < poligono.Vertices.Length; i++)
+            for (int i = 0; i < poligono.Vertices.Count; i++)
             {
-                d = poligono.Vertices[i].Global.ProdutoPontual(global_eixo);
+                d = poligono.Vertices[i].Global.Produto(global_eixo);
                 if (d < min)
                 {
                     min = d;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Epico.Sistema3D;
+using Epico.Sistema;
 
 #if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
@@ -26,7 +26,6 @@ namespace Epico
         #endregion
 
         public List<Objeto2D> objetos2D { get; private set; } = new List<Objeto2D>();
-        public List<Objeto3D> objetos3D { get; private set; } = new List<Objeto3D>();
         public int MaximoFPS { get; internal set; }
 
         public T CriarObjeto2D<T>() where T : Objeto2D

@@ -92,11 +92,11 @@ namespace Epico.Sistema3D
         [Category("Layout")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Posição do objeto</summary>
-        public virtual Vetor3D Pos { get; set; }
+        public virtual Vetor3 Pos { get; set; }
         [Category("Layout")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Escala do objeto</summary>
-        public Vetor3D Escala { get; set; }
+        public Vetor3 Escala { get; set; }
 
         //private bool _otimizaAtualizaGeometria;
         //private int _quantVertices;
@@ -104,11 +104,11 @@ namespace Epico.Sistema3D
 
         #region Arrays
         /// <summary>Ponto(s) de origem do objeto</summary>
-        public List<Origem3D> Origem { get; set; } = new List<Origem3D>();
+        public List<Origem3> Origem { get; set; } = new List<Origem3>();
         /// <summary>Vértices do objeto</summary>
-        public Vertice3D[] Vertices = new Vertice3D[0];
+        public Vertice3[] Vertices = new Vertice3[0];
         /// <summary>Arestas do objeto</summary>
-        public List<Vetor3D> Arestas = new List<Vetor3D>();
+        public List<Vetor3> Arestas = new List<Vetor3>();
         /// <summary>Triângulos do objeto</summary>
         public List<Triangulo3D> Triangulos = new List<Triangulo3D>();
 
@@ -122,9 +122,9 @@ namespace Epico.Sistema3D
 
         public Objeto3D()
         {
-            Pos = new Vetor3D(this, 0, 0, 0);
-            Escala = new Vetor3D(this, 1, 1, 1);
-            Origem.Add(new Origem3D(this, 0, 0, 0)); // Adiciona o ponto central principal
+            Pos = new Vetor3(this, 0, 0, 0);
+            Escala = new Vetor3(this, 1, 1, 1);
+            Origem.Add(new Origem3(this, 0, 0, 0)); // Adiciona o ponto central principal
         }
 
         public void AssociarEngine(EpicoGraphics engine)
@@ -158,7 +158,7 @@ namespace Epico.Sistema3D
         /// Adiciona vértice ao objeto
         /// </summary>
         /// <param name="v"></param>
-        public void AdicionarVertice(Vertice3D v)
+        public void AdicionarVertice(Vertice3 v)
         {
             //if (_otimizaAtualizaGeometria)
             //{
@@ -173,7 +173,7 @@ namespace Epico.Sistema3D
             //{
                 Array.Resize(ref Vertices, Vertices.Length + 1);
                 Vertices[Vertices.Length - 1] = v;
-            Vertices[Vertices.Length - 1].obj = this;
+            Vertices[Vertices.Length - 1].Obj = this;
                 //_quantVertices = Vertices.Length;
                 AtualizarXYMinMax();
             //}
@@ -184,7 +184,7 @@ namespace Epico.Sistema3D
         /// <summary>
         /// Obtém o centro do objeto
         /// </summary>
-        public Vetor3D Centro
+        public Vetor3 Centro
         {
             get
             {
@@ -207,18 +207,18 @@ namespace Epico.Sistema3D
         /// </summary>
         public void CriarArestasConvexo()
         {
-            Vetor3D p1, p2;
+            Vetor3 p1, p2;
             Arestas.Clear();
             for (int i = 0; i < Vertices.Length; i++)
             {
-                p1 = new Vetor3D(this, Vertices[i].X, Vertices[i].Y, Vertices[i].Z);
+                p1 = new Vetor3(this, Vertices[i].X, Vertices[i].Y, Vertices[i].Z);
                 if (i + 1 >= Vertices.Length)
                 {
-                    p2 = new Vetor3D(this, Vertices[0].X, Vertices[0].Y, Vertices[0].Z);
+                    p2 = new Vetor3(this, Vertices[0].X, Vertices[0].Y, Vertices[0].Z);
                 }
                 else
                 {
-                    p2 = new Vetor3D(this, Vertices[i + 1].X, Vertices[i + 1].Y, Vertices[i + 1].Z);
+                    p2 = new Vetor3(this, Vertices[i + 1].X, Vertices[i + 1].Y, Vertices[i + 1].Z);
                 }
                 Arestas.Add(p2 - p1);
             }
@@ -320,7 +320,7 @@ namespace Epico.Sistema3D
         //    AtualizarGeometria();
         //}
 
-        //public virtual void RotacionarVertice(Vertice2D v, int graus)
+        //public virtual void RotacionarVertice(Vertice2 v, int graus)
         //{
         //    AtualizarGeometria();
         //}

@@ -37,7 +37,7 @@ namespace Epico.Sistema2D
         }
     }
 
-    public class Vertice2D
+    public class Vertice2
     {
         public float x;     
         public float y;     

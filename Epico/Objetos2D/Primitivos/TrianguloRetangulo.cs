@@ -17,7 +17,7 @@ namespace Epico.Objetos2D.Primitivos
             float rad = (float)(Math.PI * 2 / /*Verificar*/(lados + 1));
             for (int i = 0; i < lados; i++)
             {
-                Vertice2D v = new Vertice2D(this);
+                Vertice2 v = new Vertice2(this);
                 v.X = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 v.Y = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);

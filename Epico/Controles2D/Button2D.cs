@@ -19,7 +19,7 @@ namespace Epico.Controles
             Nome = _nomePadrao;
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
-            XY proxPos = ProximoPosControle();
+            Vetor2 proxPos = ProximoPosControle();
             GerarControle(proxPos.X, proxPos.Y, 100, 100);
             Mat_render.CorSolida = new RGBA(200, 0, 200, 88);
         }

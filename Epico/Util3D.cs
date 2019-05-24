@@ -1,5 +1,4 @@
-﻿using Epico.Sistema3D;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,33 +11,33 @@ namespace Epico
             return angulo * (float)Math.PI / 180;
         }
 
-        public static EixoXYZ RotacionarPonto3D(EixoXYZ origem, EixoXYZ ponto, float graus) => RotacionarPonto3D(origem.X, origem.Y, origem.Z, ponto.X, ponto.Y, ponto.Z, graus);
+        public static Eixos3 RotacionarPonto3D(Eixos3 origem, Eixos3 ponto, float graus) => RotacionarPonto3D(origem.X, origem.Y, origem.Z, ponto.X, ponto.Y, ponto.Z, graus);
 
-        public static EixoXYZ RotacionarPonto3D(float origemX, float origemY, float origemZ, float x, float y, float z, float angulo)
+        public static Eixos3 RotacionarPonto3D(float origemX, float origemY, float origemZ, float x, float y, float z, float angulo)
         {
             float rad = Angulo2Radiano(angulo);
             float rotX = (float)(Math.Cos(rad) * (x - origemX) + Math.Sin(rad) * (y - origemY) + origemX);
             float rotY = (float)(Math.Cos(rad) * (x - origemX) + Math.Sin(rad) * (y - origemY) + origemY);
             float rotZ = (float)(Math.Cos(rad) * (z - origemZ) + Math.Sin(rad) * (z - origemZ) + origemZ);
-            return new XYZ(rotX, rotY, rotZ);
+            return new Vetor3(rotX, rotY, rotZ);
         }
 
-        public static T EulerRotacionarX<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
+        public static T EulerRotacionarX<T>(this T vetor, Eixos3 pivo, float graus) where T : Eixos3
         {
-            return EulerRotacionarX((T)vetor.Subtrair(pivo), graus);
+            return EulerRotacionarX((T)(vetor - pivo), graus);
         }
 
-        public static T EulerRotacionarY<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
+        public static T EulerRotacionarY<T>(this T vetor, Eixos3 pivo, float graus) where T : Eixos3
         {
-            return EulerRotacionarY((T)vetor.Subtrair(pivo), graus);
+            return EulerRotacionarY((T)(vetor - pivo), graus);
         }
 
-        public static T EulerRotacionarZ<T>(this T vetor, EixoXYZ pivo, float graus) where T : EixoXYZ
+        public static T EulerRotacionarZ<T>(this T vetor, Eixos3 pivo, float graus) where T : Eixos3
         {
-            return EulerRotacionarZ((T)vetor.Subtrair(pivo), graus);
+            return EulerRotacionarZ((T)(vetor - pivo), graus);
         }
 
-        public static T EulerRotacionarX<T>(this T vetor, float graus) where T : EixoXYZ
+        public static T EulerRotacionarX<T>(this T vetor, float graus) where T : Eixos3
         {
             // https://pt.wikipedia.org/wiki/%C3%82ngulos_de_Euler
             float rad = Angulo2Radiano(graus);
@@ -49,7 +48,7 @@ namespace Epico
             return vetor;
         }
 
-        public static T EulerRotacionarY<T>(this T vetor, float graus) where T : EixoXYZ
+        public static T EulerRotacionarY<T>(this T vetor, float graus) where T : Eixos3
         {
             // https://pt.wikipedia.org/wiki/%C3%82ngulos_de_Euler
             float rad = Angulo2Radiano(graus);
@@ -60,7 +59,7 @@ namespace Epico
             return vetor;
         }
 
-        public static T EulerRotacionarZ<T>(this T vetor, float graus) where T : EixoXYZ
+        public static T EulerRotacionarZ<T>(this T vetor, float graus) where T : Eixos3
         {
             // https://pt.wikipedia.org/wiki/%C3%82ngulos_de_Euler
             float rad = Angulo2Radiano(graus);

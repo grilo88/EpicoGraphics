@@ -6,7 +6,7 @@
     <SharedGUID>b5456ba6-0254-41ca-9316-ae4b80b9e5c5</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>EpicoGraphics</Import_RootNamespace>
+    <Import_RootNamespace>Epico</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Controles2D\Button2D.cs" />
@@ -20,7 +20,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controles2D\PopUpMenu2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles2D\ProgressBar2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controles2D\Textbox2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos4.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EpicoGraphics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interno.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Luzes2D\LuzDestaque.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Luzes2D\LuzDirecional.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Luzes2D\LuzObjeto2D.cs" />
@@ -37,8 +51,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Triangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\TrianguloRetangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Colisao2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema3D\Delaunay\Triangulo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema3D\Estruturas3D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Projetor2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Animacao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Avancado2D.cs" />
@@ -48,16 +62,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Entrada\Joystick.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Entrada\Mouse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Entrada\Teclado.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Estruturas2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Luz2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Luz2DRenderizar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Material.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2DRenderizar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Pivo2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Primitivo2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Transformacao.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema3D\Objeto3D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Geometria.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util3D.cs" />
   </ItemGroup>

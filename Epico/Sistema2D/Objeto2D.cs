@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Epico.Sistema;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Epico.Sistema2D
     /// <summary>
     /// Tipo abstrato que envolve tanto objetos visíveis e invisíveis do simulador
     /// </summary>
-    public abstract class Objeto2D : ICloneable
+    public abstract class Objeto2D : Geometria, ICloneable
     {
         public EpicoGraphics _epico;
 
@@ -21,6 +22,10 @@ namespace Epico.Sistema2D
         [Category("Design")]
         /// <summary>Nome do objeto</summary>
         public string Nome { get; set; }
+
+        [Category("Layout")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public virtual Vetor2 Pos { get => (Vetor2)Posicao; set => Pos = value; }
 
         [Category("Geometria")]
         /// <summary>Distância do centro ao ponto máximo da circunferência.</summary>
@@ -89,39 +94,32 @@ namespace Epico.Sistema2D
         #endregion
 
         #region Campos
-        [Category("Layout")]
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        /// <summary>Posição do objeto</summary>
-        public virtual Vetor2D Pos { get; set; }
+        
         [Category("Layout")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Escala do objeto</summary>
-        public Vetor2D Escala { get; set; }
+        public Vetor2 Escala { get; set; }
 
         //private bool _otimizaAtualizaGeometria;
         //private int _quantVertices;
         #endregion
 
         #region Arrays
-        /// <summary>Ponto(s) de origem do objeto</summary>
-        public List<Origem2D> Origem { get; set; } = new List<Origem2D>();
-        /// <summary>Vértices do objeto</summary>
-        public Vertice2D[] Vertices = new Vertice2D[0];
-        public List<Vetor2D> Arestas = new List<Vetor2D>();
+        
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Animações do objeto</summary>
         public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
         [TypeConverter(typeof(ExpandableObjectConverter))]
         /// <summary>Pivôs do objeto</summary>
-        public List<Pivo2D> Pivos { get; set; } = new List<Pivo2D>();
+        public List<Pivo2> Pivos { get; set; } = new List<Pivo2>();
         #endregion
 
         public Objeto2D()
         {
-            Pos = new Vetor2D(this, 0, 0);
-            Escala = new Vetor2D(this, 1, 1);
-            Origem.Add(new Origem2D(this, 0, 0)); // Adiciona o ponto central principal
+            Pos = new Vetor2(this, 0, 0);
+            Escala = new Vetor2(this, 1, 1);
+            Origem.Add(new Origem2(this, 0, 0)); // Adiciona o ponto central principal
             Transformação = new Transformacao(this);
         }
 
@@ -156,7 +154,7 @@ namespace Epico.Sistema2D
         /// Adiciona vértice ao objeto
         /// </summary>
         /// <param name="v"></param>
-        public void AdicionarVertice(Vertice2D v)
+        public void AdicionarVertice(Vertice2 v)
         {
             //if (_otimizaAtualizaGeometria)
             //{
@@ -169,9 +167,8 @@ namespace Epico.Sistema2D
             //}
             //else
             //{
-                Array.Resize(ref Vertices, Vertices.Length + 1);
-                Vertices[Vertices.Length - 1] = v;
-            Vertices[Vertices.Length - 1].obj = this;
+                v.Obj = this;
+                Vertices.Add(v);
                 //_quantVertices = Vertices.Length;
                 AtualizarXYMinMax();
             //}
@@ -182,19 +179,19 @@ namespace Epico.Sistema2D
         /// <summary>
         /// Obtém o centro do objeto
         /// </summary>
-        public Vetor2D Centro
+        public Vetor2 Centro
         {
             get
             {
                 float totalX = 0;
                 float totalY = 0;
-                for (int i = 0; i < Vertices.Length; i++)
+                for (int i = 0; i < Vertices.Count(); i++)
                 {
-                    totalX += Vertices[i].X;
-                    totalY += Vertices[i].Y;
+                    totalX += ((Eixos2)Vertices[i]).X;
+                    totalY += ((Eixos2)Vertices[i]).Y;
                 }
 
-                return new Vetor2D(this, totalX / (float)Vertices.Length, totalY / (float)Vertices.Length);
+                return new Vetor2(this, totalX / (float)Vertices.Count(), totalY / (float)Vertices.Count());
             }
         }
 
@@ -203,18 +200,18 @@ namespace Epico.Sistema2D
         /// </summary>
         public void CriarArestasConvexo()
         {
-            Vetor2D p1, p2;
+            Vetor2 p1, p2;
             Arestas.Clear();
-            for (int i = 0; i < Vertices.Length; i++)
+            for (int i = 0; i < Vertices.Count(); i++)
             {
-                p1 = new Vetor2D(this, Vertices[i].X, Vertices[i].Y);
-                if (i + 1 >= Vertices.Length)
+                p1 = new Vetor2(this, ((Eixos2)Vertices[i]).X, ((Eixos2)Vertices[i]).Y);
+                if (i + 1 >= Vertices.Count())
                 {
-                    p2 = new Vetor2D(this, Vertices[0].X, Vertices[0].Y);
+                    p2 = new Vetor2(this, ((Eixos2)Vertices[0]).X, ((Eixos2)Vertices[0]).Y);
                 }
                 else
                 {
-                    p2 = new Vetor2D(this, Vertices[i + 1].X, Vertices[i + 1].Y);
+                    p2 = new Vetor2(this, ((Eixos2)Vertices[i + 1]).X, ((Eixos2)Vertices[i + 1]).Y);
                 }
                 Arestas.Add(p2 - p1);
             }
@@ -240,7 +237,7 @@ namespace Epico.Sistema2D
         /// Move o objeto incrementando as posições x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Mover(Vetor2D pos) => Pos += pos;
+        public virtual void Mover(Vetor2 pos) => Pos += pos;
 
         /// <summary>
         /// Move o objeto incrementando a posição x
@@ -269,7 +266,7 @@ namespace Epico.Sistema2D
         /// Posiciona o objeto na posição x e y
         /// </summary>
         /// <param name="pos"></param>
-        public virtual void Posicionar(Vetor2D pos) => Pos = pos;
+        public virtual void Posicionar(Vetor2 pos) => Pos = pos;
 
         /// <summary>
         /// Posiciona o objeto na posição x
@@ -316,7 +313,7 @@ namespace Epico.Sistema2D
         //    AtualizarGeometria();
         //}
 
-        //public virtual void RotacionarVertice(Vertice2D v, int graus)
+        //public virtual void RotacionarVertice(Vertice2 v, int graus)
         //{
         //    AtualizarGeometria();
         //}
@@ -360,14 +357,14 @@ namespace Epico.Sistema2D
         {
             int idx = IndiceRaioMax();
 
-            float raioMax = Vertices[idx].Raio;
+            float raioMax = ((Vertice2)Vertices[idx]).Raio;
             float diff = raio - raioMax;
 
             // Define raios internos de cada vértice proporcionalmente ao novo raio máximo da circunferência
             float percentual = diff / raioMax * 100; // Percentual da proporção
-            for (int i = 0; i < Vertices.Length; i++)
+            for (int i = 0; i < Vertices.Count(); i++)
             {
-                Vertices[i].Raio += Vertices[i].Raio * percentual / 100;
+                ((Vertice2)Vertices[i]).Raio += ((Vertice2)Vertices[i]).Raio * percentual / 100;
                 
             }
             Raio = raio;
@@ -379,11 +376,11 @@ namespace Epico.Sistema2D
             int idxMax = 0;
             float v = float.MinValue;
 
-            for (int i = 0; i < Vertices.Length; i++)
+            for (int i = 0; i < Vertices.Count(); i++)
             {
-                if (Vertices[i].Raio > v)
+                if (((Vertice2)Vertices[i]).Raio > v)
                 {
-                    v = Vertices[i].Raio;
+                    v = ((Vertice2)Vertices[i]).Raio;
                     idxMax = i;
                 }
             }
@@ -469,10 +466,10 @@ namespace Epico.Sistema2D
         /// <summary>Atualiza os pontos máximos e mínimos da geometria. Deve ser chamado após atualização das vértices.</summary>
         public void AtualizarXYMinMax()
         {
-            XMax = Vertices.Max(x => x.X);
-            XMin = Vertices.Min(x => x.X);
-            YMax = Vertices.Max(x => x.Y);
-            YMin = Vertices.Min(x => x.Y);
+            XMax = Vertices.Max(x => ((Eixos2)x).X);
+            XMin = Vertices.Min(x => ((Eixos2)x).X);
+            YMax = Vertices.Max(x => ((Eixos2)x).Y);
+            YMin = Vertices.Min(x => ((Eixos2)x).Y);
         }
 
         ///// <summary>Atualiza o raio obtendo o ponto máximo da circunferência. Quando há mudanças na variação de raios entre uma vértice e outra essa atualização é necessária. Deve ser chamado após atualização das vértices.</summary>
@@ -489,11 +486,11 @@ namespace Epico.Sistema2D
             Angulo = novoAngulo;
 
             // Vértices
-            for (int i = 0; i < Vertices.Length; i++)
+            for (int i = 0; i < Vertices.Count(); i++)
             {
-                EixoXY eixo = Util2D.RotacionarPonto2D(Origem[0], Vertices[i], graus);
-                Vertices[i].X = eixo.X;
-                Vertices[i].Y = eixo.Y;
+                Eixos2 eixo = Util2D.RotacionarPonto2D((Eixos2)Origem[0], (Eixos2)Vertices[i], graus);
+                ((Eixos2)Vertices[i]).X = eixo.X;
+                ((Eixos2)Vertices[i]).Y = eixo.Y;
             }
 
             // Arestas
@@ -501,9 +498,9 @@ namespace Epico.Sistema2D
             {
                 for (int i = 0; i < Arestas.Count; i++)
                 {
-                    EixoXY eixo = Util2D.RotacionarPonto2D(Centro, Arestas[i], graus);
-                    Arestas[i].X = eixo.X;
-                    Arestas[i].Y = eixo.Y;
+                    Eixos2 eixo = Util2D.RotacionarPonto2D(Centro, (Eixos2)Arestas[i], graus);
+                    ((Eixos2)Arestas[i]).X = eixo.X;
+                    ((Eixos2)Arestas[i]).Y = eixo.Y;
                 }
             }
 
@@ -525,17 +522,17 @@ namespace Epico.Sistema2D
 
             // Cria novas instâncias para os elementos
             ((Objeto2D)clone).Vertices = Vertices
-                .Select(x => new Vertice2D(this, x.X, x.Y)
+                .Select(x => new Vertice2(this, ((Eixos2)x).X, ((Eixos2)x).Y)
                 {
-                    Ang = x.Ang,
-                    Nome = x.Nome,
-                    Rad = x.Rad,
-                    Raio = x.Raio,
-                    Sel = x.Sel
-                }).ToArray();
+                    Ang = ((Vertice2)x).Ang,
+                    Nome = ((Vertice2)x).Nome,
+                    Rad = ((Vertice2)x).Rad,
+                    Raio = ((Vertice2)x).Raio,
+                    Sel = ((Vertice2)x).Sel
+                }).ToList();
             // Cria novas instâncias para os elementos
             ((Objeto2D)clone).Origem = Origem
-                .Select(x => new Origem2D(this, x.X, x.Y)
+                .Select(x => new Origem2(this, x.X, x.Y)
                 {
                     Sel = x.Sel
                 }).ToList();

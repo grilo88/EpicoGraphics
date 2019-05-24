@@ -29,9 +29,9 @@ namespace Editor2D
 
         EpicoGraphics  _engine = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
-        List<Origem2D> _origem_sel = new List<Origem2D>();
-        List<Vertice2D> _vetor_sel = new List<Vertice2D>();
-        List<Vertice2D> _vertice_sel = new List<Vertice2D>();
+        List<Origem2> _origem_sel = new List<Origem2>();
+        List<Vertice2> _vetor_sel = new List<Vertice2>();
+        List<Vertice2> _vertice_sel = new List<Vertice2>();
 
         List<ToolStripButton> _ferramentasTransformacao = new List<ToolStripButton>();
         List<ToolStripButton> _ferramentasSelecao = new List<ToolStripButton>();
@@ -96,7 +96,8 @@ namespace Editor2D
                 }).ToList();
             #endregion
 
-            
+
+            Vetor2 teste;
 
             Show();
 
@@ -110,8 +111,8 @@ namespace Editor2D
 
                 if (moveCamera)
                 {
-                    EixoXY xyCamDrag = new XY(cameraDrag.X, cameraDrag.Y);
-                    EixoXY xyCursor = new XY(Cursor.Position.X, Cursor.Position.Y);
+                    Vetor2 xyCamDrag = new Vetor2(cameraDrag.X, cameraDrag.Y);
+                    Vetor2 xyCursor = new Vetor2(Cursor.Position.X, Cursor.Position.Y);
                     float distCursor = Util2D.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
                     float angCursor = Util2D.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
@@ -219,7 +220,7 @@ namespace Editor2D
             }
         }
 
-        private Vetor2D PosAleatorio(Objeto2D obj)
+        private Vetor2 PosAleatorio(Objeto2D obj)
         {
             int x = new Random(Environment.TickCount).Next(0, picScreen.ClientRectangle.Width);
             int y = new Random(Environment.TickCount + x).Next(0, picScreen.ClientRectangle.Height);
@@ -227,7 +228,7 @@ namespace Editor2D
             _engine.Camera.Pos.X = x;
             _engine.Camera.Pos.Y = y;
 
-            return new Vetor2D(obj, x, y);
+            return new Vetor2(obj, x, y);
         }
 
         private void AtualizarComboObjetos2D()
@@ -602,7 +603,7 @@ namespace Editor2D
         {
             #region Cria a Câmera 2D
             Camera2D camera = _engine.CriarCamera(picScreen.Width, picScreen.Height);
-            camera.Pos = new Vetor2D(_obj_sel.First().Pos.X, _obj_sel.First().Pos.Y);
+            camera.Pos = new Vetor2(_obj_sel.First().Pos.X, _obj_sel.First().Pos.Y);
             #endregion
 
             cboCamera.DataSource = _engine.Cameras
@@ -686,11 +687,11 @@ namespace Editor2D
                     e.Graphics.FillRectangle(selBrush, selRect);
 
                     #region Retângulo de colisão para o mundo 2D
-                    Vertice2D[] rect = new Vertice2D[4];
-                    rect[0] = new Vertice2D(selRect.X, selRect.Y);                                      // Superior Esquerdo
-                    rect[1] = new Vertice2D(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
-                    rect[2] = new Vertice2D(selRect.X + selRect.Width, selRect.Y + selRect.Height);     // Inferior Direito
-                    rect[3] = new Vertice2D(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
+                    Vertice2[] rect = new Vertice2[4];
+                    rect[0] = new Vertice2(selRect.X, selRect.Y);                                      // Superior Esquerdo
+                    rect[1] = new Vertice2(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
+                    rect[2] = new Vertice2(selRect.X + selRect.Width, selRect.Y + selRect.Height);     // Inferior Direito
+                    rect[3] = new Vertice2(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
                     #endregion
 
                     if (toolStripSelecao.Checked)
@@ -820,13 +821,13 @@ namespace Editor2D
             {
                 _vertice_sel.ForEach(x => x.Sel = false);
                 _vertice_sel.Clear();
-                _vertice_sel.Add((Vertice2D)cboVertices.SelectedValue);
+                _vertice_sel.Add((Vertice2)cboVertices.SelectedValue);
                 if (toolStripVertice.Checked) _vertice_sel.First().Sel = true;
                 AtualizarControlesVertice(_vertice_sel);
             }
         }
 
-        private void AtualizarControlesVertice(List<Vertice2D> selecionados)
+        private void AtualizarControlesVertice(List<Vertice2> selecionados)
         {
             if (selecionados.Count == 1)
             {
@@ -857,7 +858,7 @@ namespace Editor2D
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
                         _obj_sel.ForEach(x => x.Selecionado = false);
-                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_engine, _engine.Camera, new XY(selStart.X, selStart.Y));
+                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_engine, _engine.Camera, new Vetor2(selStart.X, selStart.Y));
                         _obj_sel = new List<Objeto2D>();
                         if (objSel != null) _obj_sel.Add(objSel);
                     }
@@ -1035,13 +1036,13 @@ namespace Editor2D
             {
                 _origem_sel.ForEach(x => x.Sel = false);
                 _origem_sel.Clear();
-                _origem_sel.Add((Origem2D)cboOrigem.SelectedValue);
+                _origem_sel.Add((Origem2)cboOrigem.SelectedValue);
                 if (toolStripOrigem.Checked) _origem_sel.First().Sel = true;
                 AtualizarControlesPontoCentro(_origem_sel);
             }
         }
 
-        private void AtualizarControlesPontoCentro(List<Origem2D> selecionados)
+        private void AtualizarControlesPontoCentro(List<Origem2> selecionados)
         {
             // Nenhum objeto selecionado?
             if (selecionados.Count == 0)
@@ -1095,7 +1096,7 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                _engine.Camera.Focar((Origem2D)cboOrigem.SelectedValue);
+                _engine.Camera.Focar((Origem2)cboOrigem.SelectedValue);
             }
         }
 
@@ -1152,7 +1153,7 @@ namespace Editor2D
         private void BtnForm2D_Click(object sender, EventArgs e)
         {
             Form2D form = new Form2D();
-            form.Pos = new Vetor2D(form, 200, 200);
+            form.Pos = new Vetor2(form, 200, 200);
             _engine.AddObjeto2D(form);
             _engine.Camera.Focar(form);
 
@@ -1175,7 +1176,7 @@ namespace Editor2D
 
             Panel2D panel = new Panel2D(_engine, (Controle2D)cboObjeto2D.SelectedValue);
             panel.MouseDown += Panel_MouseDown;
-            panel.Pos = new Vetor2D(panel, 200, 200);
+            panel.Pos = new Vetor2(panel, 200, 200);
             _engine.AddObjeto2D(panel);
 
             AtualizarComboObjetos2D();
@@ -1269,7 +1270,7 @@ namespace Editor2D
 
             Button2D obj = new Button2D(_engine, (Controle2D)cboObjeto2D.SelectedValue);
             obj.MouseDown += Panel_MouseDown;
-            obj.Pos = new Vetor2D(obj, 200, 200);
+            obj.Pos = new Vetor2(obj, 200, 200);
             _engine.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
@@ -1332,7 +1333,7 @@ namespace Editor2D
                 {
                     AngPerson += esquerda * (float)(engine.Camera.TempoDelta * (fatorTempo / 1.5));
 
-                    Vetor2D movimento = new Vetor2D(person);
+                    Vetor2 movimento = new Vetor2(person);
                     movimento.X += (float)(Math.Cos(Util2D.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
                     movimento.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(AngPerson + 90)) * frente * engine.Camera.TempoDelta * fatorTempo);
 

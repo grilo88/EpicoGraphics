@@ -8,9 +8,9 @@
 //  http://www.codeproject.com/info/cpol10.aspx
 ///////////////////////////////////////////////////////////////////////////////
 
-    using Epico.Sistema3D;
-    using System;
-    using System.Collections.Generic;
+using Epico;
+using System;
+using System.Collections.Generic;
 
 #if EtoForms
 using Eto.Drawing;
@@ -19,7 +19,7 @@ using System.Drawing;
 #endif
 
 using System.Linq;
-    using System.Text;
+using System.Text;
 
 /// <summary>
 /// Triângulo 3D
@@ -31,7 +31,7 @@ public class Triangulo3D
     /// </summary>
     public static void ResetIndice() { m_indice = 0; }
 
-#region Construcors: (), (Triangle src), (Vertice3D a, Vertice3D b, Vertice3D c)
+#region Construcors: (), (Triangle src), (Vertice3 a, Vertice3 b, Vertice3 c)
     /// <summary>
     /// Construtor.
     /// </summary>
@@ -63,7 +63,7 @@ public class Triangulo3D
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <param name="c"></param>
-    public Triangulo3D(Vertice3D a, Vertice3D b, Vertice3D c)
+    public Triangulo3D(Vertice3 a, Vertice3 b, Vertice3 c)
     {
         A = a;
         B = b;
@@ -75,10 +75,10 @@ public class Triangulo3D
 
 #region Protected data.
 
-    // Vertice3Des.
-    protected Vertice3D m_a = null;
-    protected Vertice3D m_b = null;
-    protected Vertice3D m_c = null;
+    // Vertice3es.
+    protected Vertice3 m_a = null;
+    protected Vertice3 m_b = null;
+    protected Vertice3 m_c = null;
 
     // Comprimentos.
     protected float m_abLen = 0;
@@ -108,7 +108,7 @@ public class Triangulo3D
 
     // Centro
     protected bool m_centroComputado = false;
-    protected Vertice3D m_centro = null;
+    protected Vertice3 m_centro = null;
 
 #endregion
 
@@ -134,12 +134,12 @@ public class Triangulo3D
     /// <summary>
     /// Computa o centro
     /// </summary>
-    public Vertice3D Center
+    public Vertice3 Center
     {
         get
         {
             if (m_centroComputado) return m_centro;
-            m_centro = new Vertice3D(
+            m_centro = new Vertice3(
                 (A.X + B.X + C.X) / 3f,
                 (A.Y + B.Y + C.Y) / 3f,
                 (A.Z + B.Z + C.Z) / 3f);
@@ -162,9 +162,9 @@ public class Triangulo3D
     public float MaisDitanteDoCentro { get; protected set; }
 
     /// <summary>
-    /// Vertice3D A
+    /// Vertice3 A
     /// </summary>
-    public Vertice3D A
+    public Vertice3 A
     {
         get { return m_a; }
         set
@@ -180,9 +180,9 @@ public class Triangulo3D
     }
 
     /// <summary>
-    /// Vertice3D B
+    /// Vertice3 B
     /// </summary>
-    public Vertice3D B
+    public Vertice3 B
     {
         get { return m_b; }
         set
@@ -198,9 +198,9 @@ public class Triangulo3D
     }
 
     /// <summary>
-    /// Vertice3D C
+    /// Vertice3 C
     /// </summary>
-    public Vertice3D C
+    public Vertice3 C
     {
         get { return m_c; }
         set
@@ -240,7 +240,7 @@ public class Triangulo3D
         {
             if (!m_abDetCalcd)
             {
-                m_abDet = Vertice3DTeste(A, B, C);
+                m_abDet = Vertice3Testar(A, B, C);
             }
             return m_abDet;
         }
@@ -255,7 +255,7 @@ public class Triangulo3D
         {
             if (!m_bcDetCalcd)
             {
-                m_bcDet = Vertice3DTeste(B, C, A);
+                m_bcDet = Vertice3Testar(B, C, A);
             }
             return m_bcDet;
         }
@@ -270,20 +270,20 @@ public class Triangulo3D
         {
             if (!m_caDetCalcd)
             {
-                m_caDet = Vertice3DTeste(C, A, B);
+                m_caDet = Vertice3Testar(C, A, B);
             }
             return m_caDet;
         }
     }
 
     /// <summary>
-    /// Teste de lateralidade Vertice3D.
+    /// Teste de lateralidade Vertice3.
     /// </summary>
     /// <param name="la"></param>
     /// <param name="lb"></param>
     /// <param name="t"></param>
     /// <returns></returns>
-    protected bool Vertice3DTeste(Vertice3D la, Vertice3D lb, Vertice3D t)
+    protected bool Vertice3Testar(Vertice3 la, Vertice3 lb, Vertice3 t)
     {
         // y = mx + b
         if (la.X == lb.X)
@@ -305,13 +305,13 @@ public class Triangulo3D
     /// </summary>
     /// <param name="t"></param>
     /// <returns></returns>
-    public bool Contains(Vertice3D t)
+    public bool Contains(Vertice3 t)
     {
         float delta = t.QuadradoDeltaXY(Center);
         if (delta > MaisDitanteDoCentro) return false;
-        if (abDet != Vertice3DTeste(A, B, t)) return false;
-        if (bcDet != Vertice3DTeste(B, C, t)) return false;
-        if (caDet != Vertice3DTeste(C, A, t)) return false;
+        if (abDet != Vertice3Testar(A, B, t)) return false;
+        if (bcDet != Vertice3Testar(B, C, t)) return false;
+        if (caDet != Vertice3Testar(C, A, t)) return false;
         return true;
     }
 
@@ -405,18 +405,18 @@ public class Triangulo3D
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    public Vertice3D OpostoDaAresta(int i)
+    public Vertice3 OpostoDaAresta(int i)
     {
         i = i < 0 ? i + 3 : i > 2 ? i - 3 : i;
         return i == 0 ? C : i == 1 ? A : B;
     }
 
     /// <summary>
-    /// Defina o Vertice3D por índice.
+    /// Defina o Vertice3 por índice.
     /// </summary>
     /// <param name="i"></param>
     /// <param name="v"></param>
-    public void DefinaVertice3D(int i, Vertice3D v)
+    public void DefinaVertice3(int i, Vertice3 v)
     {
         i = i < 0 ? i + 3 : i > 2 ? i - 3 : i;
         if (i == 0) A = v;
@@ -425,11 +425,11 @@ public class Triangulo3D
     }
 
     /// <summary>
-    /// Obtenha o ângulo de coseno associado a um Vertice3D.
+    /// Obtenha o ângulo de coseno associado a um Vertice3.
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    public float Vertice3DCoseno2Angulo(int i)
+    public float Vertice3Coseno2Angulo(int i)
     {
         i = i < 0 ? i + 3 : i > 2 ? i - 3 : i;
         float dx1 = 0;
@@ -471,13 +471,13 @@ public class Triangulo3D
 
 
     /// <summary>
-    /// Obtenha o ângulo de um Vertice3D em radianos.
+    /// Obtenha o ângulo de um Vertice3 em radianos.
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    public float Vertice3DAngulo2Radiano(int i)
+    public float Vertice3Angulo2Radiano(int i)
     {
-        return (float)Math.Acos(Vertice3DCoseno2Angulo(i));
+        return (float)Math.Acos(Vertice3Coseno2Angulo(i));
     }
 
     /// <summary>
@@ -508,14 +508,14 @@ public class Triangulo3D
     }
 
     /// <summary>
-    /// Ambos estão em Vertice3Des?
+    /// Ambos estão em Vertice3es?
     /// </summary>
     /// <param name="t"></param>
     /// <param name="vt"></param>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    protected bool AmbosEm(Triangulo3D t, Vertice3D a, Vertice3D b)
+    protected bool AmbosEm(Triangulo3D t, Vertice3 a, Vertice3 b)
     {
         if (a == A)
         {
@@ -536,11 +536,11 @@ public class Triangulo3D
     }
 
     /// <summary>
-    /// Vertice3D.
+    /// Vertice3.
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    public Vertice3D GetVertice3D(int i)
+    public Vertice3 GetVertice3(int i)
     {
         i = i < 0 ? i + 3 : i > 2 ? i - 3 : i;
         if (i == 0) return A;

@@ -15,7 +15,7 @@ namespace Epico.Sistema2D
             for (int i = 0; i < lados; i++)
             {
                 float raio = rnd.Next((int)raio_min, (int)raio_max);
-                Vertice2D v = new Vertice2D(this);
+                Vertice2 v = new Vertice2(this);
                 v.X = (float)(Math.Sin(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 v.Y = (float)(Math.Cos(i * rad + Util2D.Angulo2Radiano(angulo)) * raio);
                 AdicionarVertice(v);

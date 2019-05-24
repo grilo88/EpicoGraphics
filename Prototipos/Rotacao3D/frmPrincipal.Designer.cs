@@ -93,6 +93,7 @@
             this.Name = "frmPrincipal";
             this.Text = "Rotação 3D";
             this.Load += new System.EventHandler(this.FrmPrincipal_Load);
+            this.SizeChanged += new System.EventHandler(this.FrmPrincipal_SizeChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.FrmPrincipal_Paint);
             ((System.ComponentModel.ISupportInitialize)(this.NumZ)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumX)).EndInit();
