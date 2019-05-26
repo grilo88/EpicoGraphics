@@ -20,7 +20,7 @@ namespace Epico.Sistema2D
 
         public void GerarLuzPonto(float angulo, float raio, int lados = 20)
         {
-            Angulo = angulo;
+            Angulo.Z = angulo;
             Raio = raio;
             float rad = (float)(Math.PI * 2 / lados);
             for (int i = 0; i < lados + 1; i++)

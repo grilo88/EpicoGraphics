@@ -1,5 +1,4 @@
-﻿using Epico.Sistema3D;
-using Epico;
+﻿using Epico;
 
 using System;
 using System.Collections.Generic;
@@ -23,8 +22,8 @@ namespace Rotacao3D
             DoubleBuffered = true;
         }
 
-        Vetor3D cameraPos = new Vetor3D();
-        List<Vertice3D> Vertices = new List<Vertice3D>();
+        Vetor3 cameraPos = new Vetor3();
+        List<Vertice3> Vertices = new List<Vertice3>();
 
         float _angX, _angY, _angZ;
 
@@ -32,13 +31,13 @@ namespace Rotacao3D
         float AngY { get => _angY; set => NovoAnguloY(value); }
         float AngZ { get => _angZ; set => NovoAnguloZ(value); }
 
-        private Vetor3D Centro()
+        private Vetor3 Centro()
         {
             float TotalX = Vertices.Sum(x => x.X);
             float TotalY = Vertices.Sum(x => x.Y);
             float TotalZ = Vertices.Sum(x => x.Z);
 
-            return new Vetor3D(TotalX / Vertices.Count(), TotalY / Vertices.Count(), TotalZ / Vertices.Count());
+            return new Vetor3(TotalX / Vertices.Count(), TotalY / Vertices.Count(), TotalZ / Vertices.Count());
         }
 
 
@@ -54,22 +53,22 @@ namespace Rotacao3D
             NumY.Maximum = decimal.MaxValue;
 
             // Inferior
-            Vertices.Add(new Vertice3D(0, 0, 0));
-            Vertices.Add(new Vertice3D(1, 0, 0));
-            Vertices.Add(new Vertice3D(1, 1, 0));
-            Vertices.Add(new Vertice3D(0, 1, 0));
+            Vertices.Add(new Vertice3(0, 0, 0));
+            Vertices.Add(new Vertice3(1, 0, 0));
+            Vertices.Add(new Vertice3(1, 1, 0));
+            Vertices.Add(new Vertice3(0, 1, 0));
 
             // Esquerdo
-            Vertices.Add(new Vertice3D(0, 0, 0));
-            Vertices.Add(new Vertice3D(0, 1, 0));
-            Vertices.Add(new Vertice3D(0, 1, 1));
-            Vertices.Add(new Vertice3D(0, 0, 1));
+            Vertices.Add(new Vertice3(0, 0, 0));
+            Vertices.Add(new Vertice3(0, 1, 0));
+            Vertices.Add(new Vertice3(0, 1, 1));
+            Vertices.Add(new Vertice3(0, 0, 1));
 
             // Superior
-            Vertices.Add(new Vertice3D(0, 0, 1));
-            Vertices.Add(new Vertice3D(1, 0, 1));
-            Vertices.Add(new Vertice3D(1, 1, 1));
-            Vertices.Add(new Vertice3D(0, 1, 1));
+            Vertices.Add(new Vertice3(0, 0, 1));
+            Vertices.Add(new Vertice3(1, 0, 1));
+            Vertices.Add(new Vertice3(1, 1, 1));
+            Vertices.Add(new Vertice3(0, 1, 1));
 
             // Aplica o tamanho no objeto 3D
             for (int i = 0; i < Vertices.Count; i++)
@@ -89,7 +88,7 @@ namespace Rotacao3D
                 (float)(NumZ.Value = (decimal)AngZ));
         }
 
-        Vetor2D pontoTela = new Vetor2D();
+        Vetor2 pontoTela = new Vetor2();
         private void FrmPrincipal_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -102,19 +101,19 @@ namespace Rotacao3D
             float zoom = (float)(Screen.PrimaryScreen.Bounds.Width / 1.5);
 
             // Calcule a posição da câmera Z para permanecer constante apesar da rotação            
-            Vetor3D pontoAncora = new Vetor3D(Vertices[4]); //anchor point
+            Vetor3 pontoAncora = new Vetor3(Vertices[4]); //anchor point
             float cameraZ = -(((pontoAncora.X - Centro().X) * zoom) / Centro().X) + pontoAncora.Z;
-            cameraPos = new Vetor3D(Centro().X, Centro().Y, cameraZ);
+            cameraPos = new Vetor3(Centro().X, Centro().Y, cameraZ);
 
             // 
-            Vetor2D[] tela = Vertices.Select(x => new Vetor2D(0, 0)).ToArray();
+            Vetor2[] tela = Vertices.Select(x => new Vetor2(0, 0)).ToArray();
 
             // Converte pontos 3D em 2D
-            Vetor2D origem = new Vetor2D(0, 0);
-            Vetor3D vec;
+            Vetor2 origem = new Vetor2(0, 0);
+            Vetor3 vec;
             for (int i = 0; i < Vertices.Count(); i++)
             {
-                vec = new Vetor3D(Vertices[i]);
+                vec = new Vetor3(Vertices[i]);
                 if (vec.Z - cameraPos.Z >= 0)
                 {
                     tela[i].X = (int)(-(vec.X - cameraPos.X) / (-0.1f) * zoom) + pontoTela.X;
@@ -177,9 +176,9 @@ namespace Rotacao3D
         {
             for (int i = 0; i < Vertices.Count(); i++)
             {
-                Vertices[i].EulerRotacionarX(new Vetor3D(0, 0, 0), grausX);
-                Vertices[i].EulerRotacionarY(new Vetor3D(0, 0, 0), grausY);
-                Vertices[i].EulerRotacionarZ(new Vetor3D(0, 0, 0), grausZ);
+                Vertices[i].EulerRotacionarX(new Vetor3(0, 0, 0), grausX);
+                Vertices[i].EulerRotacionarY(new Vetor3(0, 0, 0), grausY);
+                Vertices[i].EulerRotacionarZ(new Vetor3(0, 0, 0), grausZ);
             }
         }
 

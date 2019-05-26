@@ -13,9 +13,14 @@ namespace Epico
     public class Origem2 : Eixos2
     {
         public Origem2() : base() { }
-        public Origem2(Geometria Obj) : base(Obj) { }
-        public Origem2(Geometria Obj, float X, float Y) : base(Obj, X, Y) { }
+        public Origem2(object Obj) : base(Obj) { }
+        public Origem2(object Obj, float X, float Y) : base(Obj, X, Y) { }
         public Origem2(float X, float Y) : base(X, Y) { }
         public override Eixos NovaInstancia() => new Origem2();
+
+        public override Eixos NovaInstancia(object epico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

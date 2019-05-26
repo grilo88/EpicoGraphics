@@ -17,5 +17,10 @@ namespace Epico
         public float W { get => Dim[3]; set => Dim[3] = value; }
 
         public override Eixos NovaInstancia() => new Eixos4();
+
+        public override Eixos NovaInstancia(object epico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

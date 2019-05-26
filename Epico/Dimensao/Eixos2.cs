@@ -18,17 +18,17 @@ namespace Epico
             Nome = eixos.Nome;
             Tag = eixos.Tag;
         }
-        public Eixos2(Geometria Obj)
+        public Eixos2(object Obj)
         {
             this.Obj = Obj;
             Dim = new float[2];
         }
-        public Eixos2(Geometria Obj, Eixos2 eixos)
+        public Eixos2(object Obj, Eixos2 eixos)
         {
             base.Obj = Obj;
             Dim = new float[2] { eixos.Dim[0], eixos.Dim[1] };
         }
-        public Eixos2(Geometria Obj, float X, float Y) {
+        public Eixos2(object Obj, float X, float Y) {
             base.Obj = Obj;
             Dim = new float[2] { X, Y };
         }
@@ -38,7 +38,7 @@ namespace Epico
         /// <summary>Coordenada Y</summary>
         public float Y { get => Dim[1]; set => Dim[1] = value; }
 
-        public Eixos2 Global { get => Obj.Pos + this; }
+        public Eixos2 Global { get => ((Poligono<Eixos2, Eixos2, Eixos2, Eixos2, Eixos2, Eixos2, Animacao2D>)Obj).Pos + this; }
 
         public static Eixos2 operator +(Eixos2 a, Vertice2 b)
         {

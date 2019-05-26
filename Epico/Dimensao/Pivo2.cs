@@ -15,5 +15,10 @@ namespace Epico
         public Pivo2(float X, float Y) : base(X, Y) { }
 
         public override Eixos NovaInstancia() => new Pivo2();
+
+        public override Eixos NovaInstancia(object epico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

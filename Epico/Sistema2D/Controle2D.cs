@@ -113,7 +113,7 @@ namespace Epico.Sistema2D
         [Category("Layout")]
         public Vetor2 LocalPos { get; set; }
 
-        public override Eixos Pos { get => base.Pos;
+        public override Vetor2 Pos { get => base.Pos;
             set {
                 var tmp = value;
                 if (base.Pos == null)
@@ -261,8 +261,8 @@ namespace Epico.Sistema2D
             AtualizarLayout();
 
             // Centraliza o ponto de origem
-            Origem[0].X = (_location.X + _size.Width) / 2;
-            Origem[0].Y = (_location.Y + _size.Height) / 2;
+            Origens[0].X = (_location.X + _size.Width) / 2;
+            Origens[0].Y = (_location.Y + _size.Height) / 2;
         }
 
         private void AtualizarLayout()
@@ -295,7 +295,7 @@ namespace Epico.Sistema2D
 
                 if (Vertices.Count > 0)
                 {
-                    AtualizarXYMinMax();
+                    AtualizarMinMax();
                 }
             }
         }

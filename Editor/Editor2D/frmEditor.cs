@@ -19,6 +19,7 @@ using Epico;
 using Epico.Sistema2D;
 using Epico.Luzes;
 using Epico.Controles;
+using Epico.Sistema;
 
 namespace Editor2D
 {
@@ -90,14 +91,10 @@ namespace Editor2D
             cboCamera.DataSource = _engine.Cameras.Select(
                 Cam => new
                 {
-                    Cam.Id,
                     Cam.Nome,
                     Cam
                 }).ToList();
             #endregion
-
-
-            Vetor2 teste;
 
             Show();
 
@@ -116,8 +113,8 @@ namespace Editor2D
                     float distCursor = Util2D.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
                     float angCursor = Util2D.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
-                    _engine.Camera.Pos.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
-                    _engine.Camera.Pos.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
+                    _engine.Camera.Pos.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
+                    _engine.Camera.Pos.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
                 }
 
                 if (_engine.Camera.ResWidth != picScreen.ClientRectangle.Width ||
@@ -239,7 +236,6 @@ namespace Editor2D
             cboObjeto2D.DataSource = _engine.objetos2D
                 .Select(o => new
                 {
-                    o.Id,
                     o.Nome,
                     o
                 }).ToList();
@@ -467,8 +463,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtEscalaY.Text, out float escalaY))
                 {
-                    _obj_sel.First().DefinirEscalaY(escalaY);
-                    propGrid.Refresh();
+                    throw new NotImplementedException();
                 }
             }
         }
@@ -478,8 +473,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtEscalaX.Text, out float escalaX))
                 {
-                    _obj_sel.First().DefinirEscalaX(escalaX);
-                    propGrid.Refresh();
+                    throw new NotImplementedException();
                 }
             }
         }
@@ -503,7 +497,7 @@ namespace Editor2D
 
             if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)_engine.Camera.Pos.X;
             if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)_engine.Camera.Pos.Y;
-            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)_engine.Camera.Angulo;
+            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)_engine.Camera.Angulo.Z;
             if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)_engine.Camera.ZoomCamera;
         }
 
@@ -564,7 +558,7 @@ namespace Editor2D
                 cboOrigem.BeginUpdate();
                 cboOrigem.DisplayMember = "i";
                 cboOrigem.ValueMember = "c";
-                cboOrigem.DataSource = _obj_sel.First().Origem.Select(
+                cboOrigem.DataSource = _obj_sel.First().Origens.Select(
                 (c, i) => new
                 {
                     i = "Ponto " + i,
@@ -609,7 +603,6 @@ namespace Editor2D
             cboCamera.DataSource = _engine.Cameras
                 .Select(cam => new
                 {
-                    cam.Id,
                     cam.Nome,
                     cam
                 }).ToList();
@@ -1144,7 +1137,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamAngulo.Text, out float ang))
                 {
-                    _engine.Camera.Angulo = ang;
+                    _engine.Camera.Angulo.Z = ang;
                     propGrid.Refresh();
                 }
             }
@@ -1302,7 +1295,7 @@ namespace Editor2D
             person.Pos.X = 100;
             person.Pos.Y = 100;
             engine.AddObjeto2D(person);
-            person.CriarArestasConvexo();
+            person.CriarArestasConvexa();
 
             engine.Camera.Focar(person);
 
@@ -1357,7 +1350,7 @@ namespace Editor2D
                     }
 
                     person.DefinirAngulo(AngPerson);
-                    engine.Camera.Angulo = AngPerson + 180;
+                    engine.Camera.Angulo.Z = AngPerson + 180;
                     person.Pos += movimento;
                     engine.Camera.Focar(person);
                 }

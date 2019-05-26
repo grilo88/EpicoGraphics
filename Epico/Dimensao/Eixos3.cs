@@ -19,17 +19,17 @@ namespace Epico
             Nome = eixos.Nome;
             Tag = eixos.Tag;
         }
-        public Eixos3(Geometria Obj)
+        public Eixos3(object Obj)
         {
             this.Obj = Obj;
             Dim = new float[3];
         }
-        public Eixos3(Geometria Obj, Eixos3 eixos)
+        public Eixos3(object Obj, Eixos3 eixos)
         {
             base.Obj = Obj;
             Dim = new float[3] { eixos.Dim[0], eixos.Dim[1], eixos.Dim[2] };
         }
-        public Eixos3(Geometria Obj, float X, float Y, float Z)
+        public Eixos3(object Obj, float X, float Y, float Z)
         {
             base.Obj = Obj;
             Dim = new float[3] { X, Y, Z };
@@ -40,6 +40,11 @@ namespace Epico
         public float Z { get => Dim[2]; set => Dim[2] = value; }
 
         public override Eixos NovaInstancia() => new Eixos3();
+
+        public override Eixos NovaInstancia(object epico)
+        {
+            return new Eixos3();
+        }
 
         public static Eixos3 operator -(Eixos3 a, Eixos3 b)
         {

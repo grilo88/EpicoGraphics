@@ -12,7 +12,7 @@ namespace Epico
         /// <summary>
         /// Objeto geométrico de dimensões genéricas do qual estes eixos estão associados
         /// </summary>
-        public Geometria Obj { get; set; }
+        public object Obj { get; set; }
         public object Tag { get; set; }
 
         /// <summary>
@@ -31,10 +31,11 @@ namespace Epico
         internal float[] Dim { get; set; }
 
         /// <summary>
-        /// Cria uma nova instância da classe derivada
+        /// Cria uma nova instância do Eixos
         /// </summary>
         /// <returns></returns>
         public abstract Eixos NovaInstancia();
+        public abstract Eixos NovaInstancia(object epico);
 
         public float Magnitude {
             get

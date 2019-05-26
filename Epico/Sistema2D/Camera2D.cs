@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Epico.Sistema;
 
 #if Editor2D || NetCore || NetStandard2
 using System.Drawing;
@@ -219,21 +220,21 @@ namespace Epico.Sistema2D
                             Vetor2 globalPos = new Vetor2(
                                 obj.Vertices[v].Global.X,
                                 obj.Vertices[v].Global.Y);
-                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo);
+                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
                             obj.Vertices[v].X = xy.X - obj.Pos.X;
                             obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
                         }
-                        for (int c = 0; c < obj.Origem.Count(); c++)
+                        for (int c = 0; c < obj.Origens.Count(); c++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                obj.Origem[c].Global.X,
-                                obj.Origem[c].Global.Y);
-                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo);
-                            obj.Origem[c].X = xy.X - obj.Pos.X;
-                            obj.Origem[c].Y = xy.Y - obj.Pos.Y;
+                                obj.Origens[c].Global.X,
+                                obj.Origens[c].Global.Y);
+                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
+                            obj.Origens[c].X = xy.X - obj.Pos.X;
+                            obj.Origens[c].Y = xy.Y - obj.Pos.Y;
                         }
                         #endregion
-                        obj.AtualizarXYMinMax();
+                        obj.AtualizarMinMax();
 
                         if (Objeto2DVisivelCamera(objEspaco))
                         {
@@ -300,13 +301,13 @@ namespace Epico.Sistema2D
                             }
 
                             // Exibe o(s) ponto(s) de origem do objeto
-                            for (int c = 0; c < obj.Origem.Count; c++)
+                            for (int c = 0; c < obj.Origens.Count; c++)
                             {
-                                if (obj.Origem[c].Sel)
+                                if (obj.Origens[c].Sel)
                                 {
                                     float width = 5;
-                                    float x = -Left + obj.Origem[c].Global.X;
-                                    float y = -Top + obj.Origem[c].Global.Y;
+                                    float x = -Left + obj.Origens[c].Global.X;
+                                    float y = -Top + obj.Origens[c].Global.Y;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 255, 0) /*Amarelo*/), rect);
                                 }
@@ -390,10 +391,10 @@ namespace Epico.Sistema2D
         public bool Objeto2DVisivelCamera(Objeto2D objEspaco)
         {
             Vertice2[] rectCam = new Vertice2[4];
-            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Top), Angulo));          // Superior Esquerda
-            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Top), Angulo));         // Superior Direita
-            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Bottom), Angulo));      // Inferior Direita
-            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Bottom), Angulo));       // Inferior Esquerda
+            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
+            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
+            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
+            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Bottom), Angulo.Z));       // Inferior Esquerda
 
             return Util2D.IntersecaoEntrePoligonos(rectCam, 
                 objEspaco.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
@@ -410,10 +411,10 @@ namespace Epico.Sistema2D
 #warning Falhas nesta lógica
             for (int i = 0; i < obj.Vertices.Count; i++)
             {
-                obj.Vertices[i].X = (float)(Math.Sin(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo)) * obj.Vertices[i].Raio * zoom);
-                obj.Vertices[i].Y = (float)(Math.Cos(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo)) * obj.Vertices[i].Raio * zoom);
+                obj.Vertices[i].X = (float)(Math.Sin(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo.Z)) * obj.Vertices[i].Raio * zoom);
+                obj.Vertices[i].Y = (float)(Math.Cos(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo.Z)) * obj.Vertices[i].Raio * zoom);
             }
-            obj.AtualizarXYMinMax();
+            obj.AtualizarMinMax();
 
             return obj;
         }

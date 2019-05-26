@@ -20,7 +20,7 @@ namespace Epico.Sistema2D
                 AdicionarVertice(v);
             }
 
-            CriarArestasConvexo();
+            CriarArestasConvexa();
         }
     }
 }

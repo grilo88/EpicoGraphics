@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem3.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo2.cs" />
@@ -51,7 +52,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\Triangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\TrianguloRetangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Colisao2D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\_Objeto2D_tmp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema3D\Delaunay\Triangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Projetor2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Animacao2D.cs" />
@@ -68,7 +69,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2DRenderizar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Primitivo2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Transformacao.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Geometria.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Poligono.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sistema\Objeto2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util3D.cs" />
   </ItemGroup>

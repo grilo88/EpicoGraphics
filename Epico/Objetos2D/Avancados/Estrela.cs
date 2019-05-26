@@ -100,7 +100,7 @@ namespace Epico.Objetos2D.Avancados
                 AdicionarVertice(v);
             }
 
-            CriarArestasConvexo();
+            CriarArestasConvexa();
         }
     }
 }

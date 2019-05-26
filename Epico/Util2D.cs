@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Epico.Sistema;
 
 #if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
@@ -71,7 +72,7 @@ namespace Epico
             float x = camLeft + posTela.X;
             float y = camTop + posTela.Y;
 
-            Eixos2 novoEixo = Util2D.RotacionarPonto2D(cam.Pos, new Vetor2(x, y), cam.Angulo);
+            Eixos2 novoEixo = Util2D.RotacionarPonto2D(cam.Pos, new Vetor2(x, y), cam.Angulo.Z);
             return novoEixo;
         }
 
@@ -86,10 +87,10 @@ namespace Epico
             {
                 Objeto2D obj = engine.objetos2D[i];
 
-                float xMax = obj.Pos.X + obj.XMax;
-                float xMin = obj.Pos.X + obj.XMin;
-                float yMax = obj.Pos.Y + obj.YMax;
-                float yMin = obj.Pos.Y + obj.YMin;
+                float xMax = obj.Pos.X + obj.Max.X;
+                float xMin = obj.Pos.X + obj.Min.X;
+                float yMax = obj.Pos.Y + obj.Max.Y;
+                float yMin = obj.Pos.Y + obj.Min.Y;
 
                 if (ponto.X >= xMin && ponto.X <= xMax)
                     if (ponto.Y >= yMin && ponto.Y <= yMax)
@@ -111,10 +112,10 @@ namespace Epico
             {
                 Objeto2D obj = engine.objetos2D[i];
 
-                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMax;
-                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.XMin;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.YMax;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.YMin;
+                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Max.X;
+                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Min.X;
+                float yMaxTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Max.Y;
+                float yMinTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Min.Y;
 
                 if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
                     if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
@@ -202,9 +203,9 @@ namespace Epico
             for (int o = 0; o < objs.Count; o++)
             {
                 Objeto2D obj = objs[o];
-                for (int i = 0; i < obj.Origem.Count; i++)
+                for (int i = 0; i < obj.Origens.Count; i++)
                 {
-                    Origem2 origem = obj.Origem[i];
+                    Origem2 origem = obj.Origens[i];
                     if (IntersecaoEntrePoligonos(verticesTela, 
                         new Vertice2(origem.Global.X, origem.Global.Y)))
                     {

@@ -36,20 +36,21 @@ namespace Epico
             return (T)objeto2D;
         }
 
-        public void AddObjeto2D(Objeto2D objeto2d)
+        public void AddObjeto2D(Objeto2D obj2D)
         {
-            Objeto2D ambiguo = objetos2D.Where(x => x.Nome.StartsWith(objeto2d.Nome)).LastOrDefault();
+            Objeto2D ambiguo = objetos2D.OfType<Objeto2D> ()
+                .Where(x => x.Nome.StartsWith(obj2D.Nome)).LastOrDefault();
 
             int number = 0;
             if (ambiguo != null)
             {
-                int length = objeto2d.Nome.Length;
+                int length = obj2D.Nome.Length;
                 int.TryParse(ambiguo.Nome.Substring(length), out number);
             }
 
-            objeto2d.Nome += (++number).ToString("D2");
-            objetos2D.Add(objeto2d);
-            objeto2d.AssociarEngine(this);
+            obj2D.Nome += (++number).ToString("D2");
+            objetos2D.Add(obj2D);
+            obj2D.AssociarEngine(this);
         }
 
         public Camera2D CriarCamera(int width, int heigth)
@@ -89,15 +90,6 @@ namespace Epico
             if (Cameras.Count == 1) Camera = camera;
 
             return camera;
-        }
-
-        public void AtualizarFisica(float deltaTime)
-        {
-            int tick = Environment.TickCount;
-
-            // TODO: Física
-
-            int tempoGasto = Environment.TickCount - tick;
         }
     }
 }

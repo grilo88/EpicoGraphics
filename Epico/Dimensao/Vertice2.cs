@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Epico
 {
+    public class Vertice
+    {
+    
+    }
+
+
     /// <summary>
     /// Vértice de 2 dimensões
     /// </summary>
@@ -16,13 +22,18 @@ namespace Epico
         public Vertice2(Eixos2 eixos2) : base(eixos2) { }
         public Vertice2(float X, float Y) : base(X, Y) { }
 
-        public Vertice2(Geometria Obj) : base(Obj) { }
-        public Vertice2(Geometria Obj, float X, float Y) : base(Obj, X, Y) { }
+        public Vertice2(object Obj) : base(Obj) { }
+        public Vertice2(object Obj, float X, float Y) : base(Obj, X, Y) { }
 
         public float Raio { get; set; }
         public float Ang { get; set; }
         public float Rad { get; set; }
 
         public override Eixos NovaInstancia() => new Vertice2();
+
+        public override Eixos NovaInstancia(object epico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
