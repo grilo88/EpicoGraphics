@@ -86,6 +86,14 @@ namespace Epico
             return (T)this;
         }
 
+        /// <summary>
+        /// Interpolação Linear
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="origem"></param>
+        /// <param name="destino"></param>
+        /// <param name="distancia"></param>
+        /// <returns></returns>
         public static T Lerp<T>(T origem, T destino, float distancia) where T : Eixos
         {
             // a + f * (b - a);
@@ -94,8 +102,13 @@ namespace Epico
             {
                 eixos.Dim[i] = origem.Dim[i] + distancia * (destino.Dim[i] - origem.Dim[i]);
             }
-
             return (T)eixos;
+        }
+
+        public static T Lerp<T>(T origem, T destino, float distancia, out bool completado) where T : Eixos
+        {
+            completado = origem.Dim == destino.Dim;
+            return Lerp<T>(origem, destino, distancia);
         }
     }
 }

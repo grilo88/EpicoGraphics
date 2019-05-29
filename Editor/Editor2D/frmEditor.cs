@@ -28,6 +28,7 @@ namespace Editor2D
         bool _sair = false;
         const int _raio_padrao = 50;
         Vetor2 NovaPosCamera = new Vetor2();
+        Vetor3 NovoAnguloCamera = new Vetor3();
 
         EpicoGraphics  _engine = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
@@ -118,6 +119,11 @@ namespace Editor2D
                     NovaPosCamera.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
                 }
 
+                // Efeito suave para ângulo da câmera
+                _engine.Camera.Angulo = Eixos.Lerp(
+                    _engine.Camera.Angulo, NovoAnguloCamera, 1F * _engine.Camera.TempoDelta * 0.000001F);
+
+                // Efeito suave para transladação da câmera
                 _engine.Camera.Pos = Eixos.Lerp(
                     _engine.Camera.Pos, NovaPosCamera, 1F * _engine.Camera.TempoDelta * 0.000001F);
 
@@ -1145,8 +1151,9 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamAngulo.Text, out float ang))
                 {
-                    _engine.Camera.Angulo.Z = ang;
-                    propGrid.Refresh();
+                    NovoAnguloCamera.Z = ang;
+                    //_engine.Camera.Angulo.Z = ang;
+                    //propGrid.Refresh();
                 }
             }
         }
