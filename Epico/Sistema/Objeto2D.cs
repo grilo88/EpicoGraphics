@@ -15,6 +15,9 @@ namespace Epico.Sistema
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Layout")]
         public virtual Vetor2 Pos { get; set; }
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Layout")]
+        public Vetor3 Angulo { get; set; }
 
         public Vetor2 Escala { get; set; }
         public List<Vertice2> Vertices { get; set; } = new List<Vertice2>();
@@ -23,9 +26,15 @@ namespace Epico.Sistema
         public List<Vetor2> Arestas { get; set; } = new List<Vetor2>();
         public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
 
-        public Vetor3 Angulo { get; set; }
+        
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Extremidades")]
         public Vetor2 Min { get; set; }
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Extremidades")]
         public Vetor2 Max { get; set; }
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Extremidades")]
         public Vetor2 GlobalMin {
             get
             {
@@ -33,6 +42,8 @@ namespace Epico.Sistema
             }
         }
 
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Extremidades")]
         public Vetor2 GlobalMax {
             get
             {
@@ -65,7 +76,7 @@ namespace Epico.Sistema
         {
             Pos = new Vetor2(this, 0, 0);
             Escala = new Vetor2(this, 1, 1);
-            Angulo = new Vetor3();
+            Angulo = new Vetor3(this);
             Max = new Vetor2(this);
             Min = new Vetor2(this);
             Origens.Add(new Origem2(this, 0, 0)); // Adiciona o ponto central principal
@@ -135,6 +146,7 @@ namespace Epico.Sistema
             }
             Raio = raio;
             AtualizarGeometria(Angulo);
+            CriarArestasConvexa();
         }
 
         private int IndiceRaioMax()

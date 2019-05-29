@@ -14,8 +14,10 @@ namespace Epico
         public Eixos2(float X, float Y) => Dim = new float[2] { X, Y };
         public Eixos2(Eixos2 eixos)
         {
+            Dim = new float[2];
             Obj = eixos.Obj;
-            Dim = eixos.Dim;
+            X = eixos.X;
+            Y = eixos.Y;
             Nome = eixos.Nome;
             Tag = eixos.Tag;
         }

@@ -15,11 +15,7 @@ namespace Epico
     public class Vetor2 : Eixos2
     {
         public Vetor2() : base() { }
-        public Vetor2(Vetor2 vetor2)
-        {
-            X = vetor2.X;
-            Y = vetor2.Y;
-        }
+        public Vetor2(Vetor2 vetor2) : base(vetor2) { }
         public Vetor2(ObjetoEpico Obj) : base(Obj) { }
         public Vetor2(ObjetoEpico Obj, Vetor2 vetor) : base(Obj, vetor) { }
         public Vetor2(float X, float Y) : base(X, Y) { }

@@ -40,6 +40,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabControlObjeto = new System.Windows.Forms.TabControl();
             this.tabObjeto = new System.Windows.Forms.TabPage();
+            this.chkAutoFocarObjeto = new System.Windows.Forms.CheckBox();
             this.lblNome = new System.Windows.Forms.Label();
             this.txtPosX = new System.Windows.Forms.NumericUpDown();
             this.txtPosY = new System.Windows.Forms.NumericUpDown();
@@ -156,7 +157,15 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.chkAutoFocarObjeto = new System.Windows.Forms.CheckBox();
+            this.resoluçãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x480ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x600ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoRedimensionarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x242ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.esticarQuadroNaTelaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -328,6 +337,18 @@
             this.tabObjeto.Text = "Objeto";
             this.tabObjeto.UseVisualStyleBackColor = true;
             this.tabObjeto.Enter += new System.EventHandler(this.TabObjeto_Enter);
+            // 
+            // chkAutoFocarObjeto
+            // 
+            this.chkAutoFocarObjeto.AutoSize = true;
+            this.chkAutoFocarObjeto.Checked = true;
+            this.chkAutoFocarObjeto.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarObjeto.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarObjeto.Name = "chkAutoFocarObjeto";
+            this.chkAutoFocarObjeto.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarObjeto.TabIndex = 36;
+            this.chkAutoFocarObjeto.Text = "Auto foco";
+            this.chkAutoFocarObjeto.UseVisualStyleBackColor = true;
             // 
             // lblNome
             // 
@@ -1413,24 +1434,25 @@
             // portaDeVisãoToolStripMenuItem
             // 
             this.portaDeVisãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resoluçãoToolStripMenuItem,
             this.efeitosToolStripMenuItem});
             this.portaDeVisãoToolStripMenuItem.Name = "portaDeVisãoToolStripMenuItem";
-            this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
-            this.portaDeVisãoToolStripMenuItem.Text = "Porta de Visão";
+            this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.portaDeVisãoToolStripMenuItem.Text = "Tela";
             // 
             // efeitosToolStripMenuItem
             // 
             this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.multiplicarQuadrosToolStripMenuItem});
             this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
-            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.efeitosToolStripMenuItem.Text = "Efeitos";
             // 
             // multiplicarQuadrosToolStripMenuItem
             // 
             this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
-            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.multiplicarQuadrosToolStripMenuItem.Text = "Multiplicar Quadros";
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Text = "Motion Blur";
             this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
             // jogosToolStripMenuItem
@@ -1506,17 +1528,67 @@
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
-            // chkAutoFocarObjeto
+            // resoluçãoToolStripMenuItem
             // 
-            this.chkAutoFocarObjeto.AutoSize = true;
-            this.chkAutoFocarObjeto.Checked = true;
-            this.chkAutoFocarObjeto.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoFocarObjeto.Location = new System.Drawing.Point(55, 42);
-            this.chkAutoFocarObjeto.Name = "chkAutoFocarObjeto";
-            this.chkAutoFocarObjeto.Size = new System.Drawing.Size(72, 17);
-            this.chkAutoFocarObjeto.TabIndex = 36;
-            this.chkAutoFocarObjeto.Text = "Auto foco";
-            this.chkAutoFocarObjeto.UseVisualStyleBackColor = true;
+            this.resoluçãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x242ToolStripMenuItem,
+            this.x480ToolStripMenuItem,
+            this.xToolStripMenuItem,
+            this.x600ToolStripMenuItem,
+            this.x768ToolStripMenuItem,
+            this.autoRedimensionarToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.esticarQuadroNaTelaToolStripMenuItem});
+            this.resoluçãoToolStripMenuItem.Name = "resoluçãoToolStripMenuItem";
+            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resoluçãoToolStripMenuItem.Text = "Resolução";
+            // 
+            // x480ToolStripMenuItem
+            // 
+            this.x480ToolStripMenuItem.Name = "x480ToolStripMenuItem";
+            this.x480ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x480ToolStripMenuItem.Text = "640x480";
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x768ToolStripMenuItem.Text = "1024x768";
+            // 
+            // x600ToolStripMenuItem
+            // 
+            this.x600ToolStripMenuItem.Name = "x600ToolStripMenuItem";
+            this.x600ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x600ToolStripMenuItem.Text = "800x600";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.xToolStripMenuItem.Text = "720x480";
+            // 
+            // autoRedimensionarToolStripMenuItem
+            // 
+            this.autoRedimensionarToolStripMenuItem.Name = "autoRedimensionarToolStripMenuItem";
+            this.autoRedimensionarToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoRedimensionarToolStripMenuItem.Text = "Auto-redimensionar";
+            // 
+            // x242ToolStripMenuItem
+            // 
+            this.x242ToolStripMenuItem.Name = "x242ToolStripMenuItem";
+            this.x242ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.x242ToolStripMenuItem.Text = "320x242";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(188, 6);
+            // 
+            // esticarQuadroNaTelaToolStripMenuItem
+            // 
+            this.esticarQuadroNaTelaToolStripMenuItem.Name = "esticarQuadroNaTelaToolStripMenuItem";
+            this.esticarQuadroNaTelaToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.esticarQuadroNaTelaToolStripMenuItem.Text = "Esticar Quadro na Tela";
             // 
             // frmEditor
             // 
@@ -1718,6 +1790,15 @@
         private System.Windows.Forms.ToolStripMenuItem jogosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem andePeloEspaço2DToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkAutoFocarObjeto;
+        private System.Windows.Forms.ToolStripMenuItem resoluçãoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x480ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x600ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x768ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem x242ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoRedimensionarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem esticarQuadroNaTelaToolStripMenuItem;
     }
 }
 

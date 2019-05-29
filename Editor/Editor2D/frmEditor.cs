@@ -30,7 +30,7 @@ namespace Editor2D
         Vetor2 NovaPosCamera = new Vetor2();
         Vetor3 NovoAnguloCamera = new Vetor3();
 
-        EpicoGraphics  _engine = new EpicoGraphics();
+        EpicoGraphics  _epico = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
         List<Origem2> _origem_sel = new List<Origem2>();
         List<Vertice2> _vetor_sel = new List<Vertice2>();
@@ -68,7 +68,7 @@ namespace Editor2D
         private void Form1_Load(object sender, EventArgs e)
         {
             #region Cria a Câmera
-            _engine.CriarCamera(picScreen.ClientRectangle.Width, picScreen.ClientRectangle.Height);
+            _epico.CriarCamera(picScreen.ClientRectangle.Width, picScreen.ClientRectangle.Height);
             #endregion
 
             #region Define os atributos dos controles
@@ -85,12 +85,12 @@ namespace Editor2D
             AtualizarControlesObjeto2D(_obj_sel);
             AtualizarComboObjetos2D();
 
-            debugToolStripMenuItem.Checked = _engine.Debug = true;
-            desligarZoomToolStripMenuItem.Checked = _engine.Camera.DesligarSistemaZoom = true;
+            debugToolStripMenuItem.Checked = _epico.Debug = true;
+            desligarZoomToolStripMenuItem.Checked = _epico.Camera.DesligarSistemaZoom = true;
 
             cboCamera.DisplayMember = "Nome";
             cboCamera.ValueMember = "Cam";
-            cboCamera.DataSource = _engine.Cameras.Select(
+            cboCamera.DataSource = _epico.Cameras.Select(
                 Cam => new
                 {
                     Cam.Nome,
@@ -101,6 +101,9 @@ namespace Editor2D
             Show();
 
             #region  Loop principal de rotinas do simulador 2D
+            bool lerpAngCamCompletado;
+            bool lerpPosCamCompletado;
+
             while (!_sair)
             {
                 // Use o tempo delta em todos os cálculos que alteram o comportamento dos objetos 2d
@@ -115,26 +118,44 @@ namespace Editor2D
                     float distCursor = Util2D.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
                     float angCursor = Util2D.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
-                    NovaPosCamera.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
-                    NovaPosCamera.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
+                    NovaPosCamera.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _epico.Camera.Angulo.Z)) * distCursor * _epico.Camera.TempoDelta * 0.000001);
+                    NovaPosCamera.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _epico.Camera.Angulo.Z)) * distCursor * _epico.Camera.TempoDelta * 0.000001);
                 }
 
-                // Efeito suave para ângulo da câmera
-                _engine.Camera.Angulo = Eixos.Lerp(
-                    _engine.Camera.Angulo, NovoAnguloCamera, 1F * _engine.Camera.TempoDelta * 0.000001F);
+                #region Efeito suave no ângulo da câmera
+                _epico.Camera.Angulo = Eixos.Lerp(
+                    _epico.Camera.Angulo, NovoAnguloCamera, 1F * _epico.Camera.TempoDelta * 0.000001F, out lerpAngCamCompletado);
 
-                // Efeito suave para transladação da câmera
-                _engine.Camera.Pos = Eixos.Lerp(
-                    _engine.Camera.Pos, NovaPosCamera, 1F * _engine.Camera.TempoDelta * 0.000001F);
-
-                if (_engine.Camera.ResWidth != picScreen.ClientRectangle.Width ||
-                    _engine.Camera.ResHeight != picScreen.ClientRectangle.Height)
+                if (lerpAngCamCompletado)
                 {
-                    _engine.Camera.RedefinirResolucao(picScreen.ClientRectangle.Width, picScreen.ClientRectangle.Height);
+                    _epico.Camera.Angulo = new Vetor3(NovoAnguloCamera);
+                    propGrid.Refresh();
                 }
+                #endregion
 
-                picScreen.Image = _engine.Camera.Renderizar();
+                #region Efeito suave na transladação da câmera
+                _epico.Camera.Pos = Eixos.Lerp(
+                    _epico.Camera.Pos, NovaPosCamera, 1F * _epico.Camera.TempoDelta * 0.000001F, out lerpPosCamCompletado);
+
+                if (lerpPosCamCompletado)
+                {
+                    _epico.Camera.Pos = new Vetor2(NovaPosCamera);
+                    propGrid.Refresh();
+                }
+                #endregion
+
+                #region Reajuste no tamanho da tela
+                if (_epico.Camera.ResWidth != picScreen.ClientRectangle.Width ||
+                    _epico.Camera.ResHeight != picScreen.ClientRectangle.Height)
+                {
+                    _epico.Camera.RedefinirResolucao(picScreen.ClientRectangle.Width, picScreen.ClientRectangle.Height);
+                }
+                #endregion
+
+                #region Renderização
+                picScreen.Image = _epico.Camera.Renderizar();
                 Application.DoEvents();
+                #endregion
             }
             #endregion
         }
@@ -232,8 +253,8 @@ namespace Editor2D
             int x = new Random(Environment.TickCount).Next(0, picScreen.ClientRectangle.Width);
             int y = new Random(Environment.TickCount + x).Next(0, picScreen.ClientRectangle.Height);
 
-            _engine.Camera.Pos.X = x;
-            _engine.Camera.Pos.Y = y;
+            _epico.Camera.Pos.X = x;
+            _epico.Camera.Pos.Y = y;
 
             return new Vetor2(obj, x, y);
         }
@@ -243,7 +264,7 @@ namespace Editor2D
             cboObjeto2D.BeginUpdate();
             cboObjeto2D.DisplayMember = "Nome";
             cboObjeto2D.ValueMember = "o";
-            cboObjeto2D.DataSource = _engine.objetos2D
+            cboObjeto2D.DataSource = _epico.objetos2D
                 .Select(o => new
                 {
                     o.Nome,
@@ -259,7 +280,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -273,7 +294,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -287,7 +308,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -300,7 +321,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -313,7 +334,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -329,7 +350,7 @@ namespace Editor2D
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
 
             
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -342,7 +363,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -355,7 +376,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -448,7 +469,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamPosX.Text, out float camPosX))
                 {
-                    _engine.Camera.Pos.X = camPosX;
+                    _epico.Camera.Pos.X = camPosX;
                     propGrid.Refresh();
                 }
             }
@@ -460,7 +481,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamPosY.Text, out float camPosY))
                 {
-                    _engine.Camera.Pos.Y = camPosY;
+                    _epico.Camera.Pos.Y = camPosY;
                     propGrid.Refresh();
                 }
             }
@@ -499,16 +520,16 @@ namespace Editor2D
             
             if (_obj_sel.Count == 1)
             {
-                if (_engine.Camera.Objeto2DVisivelCamera(_obj_sel.First()))
+                if (_epico.Camera.Objeto2DVisivelCamera(_obj_sel.First()))
                     txtVisivel.Text = "Sim";
                 else
                     txtVisivel.Text = "Não";
             }
 
-            if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)_engine.Camera.Pos.X;
-            if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)_engine.Camera.Pos.Y;
-            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)_engine.Camera.Angulo.Z;
-            if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)_engine.Camera.ZoomCamera;
+            if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)_epico.Camera.Pos.X;
+            if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)_epico.Camera.Pos.Y;
+            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)_epico.Camera.Angulo.Z;
+            if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)_epico.Camera.ZoomCamera;
         }
 
         private void BtnVarios_Click(object sender, EventArgs e)
@@ -532,7 +553,7 @@ namespace Editor2D
         {
             if (cboObjeto2D.SelectedValue != null)
             {
-                NovaPosCamera = _engine.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
+                NovaPosCamera = _epico.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
                 //_engine.Camera.Focar((Objeto2D)cboObjeto2D.SelectedValue);
             }
         }
@@ -604,17 +625,17 @@ namespace Editor2D
         private void FPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fPSToolStripMenuItem.Checked = !fPSToolStripMenuItem.Checked;
-            _engine.Debug = fPSToolStripMenuItem.Checked;
+            _epico.Debug = fPSToolStripMenuItem.Checked;
         }
 
         private void BtnNovaCamera_Click(object sender, EventArgs e)
         {
             #region Cria a Câmera 2D
-            Camera2D camera = _engine.CriarCamera(picScreen.Width, picScreen.Height);
+            Camera2D camera = _epico.CriarCamera(picScreen.Width, picScreen.Height);
             camera.Pos = new Vetor2(_obj_sel.First().Pos.X, _obj_sel.First().Pos.Y);
             #endregion
 
-            cboCamera.DataSource = _engine.Cameras
+            cboCamera.DataSource = _epico.Cameras
                 .Select(cam => new
                 {
                     cam.Nome,
@@ -626,7 +647,7 @@ namespace Editor2D
 
         private void CboCamera_SelectedValueChanged(object sender, EventArgs e)
         {
-            _engine.Camera = (Camera2D)cboCamera.SelectedValue;
+            _epico.Camera = (Camera2D)cboCamera.SelectedValue;
         }
 
         private void BtnQuadrilatero_Click(object sender, EventArgs e)
@@ -637,7 +658,7 @@ namespace Editor2D
             obj.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.GerarGeometria(rnd.Next(0, 359), _raio_padrao, (int)(_raio_padrao * 1.5F));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -650,7 +671,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -665,7 +686,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -678,7 +699,7 @@ namespace Editor2D
             var rnd = new Random(Environment.TickCount);
             obj.Mat_render.CorBorda = new RGBA(255, (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -705,11 +726,11 @@ namespace Editor2D
                     {
                         _obj_sel.ForEach(x => x.Selecionado = false);
                         _obj_sel.Clear();
-                        _obj_sel = _engine.ObterObjetos2DPelaTela(_engine.Camera, rect).ToList();
+                        _obj_sel = _epico.ObterObjetos2DPelaTela(_epico.Camera, rect).ToList();
                         _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        var tmp = Util2D.ObterObjetos2DPelaTela(_engine, _engine.Camera, rect);
+                        var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
                         e.Graphics.DrawString(
                             $"{tmp.Count()} objetos", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
@@ -721,7 +742,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _origem_sel.ForEach(x => x.Sel = false);
                         _origem_sel.Clear();
-                        _origem_sel = Util2D.ObterOrigensObjeto2DPelaTela(_engine.Camera, _obj_sel, rect).ToList();
+                        _origem_sel = Util2D.ObterOrigensObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
                         _origem_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -735,7 +756,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _vetor_sel.ForEach(x => x.Sel = false);
                         _vetor_sel.Clear();
-                        _vetor_sel = Util2D.ObterVetoresObjeto2DPelaTela(_engine.Camera, _obj_sel, selRect).ToList();
+                        _vetor_sel = Util2D.ObterVetoresObjeto2DPelaTela(_epico.Camera, _obj_sel, selRect).ToList();
                         _vetor_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -749,7 +770,7 @@ namespace Editor2D
                         // Informa a quantidade de objetos presentes na área do retângulo
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
-                        _vertice_sel = Util2D.ObterVerticesObjeto2DPelaTela(_engine.Camera, _obj_sel, rect).ToList();
+                        _vertice_sel = Util2D.ObterVerticesObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
                         _vertice_sel.ForEach(x => x.Sel = true);
 
                         e.Graphics.DrawString(
@@ -772,7 +793,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamZoom.Text, out float camZoom))
                 {
-                    _engine.Camera.DefinirZoom(camZoom);
+                    _epico.Camera.DefinirZoom(camZoom);
                     propGrid.Refresh();
                 }
             }
@@ -781,7 +802,7 @@ namespace Editor2D
         private void DesligarZoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             desligarZoomToolStripMenuItem.Checked = !desligarZoomToolStripMenuItem.Checked;
-            _engine.Camera.DesligarSistemaZoom = desligarZoomToolStripMenuItem.Checked;
+            _epico.Camera.DesligarSistemaZoom = desligarZoomToolStripMenuItem.Checked;
         }
 
         private void BtnDeformado_Click(object sender, EventArgs e)
@@ -793,7 +814,7 @@ namespace Editor2D
             obj.Mat_render.CorSolida = new RGBA((byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255));
 
             obj.GerarGeometria(0, 5, 50);
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -804,7 +825,7 @@ namespace Editor2D
             LuzPonto obj = new LuzPonto(150, 150);
             obj.Pos = PosAleatorio(obj);
             var rnd = new Random(Environment.TickCount);
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -865,7 +886,7 @@ namespace Editor2D
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
                         _obj_sel.ForEach(x => x.Selecionado = false);
-                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_engine, _engine.Camera, new Vetor2(selStart.X, selStart.Y));
+                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_epico, _epico.Camera, new Vetor2(selStart.X, selStart.Y));
                         _obj_sel = new List<Objeto2D>();
                         if (objSel != null) _obj_sel.Add(objSel);
                     }
@@ -1103,7 +1124,7 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                _engine.Camera.Focar((Origem2)cboOrigem.SelectedValue);
+                _epico.Camera.Focar((Origem2)cboOrigem.SelectedValue);
             }
         }
 
@@ -1162,8 +1183,8 @@ namespace Editor2D
         {
             Form2D form = new Form2D();
             form.Pos = new Vetor2(form, 200, 200);
-            _engine.AddObjeto2D(form);
-            _engine.Camera.Focar(form);
+            _epico.AddObjeto2D(form);
+            _epico.Camera.Focar(form);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = form;
@@ -1182,10 +1203,10 @@ namespace Editor2D
                 return;
             }
 
-            Panel2D panel = new Panel2D(_engine, (Controle2D)cboObjeto2D.SelectedValue);
+            Panel2D panel = new Panel2D(_epico, (Controle2D)cboObjeto2D.SelectedValue);
             panel.MouseDown += Panel_MouseDown;
             panel.Pos = new Vetor2(panel, 200, 200);
-            _engine.AddObjeto2D(panel);
+            _epico.AddObjeto2D(panel);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = panel;
@@ -1255,7 +1276,7 @@ namespace Editor2D
             {
                 if (picScreen.Focused)
                 {
-                    _engine.objetos2D.Remove((Objeto2D)cboObjeto2D.SelectedItem);
+                    _epico.objetos2D.Remove((Objeto2D)cboObjeto2D.SelectedItem);
                     //_obj_sel.Clear();
                     //AtualizarControlesObjeto2D(_obj_sel);
 
@@ -1276,10 +1297,10 @@ namespace Editor2D
                 return;
             }
 
-            Button2D obj = new Button2D(_engine, (Controle2D)cboObjeto2D.SelectedValue);
+            Button2D obj = new Button2D(_epico, (Controle2D)cboObjeto2D.SelectedValue);
             obj.MouseDown += Panel_MouseDown;
             obj.Pos = new Vetor2(obj, 200, 200);
-            _engine.AddObjeto2D(obj);
+            _epico.AddObjeto2D(obj);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = obj;
@@ -1288,7 +1309,7 @@ namespace Editor2D
         private void MultiplicarQuadrosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             multiplicarQuadrosToolStripMenuItem.Checked = !multiplicarQuadrosToolStripMenuItem.Checked;
-            _engine.Camera.EfeitoQuadroDuplicado = multiplicarQuadrosToolStripMenuItem.Checked;
+            _epico.Camera.EfeitoQuadroDuplicado = multiplicarQuadrosToolStripMenuItem.Checked;
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)
@@ -1298,7 +1319,7 @@ namespace Editor2D
 
         private void AndePeloEspaço2DToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoopAndePeloEspaco(_engine, this);
+            LoopAndePeloEspaco(_epico, this);
         }
 
         private async void LoopAndePeloEspaco(EpicoGraphics engine, Form owner)

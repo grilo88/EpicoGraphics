@@ -14,8 +14,11 @@ namespace Epico
 
         public Eixos3(Eixos3 eixos)
         {
+            Dim = new float[3];
             Obj = eixos.Obj;
-            Dim = eixos.Dim;
+            X = eixos.X;
+            Y = eixos.Y;
+            Z = eixos.Z;
             Nome = eixos.Nome;
             Tag = eixos.Tag;
         }

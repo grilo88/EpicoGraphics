@@ -16,7 +16,7 @@ namespace Epico
         public ObjetoEpico Obj { get; set; }
         public object Tag { get; set; }
 
-        
+
         /// <summary>
         /// Nome do {Eixos}
         /// </summary>
@@ -39,7 +39,8 @@ namespace Epico
         public abstract Eixos NovaInstancia();
         public abstract Eixos NovaInstancia(ObjetoEpico epico);
 
-        public float Magnitude {
+        public float Magnitude
+        {
             get
             {
                 float ret = 0;
@@ -107,8 +108,46 @@ namespace Epico
 
         public static T Lerp<T>(T origem, T destino, float distancia, out bool completado) where T : Eixos
         {
-            completado = origem.Dim == destino.Dim;
-            return Lerp<T>(origem, destino, distancia);
+            completado = false;
+            var ret = Lerp<T>(origem, destino, distancia);
+
+            bool transladando = false;
+            for (int i = 0; i < origem.Dim.Length; i++)
+                if (origem.Dim[i] != destino.Dim[i]) transladando = true;
+
+            if (transladando)
+            {
+                completado = true; // Antecipa o status completado
+                for (int i = 0; i < origem.Dim.Length; i++)
+                {
+                    if (Arredondar(origem.Dim[i]) != Arredondar(destino.Dim[i]))
+                        completado = false; // Não está próximo o suficiente do ponto de destino
+                }
+            }
+
+            if (completado) // Define valores para as dimensões de origem
+            {
+                for (int i = 0; i < origem.Dim.Length; i++)
+                    ret.Dim[i] = destino.Dim[i];
+            }
+
+            return ret;
+        }
+
+        public static float Arredondar(float valor, int casasDecimais = 1)
+        {
+            float mult = 1;
+            for (int i = 0; i < casasDecimais; i++) mult *= 0.1F;
+            float ret = (int)(valor / mult + 0.1F);
+            ret *= mult;
+            return ret;
+        }
+
+        public static float Grade(float valor, float tamanhoGrade = 2.5F)
+        {
+            valor = (int)(valor / tamanhoGrade + 0.1F);
+            valor *= tamanhoGrade;
+            return valor;
         }
     }
 }
