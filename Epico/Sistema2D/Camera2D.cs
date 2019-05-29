@@ -21,7 +21,7 @@ namespace Epico.Sistema2D
 {
     public sealed class Camera2D : Objeto2D, IDisposable
     {
-        readonly EpicoGraphics engine;
+        readonly EpicoGraphics epico;
         Bitmap render;
         Graphics g;
 
@@ -62,15 +62,15 @@ namespace Epico.Sistema2D
         public bool EfeitoQuadroDuplicado { get; set; }
         #endregion
 
-        public Camera2D(EpicoGraphics engine, int width, int height)
+        public Camera2D(EpicoGraphics epico, int width, int height)
         {
-            this.engine = engine;
+            this.epico = epico;
             IniciarCamera(width, height, FormatoPixel);
         }
 
         public Camera2D(EpicoGraphics engine, int width, int height, PixelFormat FormatoPixel)
         {
-            this.engine = engine;
+            this.epico = engine;
             IniciarCamera(width, height, FormatoPixel);
         }
 
@@ -145,16 +145,23 @@ namespace Epico.Sistema2D
         /// <param name="obj"></param>
         public void Focar(Objeto2D obj)
         {
+            Pos = PosFoco(obj);
+        }
+
+        public Vetor2 PosFoco(Objeto2D obj)
+        {
+            Vetor2 novaPos = (Vetor2)obj.Pos.NovaInstancia();
             if (obj is Controle2D)
             {
-                Pos.X = obj.Pos.X + ((Controle2D)obj).Width / 2;
-                Pos.Y = obj.Pos.Y + ((Controle2D)obj).Height / 2;
+                novaPos.X = obj.Pos.X + ((Controle2D)obj).Width / 2;
+                novaPos.Y = obj.Pos.Y + ((Controle2D)obj).Height / 2;
             }
             else
             {
-                Pos.X = obj.Pos.X;
-                Pos.Y = obj.Pos.Y;
+                novaPos.X = obj.Pos.X;
+                novaPos.Y = obj.Pos.Y;
             }
+            return novaPos;
         }
 
         public void Focar(Eixos2 xy)
@@ -198,61 +205,61 @@ namespace Epico.Sistema2D
 
                 // Obtém a posição da tela da câmera
                 
-                for (int i = 0; i < engine.objetos2D.Count; i++)
+                for (int i = 0; i < epico.objetos2D.Count; i++)
                 {
-                    Objeto2DRenderizar objEspaco = engine.objetos2D[i] as Objeto2DRenderizar;
-                    if (objEspaco != null)
+                    Objeto2DRenderizar obj = epico.objetos2D[i] as Objeto2DRenderizar;
+                    if (obj != null)
                     {
-                        Objeto2DRenderizar obj = (Objeto2DRenderizar)objEspaco.Clone();
+                        Objeto2DRenderizar objProjecao = (Objeto2DRenderizar)obj.Clone();
 
 #region Calcula o ZOOM da câmera
                         if (!DesligarSistemaZoom)
                         {
-                            Objeto2D objZoom = ZoomEscalaObjeto2D(obj, ZoomCamera);
-                            Objeto2D objPosZoom = ZoomPosObjeto2D(obj, ZoomCamera);
+                            Objeto2D objZoom = ZoomEscalaObjeto2D(objProjecao, ZoomCamera);
+                            Objeto2D objPosZoom = ZoomPosObjeto2D(objProjecao, ZoomCamera);
                             objZoom.Pos = objPosZoom.Pos;
                         }
                         #endregion
 
                         #region Aplica ângulo na câmera
-                        for (int v = 0; v < obj.Vertices.Count(); v++)
+                        for (int v = 0; v < objProjecao.Vertices.Count(); v++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                obj.Vertices[v].Global.X,
-                                obj.Vertices[v].Global.Y);
+                                objProjecao.Vertices[v].Global.X,
+                                objProjecao.Vertices[v].Global.Y);
                             Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
-                            obj.Vertices[v].X = xy.X - obj.Pos.X;
-                            obj.Vertices[v].Y = xy.Y - obj.Pos.Y;
+                            objProjecao.Vertices[v].X = xy.X - objProjecao.Pos.X;
+                            objProjecao.Vertices[v].Y = xy.Y - objProjecao.Pos.Y;
                         }
-                        for (int c = 0; c < obj.Origens.Count(); c++)
+                        for (int c = 0; c < objProjecao.Origens.Count(); c++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                obj.Origens[c].Global.X,
-                                obj.Origens[c].Global.Y);
+                                objProjecao.Origens[c].Global.X,
+                                objProjecao.Origens[c].Global.Y);
                             Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
-                            obj.Origens[c].X = xy.X - obj.Pos.X;
-                            obj.Origens[c].Y = xy.Y - obj.Pos.Y;
+                            objProjecao.Origens[c].X = xy.X - objProjecao.Pos.X;
+                            objProjecao.Origens[c].Y = xy.Y - objProjecao.Pos.Y;
                         }
                         #endregion
-                        obj.AtualizarMinMax();
+                        objProjecao.AtualizarMinMax();
 
-                        if (Objeto2DVisivelCamera(objEspaco))
+                        if (Objeto2DVisivelCamera(obj))
                         {
-                            if (obj.Mat_render.CorSolida.A > 0) // Pinta objeto materialmente visível
+                            if (objProjecao.Mat_render.CorSolida.A > 0) // Pinta objeto materialmente visível
                             {
                                 GraphicsPath preenche = new GraphicsPath();
-                                preenche.AddLines(obj.Vertices.ToList().Select(ponto => new PointF(
+                                preenche.AddLines(objProjecao.Vertices.AsEnumerable().Select(ponto => new PointF(
                                     -Left + ponto.Global.X,
                                     -Top + ponto.Global.Y)).ToArray());
-                                g.FillPath(new SolidBrush(Color.FromArgb(obj.Mat_render.CorSolida.A, obj.Mat_render.CorSolida.R, obj.Mat_render.CorSolida.G, obj.Mat_render.CorSolida.B)), preenche);
+                                g.FillPath(new SolidBrush(Color.FromArgb(objProjecao.Mat_render.CorSolida.A, objProjecao.Mat_render.CorSolida.R, objProjecao.Mat_render.CorSolida.G, objProjecao.Mat_render.CorSolida.B)), preenche);
                             }
 
                             // Materialização do objeto na Câmera
                             Material mat;
-                            if (obj.Selecionado)
-                                mat = obj.Mat_render_sel;
+                            if (objProjecao.Selecionado)
+                                mat = objProjecao.Mat_render_sel;
                             else
-                                mat = obj.Mat_render;
+                                mat = objProjecao.Mat_render;
 
                             if (mat.CorBorda.A > 0) // Desenha borda dos objetos materialmente visíveis
                             {
@@ -264,18 +271,18 @@ namespace Epico.Sistema2D
 #elif EtoForms
                                 pen.Thickness = mat.LarguraBorda;
 #endif
-                                for (int v = 1; v < obj.Vertices.Count() + 1; v++)
+                                for (int v = 1; v < objProjecao.Vertices.Count() + 1; v++)
                                 {
                                     Vertice2 v1, v2;
-                                    if (v == obj.Vertices.Count()) // Conecta a última Vértice na primeira Vértice
+                                    if (v == objProjecao.Vertices.Count()) // Conecta a última Vértice na primeira Vértice
                                     {
-                                        v2 = obj.Vertices[v - 1];     // Ponto Final
-                                        v1 = obj.Vertices[0];         // Ponto Inicial
+                                        v2 = objProjecao.Vertices[v - 1];     // Ponto Final
+                                        v1 = objProjecao.Vertices[0];         // Ponto Inicial
                                     }
                                     else
                                     {
-                                        v1 = obj.Vertices[v - 1]; // Ponto A
-                                        v2 = obj.Vertices[v];     // Ponto B
+                                        v1 = objProjecao.Vertices[v - 1]; // Ponto A
+                                        v2 = objProjecao.Vertices[v];     // Ponto B
                                     }
 
                                     // Desenha as linhas entre as vértices na câmera
@@ -288,26 +295,26 @@ namespace Epico.Sistema2D
                                 }
                             }
 
-                            for (int v = 0; v < obj.Vertices.Count; v++)
+                            for (int v = 0; v < objProjecao.Vertices.Count; v++)
                             {
-                                if (obj.Vertices[v].Sel)
+                                if (objProjecao.Vertices[v].Sel)
                                 {
                                     float width = 5;
-                                    float x = -Left + obj.Vertices[v].Global.X;
-                                    float y = -Top + obj.Vertices[v].Global.Y;
+                                    float x = -Left + objProjecao.Vertices[v].Global.X;
+                                    float y = -Top + objProjecao.Vertices[v].Global.Y;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 0, 0) /*Vermelho*/), rect);
                                 }
                             }
 
                             // Exibe o(s) ponto(s) de origem do objeto
-                            for (int c = 0; c < obj.Origens.Count; c++)
+                            for (int c = 0; c < objProjecao.Origens.Count; c++)
                             {
-                                if (obj.Origens[c].Sel)
+                                if (objProjecao.Origens[c].Sel)
                                 {
                                     float width = 5;
-                                    float x = -Left + obj.Origens[c].Global.X;
-                                    float y = -Top + obj.Origens[c].Global.Y;
+                                    float x = -Left + objProjecao.Origens[c].Global.X;
+                                    float y = -Top + objProjecao.Origens[c].Global.Y;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 255, 0) /*Amarelo*/), rect);
                                 }
@@ -317,9 +324,9 @@ namespace Epico.Sistema2D
                 }
 
                 // A iluminação deve ser renderizada após pintar todos os objetos.
-                for (int i = 0; i < engine.objetos2D.Count; i++)
+                for (int i = 0; i < epico.objetos2D.Count; i++)
                 {
-                    Luz2DRenderizar luz = engine.objetos2D[i] as Luz2DRenderizar;
+                    Luz2DRenderizar luz = epico.objetos2D[i] as Luz2DRenderizar;
                     if (luz != null)
                     {
                         if (luz is LuzPonto)
@@ -350,7 +357,7 @@ namespace Epico.Sistema2D
                 }
 
 #region Exibe informações de depuração
-                if (engine.Debug)
+                if (epico.Debug)
                 {
 #if Editor2D
                     g.DrawString(Nome.ToUpper(), font_debug, font_debug_color, new PointF(10, 10));
@@ -386,9 +393,9 @@ namespace Epico.Sistema2D
         /// <summary>
         /// Checa se o objeto 2D está visível na câmera
         /// </summary>
-        /// <param name="objEspaco">Objeto 2D antes da fase de projeção de tela</param>
+        /// <param name="obj">Objeto 2D antes da fase de projeção de tela</param>
         /// <returns></returns>
-        public bool Objeto2DVisivelCamera(Objeto2D objEspaco)
+        public bool Objeto2DVisivelCamera(Objeto2D obj)
         {
             Vertice2[] rectCam = new Vertice2[4];
             rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
@@ -397,7 +404,7 @@ namespace Epico.Sistema2D
             rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Bottom), Angulo.Z));       // Inferior Esquerda
 
             return Util2D.IntersecaoEntrePoligonos(rectCam, 
-                objEspaco.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
+                obj.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
         }
 
         /// <summary>

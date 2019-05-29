@@ -9,7 +9,7 @@ using System.Text;
 namespace Epico.Sistema
 {
     /// <summary>
-    /// Abstração de geometria genérica
+    /// Abstração do polígono dimensional genérico
     /// </summary>
     /// <typeparam name="T">ObjetoEspacial</typeparam>
     /// <typeparam name="T1">Vetor</typeparam>
@@ -18,7 +18,7 @@ namespace Epico.Sistema
     /// <typeparam name="T4">Pivô</typeparam>
     /// <typeparam name="T5">Vetor do Ângulo</typeparam>
     /// <typeparam name="T5">Animação</typeparam>
-    public abstract class Poligono<T, T1, T2, T3, T4, T5, T6> : ICloneable
+    public abstract class PoligonoDimensional_old<T, T1, T2, T3, T4, T5, T6> : ICloneable
         where T1 : Eixos
         where T2 : Eixos
         where T3 : Eixos
@@ -35,6 +35,7 @@ namespace Epico.Sistema
         public abstract float Raio { get; set; }
         public abstract bool Selecionado { get; set; }
 
+        
         public RGBA Cor { get; set; }
 
         [Category("Layout")]
@@ -70,12 +71,12 @@ namespace Epico.Sistema
                 for (int v = 0; v < Vertices.Count; v++)
                     for (int i = 0; i < _quant_dim; i++)
                     {
-                        centro.Dim[i] += Vertices[v].Dim[i]; // Soma os eixos
+                        centro.Dim[i] += Vertices[v].Dim[i]; // Soma os eixos das dimensões
                     }
 
                 for (int i = 0; i < _quant_dim; i++)
                 {
-                    // Depois divide a soma pela quantidade de vértices
+                    // Depois divide a soma das dimensões pela quantidade de vértices
                     centro.Dim[i] /= Vertices.Count;
                 }
                 return centro;
@@ -92,14 +93,16 @@ namespace Epico.Sistema
         {
             for (int i = 0; i < _quant_dim; i++)
             {
-                Max.Dim[i] = Vertices.Max(x => x.Dim[i]);
-                Min.Dim[i] = Vertices.Min(x => x.Dim[i]);
+                Max.Dim[i] = Vertices.Max(d => d.Dim[i]);
+                Min.Dim[i] = Vertices.Min(d => d.Dim[i]);
             }
         }
 
         public abstract void AtualizarGeometria(T5 novoAngulo);
 
         public abstract void CriarArestasConvexa();
+
+        public abstract void DefinirRaio(float raio);
 
         public virtual object Clone() => MemberwiseClone();
     }

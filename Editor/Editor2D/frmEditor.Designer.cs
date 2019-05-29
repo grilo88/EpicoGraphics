@@ -148,14 +148,15 @@
             this.portaDeVisãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jogosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.andePeloEspaço2DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripDesfazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripRefazer = new System.Windows.Forms.ToolStripDropDownButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.jogosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.andePeloEspaço2DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkAutoFocarObjeto = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -254,7 +255,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 49);
+            this.label1.Location = new System.Drawing.Point(6, 76);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 3;
@@ -263,7 +264,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(127, 49);
+            this.label2.Location = new System.Drawing.Point(127, 76);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 6;
@@ -301,6 +302,7 @@
             // tabObjeto
             // 
             this.tabObjeto.AutoScroll = true;
+            this.tabObjeto.Controls.Add(this.chkAutoFocarObjeto);
             this.tabObjeto.Controls.Add(this.lblNome);
             this.tabObjeto.Controls.Add(this.txtPosX);
             this.tabObjeto.Controls.Add(this.txtPosY);
@@ -338,7 +340,7 @@
             // 
             // txtPosX
             // 
-            this.txtPosX.Location = new System.Drawing.Point(55, 47);
+            this.txtPosX.Location = new System.Drawing.Point(55, 74);
             this.txtPosX.Name = "txtPosX";
             this.txtPosX.Size = new System.Drawing.Size(59, 20);
             this.txtPosX.TabIndex = 19;
@@ -346,7 +348,7 @@
             // 
             // txtPosY
             // 
-            this.txtPosY.Location = new System.Drawing.Point(178, 47);
+            this.txtPosY.Location = new System.Drawing.Point(178, 74);
             this.txtPosY.Name = "txtPosY";
             this.txtPosY.Size = new System.Drawing.Size(59, 20);
             this.txtPosY.TabIndex = 18;
@@ -354,7 +356,7 @@
             // 
             // txtRaio
             // 
-            this.txtRaio.Location = new System.Drawing.Point(178, 99);
+            this.txtRaio.Location = new System.Drawing.Point(178, 126);
             this.txtRaio.Name = "txtRaio";
             this.txtRaio.Size = new System.Drawing.Size(59, 20);
             this.txtRaio.TabIndex = 17;
@@ -362,7 +364,7 @@
             // 
             // txtAngulo
             // 
-            this.txtAngulo.Location = new System.Drawing.Point(55, 101);
+            this.txtAngulo.Location = new System.Drawing.Point(55, 128);
             this.txtAngulo.Name = "txtAngulo";
             this.txtAngulo.Size = new System.Drawing.Size(59, 20);
             this.txtAngulo.TabIndex = 16;
@@ -371,7 +373,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(127, 101);
+            this.label3.Location = new System.Drawing.Point(127, 128);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 14;
@@ -380,7 +382,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 75);
+            this.label12.Location = new System.Drawing.Point(6, 102);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(49, 13);
             this.label12.TabIndex = 30;
@@ -389,7 +391,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 101);
+            this.label4.Location = new System.Drawing.Point(6, 128);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 11;
@@ -398,7 +400,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(127, 75);
+            this.label11.Location = new System.Drawing.Point(127, 102);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(49, 13);
             this.label11.TabIndex = 31;
@@ -406,7 +408,7 @@
             // 
             // txtVisivel
             // 
-            this.txtVisivel.Location = new System.Drawing.Point(55, 146);
+            this.txtVisivel.Location = new System.Drawing.Point(55, 173);
             this.txtVisivel.Name = "txtVisivel";
             this.txtVisivel.ReadOnly = true;
             this.txtVisivel.Size = new System.Drawing.Size(132, 20);
@@ -425,7 +427,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 149);
+            this.label10.Location = new System.Drawing.Point(6, 176);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(37, 13);
             this.label10.TabIndex = 28;
@@ -439,7 +441,7 @@
             0,
             0,
             65536});
-            this.txtEscalaY.Location = new System.Drawing.Point(178, 73);
+            this.txtEscalaY.Location = new System.Drawing.Point(178, 100);
             this.txtEscalaY.Name = "txtEscalaY";
             this.txtEscalaY.Size = new System.Drawing.Size(59, 20);
             this.txtEscalaY.TabIndex = 32;
@@ -462,7 +464,7 @@
             0,
             0,
             65536});
-            this.txtEscalaX.Location = new System.Drawing.Point(55, 73);
+            this.txtEscalaX.Location = new System.Drawing.Point(55, 100);
             this.txtEscalaX.Name = "txtEscalaX";
             this.txtEscalaX.Size = new System.Drawing.Size(59, 20);
             this.txtEscalaX.TabIndex = 33;
@@ -1431,6 +1433,21 @@
             this.multiplicarQuadrosToolStripMenuItem.Text = "Multiplicar Quadros";
             this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
+            // jogosToolStripMenuItem
+            // 
+            this.jogosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.andePeloEspaço2DToolStripMenuItem});
+            this.jogosToolStripMenuItem.Name = "jogosToolStripMenuItem";
+            this.jogosToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+            this.jogosToolStripMenuItem.Text = "Jogos";
+            // 
+            // andePeloEspaço2DToolStripMenuItem
+            // 
+            this.andePeloEspaço2DToolStripMenuItem.Name = "andePeloEspaço2DToolStripMenuItem";
+            this.andePeloEspaço2DToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.andePeloEspaço2DToolStripMenuItem.Text = "Ande pelo Espaço 2D";
+            this.andePeloEspaço2DToolStripMenuItem.Click += new System.EventHandler(this.AndePeloEspaço2DToolStripMenuItem_Click);
+            // 
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1489,20 +1506,17 @@
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
-            // jogosToolStripMenuItem
+            // chkAutoFocarObjeto
             // 
-            this.jogosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.andePeloEspaço2DToolStripMenuItem});
-            this.jogosToolStripMenuItem.Name = "jogosToolStripMenuItem";
-            this.jogosToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
-            this.jogosToolStripMenuItem.Text = "Jogos";
-            // 
-            // andePeloEspaço2DToolStripMenuItem
-            // 
-            this.andePeloEspaço2DToolStripMenuItem.Name = "andePeloEspaço2DToolStripMenuItem";
-            this.andePeloEspaço2DToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.andePeloEspaço2DToolStripMenuItem.Text = "Ande pelo Espaço 2D";
-            this.andePeloEspaço2DToolStripMenuItem.Click += new System.EventHandler(this.AndePeloEspaço2DToolStripMenuItem_Click);
+            this.chkAutoFocarObjeto.AutoSize = true;
+            this.chkAutoFocarObjeto.Checked = true;
+            this.chkAutoFocarObjeto.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarObjeto.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarObjeto.Name = "chkAutoFocarObjeto";
+            this.chkAutoFocarObjeto.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarObjeto.TabIndex = 36;
+            this.chkAutoFocarObjeto.Text = "Auto foco";
+            this.chkAutoFocarObjeto.UseVisualStyleBackColor = true;
             // 
             // frmEditor
             // 
@@ -1703,6 +1717,7 @@
         private System.Windows.Forms.ToolStripMenuItem multiplicarQuadrosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem jogosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem andePeloEspaço2DToolStripMenuItem;
+        private System.Windows.Forms.CheckBox chkAutoFocarObjeto;
     }
 }
 

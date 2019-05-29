@@ -13,10 +13,10 @@ namespace Epico
     public class Vetor3 : Eixos3
     {
         public Vetor3() : base() { }
-        public Vetor3(object Obj) : base(Obj) { }
-        public Vetor3(object Obj, Vetor3 vetor) : base(Obj, vetor) { }
+        public Vetor3(ObjetoEpico Obj) : base(Obj) { }
+        public Vetor3(ObjetoEpico Obj, Vetor3 vetor) : base(Obj, vetor) { }
         public Vetor3(float X, float Y, float Z) : base(X, Y, Z) { }
-        public Vetor3(object Obj, float X, float Y, float Z) : base(Obj, X, Y, Z) { }
+        public Vetor3(ObjetoEpico Obj, float X, float Y, float Z) : base(Obj, X, Y, Z) { }
 
         public override Eixos NovaInstancia() => new Vetor3();
 

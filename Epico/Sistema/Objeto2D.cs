@@ -6,34 +6,34 @@ using System.Text;
 
 namespace Epico.Sistema
 {
-    public class Objeto2D :
-        Poligono<Objeto2D, Vetor2, Vertice2, Origem2, Pivo2, Vetor3, Animacao2D>
+    public class Objeto2D : ObjetoEpico
     {
-        public EpicoGraphics _epico;
+        int _quant_dim => Pos.Dim.Length;
 
-        public override string Nome { get; set; } = "SemNome";
-        public override float Raio { get; set; }
-        public override bool Selecionado { get; set; }
+        public float Raio { get; set; }
 
-        public override Vetor2 Pos { get; set; }
-        public override Vetor2 Escala { get; set; }
-        public override List<Vertice2> Vertices { get; set; } = new List<Vertice2>();
-        public override List<Origem2> Origens { get; set; } = new List<Origem2>();
-        public override List<Pivo2> Pivos { get; set; } = new List<Pivo2>();
-        public override List<Vetor2> Arestas { get; set; } = new List<Vetor2>();
-        public override List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [Category("Layout")]
+        public virtual Vetor2 Pos { get; set; }
 
-        public override Vetor3 Angulo { get; set; }
-        public override Vetor2 Min { get; set; }
-        public override Vetor2 Max { get; set; }
-        public override Vetor2 GlobalMin {
+        public Vetor2 Escala { get; set; }
+        public List<Vertice2> Vertices { get; set; } = new List<Vertice2>();
+        public List<Origem2> Origens { get; set; } = new List<Origem2>();
+        public List<Pivo2> Pivos { get; set; } = new List<Pivo2>();
+        public List<Vetor2> Arestas { get; set; } = new List<Vetor2>();
+        public List<Animacao2D> Animacoes { get; set; } = new List<Animacao2D>();
+
+        public Vetor3 Angulo { get; set; }
+        public Vetor2 Min { get; set; }
+        public Vetor2 Max { get; set; }
+        public Vetor2 GlobalMin {
             get
             {
                 return new Vetor2(Pos.X + Min.X, Pos.Y + Min.Y);
             }
         }
 
-        public override Vetor2 GlobalMax {
+        public Vetor2 GlobalMax {
             get
             {
                 return new Vetor2(Pos.X + Max.X, Pos.Y + Max.Y);
@@ -58,14 +58,16 @@ namespace Epico.Sistema
         [Category("Ordenação")]
         [Description("Último índice de Ordem Z no espaço 2D.")]
         public int GlobalOrdemZMax { get => _epico.objetos2D.Count - 1; }
-        
 
-        public override Objeto2D NovaInstancia() => new Objeto2D();
+        public Objeto2D NovaInstancia() => new Objeto2D();
 
         public Objeto2D()
         {
             Pos = new Vetor2(this, 0, 0);
             Escala = new Vetor2(this, 1, 1);
+            Angulo = new Vetor3();
+            Max = new Vetor2(this);
+            Min = new Vetor2(this);
             Origens.Add(new Origem2(this, 0, 0)); // Adiciona o ponto central principal
         }
 
@@ -73,20 +75,20 @@ namespace Epico.Sistema
         /// Posiciona o objeto na posição x
         /// </summary>
         /// <param name="x"></param>
-        public virtual void PosicionarX(float x) => Pos.X = x;
+        public void PosicionarX(float x) => Pos.X = x;
 
         /// <summary>
         /// Posiciona o objeto na posição y
         /// </summary>
         /// <param name="y"></param>
-        public virtual void PosicionarY(float y) => Pos.Y = y;
+        public void PosicionarY(float y) => Pos.Y = y;
 
-        public override void AssociarEngine(EpicoGraphics engine)
+        public void AssociarEngine(EpicoGraphics engine)
         {
             _epico = engine;
         }
 
-        public override void AtualizarGeometria(Vetor3 novoAngulo)
+        public void AtualizarGeometria(Vetor3 novoAngulo)
         {
             Vetor3 graus = novoAngulo - Angulo;
             Angulo = novoAngulo;
@@ -110,7 +112,7 @@ namespace Epico.Sistema
                 }
             }
 
-            base.AtualizarMinMax();
+            AtualizarMinMax();
         }
 
         /// <summary>
@@ -151,11 +153,49 @@ namespace Epico.Sistema
             return idxMax;
         }
 
+        public void AtualizarMinMax()
+        {
+            for (int i = 0; i < _quant_dim; i++)
+            {
+                Max.Dim[i] = Vertices.Max(d => d.Dim[i]);
+                Min.Dim[i] = Vertices.Min(d => d.Dim[i]);
+            }
+        }
+
+        public void AdicionarVertice(Vertice2 vertice)
+        {
+            Vertices.Add(vertice);
+            AtualizarMinMax();
+        }
+
+        /// <summary>
+        /// Obtém o centro do polígono
+        /// </summary>
+        public Vetor2 Centro
+        {
+            get
+            {
+                Vetor2 centro = (Vetor2)Pos.NovaInstancia();
+                for (int v = 0; v < Vertices.Count; v++)
+                    for (int i = 0; i < _quant_dim; i++)
+                    {
+                        centro.Dim[i] += Vertices[v].Dim[i]; // Soma os eixos das dimensões
+                    }
+
+                for (int i = 0; i < _quant_dim; i++)
+                {
+                    // Depois divide a soma das dimensões pela quantidade de vértices
+                    centro.Dim[i] /= Vertices.Count;
+                }
+                return centro;
+            }
+        }
+
         /// <summary>
         /// Define o ângulo do objeto
         /// </summary>
         /// <param name="angulo"></param>
-        public virtual void DefinirAngulo(float angulo)
+        public void DefinirAngulo(float angulo)
         {
             AtualizarGeometria(new Vetor3(0, 0, angulo));
         }
@@ -163,7 +203,7 @@ namespace Epico.Sistema
         /// <summary>
         /// Cria arestas convexa para o objeto2D para fins diversos
         /// </summary>
-        public override void CriarArestasConvexa()
+        public void CriarArestasConvexa()
         {
             Vetor2 p1, p2;
             Arestas.Clear();
@@ -182,9 +222,9 @@ namespace Epico.Sistema
             }
         }
 
-        public override object Clone()
+        public object Clone()
         {
-            Objeto2D clone = (Objeto2D)base.Clone();
+            Objeto2D clone = (Objeto2D)MemberwiseClone();
 
             // Cria novas instâncias para os elementos
             clone.Vertices = Vertices

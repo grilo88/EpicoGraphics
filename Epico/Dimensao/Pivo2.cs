@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Epico.Sistema;
 
 namespace Epico
 {
@@ -16,7 +17,7 @@ namespace Epico
 
         public override Eixos NovaInstancia() => new Pivo2();
 
-        public override Eixos NovaInstancia(object epico)
+        public override Eixos NovaInstancia(ObjetoEpico epico)
         {
             throw new NotImplementedException();
         }

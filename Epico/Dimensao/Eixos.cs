@@ -1,6 +1,7 @@
 ﻿using Epico.Sistema;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,10 @@ namespace Epico
         /// <summary>
         /// Objeto geométrico de dimensões genéricas do qual estes eixos estão associados
         /// </summary>
-        public object Obj { get; set; }
+        public ObjetoEpico Obj { get; set; }
         public object Tag { get; set; }
 
+        
         /// <summary>
         /// Nome do {Eixos}
         /// </summary>
@@ -35,7 +37,7 @@ namespace Epico
         /// </summary>
         /// <returns></returns>
         public abstract Eixos NovaInstancia();
-        public abstract Eixos NovaInstancia(object epico);
+        public abstract Eixos NovaInstancia(ObjetoEpico epico);
 
         public float Magnitude {
             get
@@ -82,6 +84,18 @@ namespace Epico
             float magnitude = Magnitude;
             for (int i = 0; i < Dim.Length; i++) Dim[i] /= magnitude;
             return (T)this;
+        }
+
+        public static T Lerp<T>(T origem, T destino, float distancia) where T : Eixos
+        {
+            // a + f * (b - a);
+            Eixos eixos = origem.NovaInstancia();
+            for (int i = 0; i < origem.Dim.Length; i++)
+            {
+                eixos.Dim[i] = origem.Dim[i] + distancia * (destino.Dim[i] - origem.Dim[i]);
+            }
+
+            return (T)eixos;
         }
     }
 }

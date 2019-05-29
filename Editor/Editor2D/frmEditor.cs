@@ -27,6 +27,7 @@ namespace Editor2D
     {
         bool _sair = false;
         const int _raio_padrao = 50;
+        Vetor2 NovaPosCamera = new Vetor2();
 
         EpicoGraphics  _engine = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
@@ -113,9 +114,12 @@ namespace Editor2D
                     float distCursor = Util2D.DistanciaEntreDoisPontos(xyCamDrag, xyCursor);
                     float angCursor = Util2D.AnguloEntreDoisPontos(xyCamDrag, xyCursor);
 
-                    _engine.Camera.Pos.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
-                    _engine.Camera.Pos.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
+                    NovaPosCamera.X += (float)(Math.Cos(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
+                    NovaPosCamera.Y += (float)(Math.Sin(Util2D.Angulo2Radiano(angCursor + _engine.Camera.Angulo.Z)) * distCursor * _engine.Camera.TempoDelta * 0.000001);
                 }
+
+                _engine.Camera.Pos = Eixos.Lerp(
+                    _engine.Camera.Pos, NovaPosCamera, 1F * _engine.Camera.TempoDelta * 0.000001F);
 
                 if (_engine.Camera.ResWidth != picScreen.ClientRectangle.Width ||
                     _engine.Camera.ResHeight != picScreen.ClientRectangle.Height)
@@ -522,7 +526,8 @@ namespace Editor2D
         {
             if (cboObjeto2D.SelectedValue != null)
             {
-                _engine.Camera.Focar((Objeto2D)cboObjeto2D.SelectedValue);
+                NovaPosCamera = _engine.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
+                //_engine.Camera.Focar((Objeto2D)cboObjeto2D.SelectedValue);
             }
         }
 
@@ -566,6 +571,9 @@ namespace Editor2D
                 }).ToList();
                 cboOrigem.EndUpdate();
                 #endregion
+
+                if (chkAutoFocarObjeto.Checked)
+                    BtnFocarObjeto_Click(sender, e);
             }
         }
 

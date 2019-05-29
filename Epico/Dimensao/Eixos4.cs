@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Epico.Sistema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Epico
 
         public override Eixos NovaInstancia() => new Eixos4();
 
-        public override Eixos NovaInstancia(object epico)
+        public override Eixos NovaInstancia(ObjetoEpico epico)
         {
             throw new NotImplementedException();
         }

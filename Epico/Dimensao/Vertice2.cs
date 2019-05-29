@@ -22,8 +22,8 @@ namespace Epico
         public Vertice2(Eixos2 eixos2) : base(eixos2) { }
         public Vertice2(float X, float Y) : base(X, Y) { }
 
-        public Vertice2(object Obj) : base(Obj) { }
-        public Vertice2(object Obj, float X, float Y) : base(Obj, X, Y) { }
+        public Vertice2(ObjetoEpico Obj) : base(Obj) { }
+        public Vertice2(ObjetoEpico Obj, float X, float Y) : base(Obj, X, Y) { }
 
         public float Raio { get; set; }
         public float Ang { get; set; }
@@ -31,7 +31,7 @@ namespace Epico
 
         public override Eixos NovaInstancia() => new Vertice2();
 
-        public override Eixos NovaInstancia(object epico)
+        public override Eixos NovaInstancia(ObjetoEpico epico)
         {
             throw new NotImplementedException();
         }
