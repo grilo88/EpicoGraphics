@@ -35,6 +35,11 @@ namespace Epico
             return angulo * (float)Math.PI / 180;
         }
 
+        public static float Radiano2Angulo(this float radiano)
+        {
+            return radiano * (180 / (float)Math.PI);
+        }
+
         /// <summary>
         /// Rotaciona um ponto 2D a partir de um ponto de origem
         /// </summary>
@@ -64,16 +69,16 @@ namespace Epico
         /// Obtém a posição no espaço 2D através da coordenada x e y da tela
         /// </summary>
         /// <param name="cam"></param>
-        /// <param name="posTela"></param>
+        /// <param name="mouseXY"></param>
         /// <returns>Retorna ponto 2d pela coordenada X e Y da tela</returns>
-        public static Eixos2 ObterPosEspaco2DPelaTela(
-            this Camera2D cam, Eixos2 posTela)
+        public static Eixos2 ObterPosEspaco2DMouseXY(
+            this Camera2D cam, Eixos2 mouseXY)
         {
             Vetor2 PosCamZoomDiff = new Vetor2();
             PosCamZoomDiff = cam.Pos * cam.ZoomCamera - cam.Pos;
 
-            float x = cam.Left + posTela.X + PosCamZoomDiff.X;
-            float y = cam.Top + posTela.Y + PosCamZoomDiff.Y;
+            float x = cam.Left + mouseXY.X + PosCamZoomDiff.X;
+            float y = cam.Top + mouseXY.Y + PosCamZoomDiff.Y;
 
             Vetor2 ponto = new Vetor2(x / cam.ZoomCamera, y / cam.ZoomCamera); // Reduz escala para tamanho real em 2D
             Eixos2 ponto2D = Util2D.RotacionarPonto2D(cam.Pos, ponto, cam.Angulo.Z); // Rotaciona ponto no tamanho real
@@ -154,7 +159,7 @@ namespace Epico
             for (int i = 0; i < verticesTela.Length; i++)
             {
                 // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
-                Eixos2 xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                Eixos2 xy = ObterPosEspaco2DMouseXY(cam, verticesTela[i]);
                 verticesTela[i].X = xy.X;
                 verticesTela[i].Y = xy.Y;
             }
@@ -174,7 +179,7 @@ namespace Epico
             for (int i = 0; i < verticesTela.Length; i++)
             {
                 // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
-                Eixos2 xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                Eixos2 xy = ObterPosEspaco2DMouseXY(cam, verticesTela[i]);
                 verticesTela[i].X = xy.X;
                 verticesTela[i].Y = xy.Y;
             }
@@ -199,7 +204,7 @@ namespace Epico
             for (int i = 0; i < verticesTela.Length; i++)
             {
                 // Converte X e Y da tela para as coordenadas X e Y no mundo 2D
-                Eixos2 xy = ObterPosEspaco2DPelaTela(cam, verticesTela[i]);
+                Eixos2 xy = ObterPosEspaco2DMouseXY(cam, verticesTela[i]);
                 verticesTela[i].X = xy.X;
                 verticesTela[i].Y = xy.Y;
             }

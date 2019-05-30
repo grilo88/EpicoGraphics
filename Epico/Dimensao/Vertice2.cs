@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace Epico
 {
-    public class Vertice
-    {
-    
-    }
-
 
     /// <summary>
     /// Vértice de 2 dimensões
@@ -26,7 +21,8 @@ namespace Epico
         public Vertice2(ObjetoEpico Obj, float X, float Y) : base(Obj, X, Y) { }
 
         public float Raio { get; set; }
-        public float Ang { get; set; }
+
+        public float Ang { get => Util2D.Radiano2Angulo(Rad); set => Rad = Util2D.Angulo2Radiano(value); }
         public float Rad { get; set; }
 
         public override Eixos NovaInstancia() => new Vertice2();

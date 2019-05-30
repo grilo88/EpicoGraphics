@@ -57,6 +57,7 @@
             this.cboObjeto2D = new System.Windows.Forms.ComboBox();
             this.txtEscalaX = new System.Windows.Forms.NumericUpDown();
             this.tabOrigem = new System.Windows.Forms.TabPage();
+            this.chkAutoFocarOrigem = new System.Windows.Forms.CheckBox();
             this.label22 = new System.Windows.Forms.Label();
             this.txtOrigemPosX = new System.Windows.Forms.NumericUpDown();
             this.txtOrigemPosY = new System.Windows.Forms.NumericUpDown();
@@ -66,6 +67,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.tabVetor = new System.Windows.Forms.TabPage();
             this.tabVertice = new System.Windows.Forms.TabPage();
+            this.chkAutoFocarVertice = new System.Windows.Forms.CheckBox();
             this.btnFocarVertice = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -166,8 +168,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.chkAutoFocarOrigem = new System.Windows.Forms.CheckBox();
-            this.chkAutoFocarVertice = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -512,6 +512,18 @@
             this.tabOrigem.UseVisualStyleBackColor = true;
             this.tabOrigem.Enter += new System.EventHandler(this.TabOrigem_Enter);
             // 
+            // chkAutoFocarOrigem
+            // 
+            this.chkAutoFocarOrigem.AutoSize = true;
+            this.chkAutoFocarOrigem.Checked = true;
+            this.chkAutoFocarOrigem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarOrigem.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarOrigem.Name = "chkAutoFocarOrigem";
+            this.chkAutoFocarOrigem.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarOrigem.TabIndex = 43;
+            this.chkAutoFocarOrigem.Text = "Auto foco";
+            this.chkAutoFocarOrigem.UseVisualStyleBackColor = true;
+            // 
             // label22
             // 
             this.label22.AutoSize = true;
@@ -607,6 +619,18 @@
             this.tabVertice.UseVisualStyleBackColor = true;
             this.tabVertice.Enter += new System.EventHandler(this.TabVertice_Enter);
             // 
+            // chkAutoFocarVertice
+            // 
+            this.chkAutoFocarVertice.AutoSize = true;
+            this.chkAutoFocarVertice.Checked = true;
+            this.chkAutoFocarVertice.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarVertice.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarVertice.Name = "chkAutoFocarVertice";
+            this.chkAutoFocarVertice.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarVertice.TabIndex = 47;
+            this.chkAutoFocarVertice.Text = "Auto foco";
+            this.chkAutoFocarVertice.UseVisualStyleBackColor = true;
+            // 
             // btnFocarVertice
             // 
             this.btnFocarVertice.Location = new System.Drawing.Point(193, 14);
@@ -669,6 +693,7 @@
             this.txtVerticePosX.Size = new System.Drawing.Size(59, 20);
             this.txtVerticePosX.TabIndex = 45;
             this.txtVerticePosX.ValueChanged += new System.EventHandler(this.TxtVerticePosX_ValueChanged);
+            this.txtVerticePosX.Enter += new System.EventHandler(this.TxtVerticePosX_Enter);
             // 
             // label21
             // 
@@ -686,6 +711,7 @@
             this.txtVerticePosY.Size = new System.Drawing.Size(59, 20);
             this.txtVerticePosY.TabIndex = 44;
             this.txtVerticePosY.ValueChanged += new System.EventHandler(this.TxtVerticePosY_ValueChanged);
+            this.txtVerticePosY.Enter += new System.EventHandler(this.TxtVerticePosY_Enter);
             // 
             // txtVerticeAngulo
             // 
@@ -694,6 +720,7 @@
             this.txtVerticeAngulo.Size = new System.Drawing.Size(59, 20);
             this.txtVerticeAngulo.TabIndex = 42;
             this.txtVerticeAngulo.ValueChanged += new System.EventHandler(this.TxtVerticeAngulo_ValueChanged);
+            this.txtVerticeAngulo.Enter += new System.EventHandler(this.TxtVerticeAngulo_Enter);
             // 
             // txtVerticeRaio
             // 
@@ -702,6 +729,7 @@
             this.txtVerticeRaio.Size = new System.Drawing.Size(59, 20);
             this.txtVerticeRaio.TabIndex = 43;
             this.txtVerticeRaio.ValueChanged += new System.EventHandler(this.TxtVerticeRaio_ValueChanged);
+            this.txtVerticeRaio.Enter += new System.EventHandler(this.TxtVerticeRaio_Enter);
             // 
             // groupBox5
             // 
@@ -1595,30 +1623,6 @@
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
-            // chkAutoFocarOrigem
-            // 
-            this.chkAutoFocarOrigem.AutoSize = true;
-            this.chkAutoFocarOrigem.Checked = true;
-            this.chkAutoFocarOrigem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoFocarOrigem.Location = new System.Drawing.Point(55, 42);
-            this.chkAutoFocarOrigem.Name = "chkAutoFocarOrigem";
-            this.chkAutoFocarOrigem.Size = new System.Drawing.Size(72, 17);
-            this.chkAutoFocarOrigem.TabIndex = 43;
-            this.chkAutoFocarOrigem.Text = "Auto foco";
-            this.chkAutoFocarOrigem.UseVisualStyleBackColor = true;
-            // 
-            // chkAutoFocarVertice
-            // 
-            this.chkAutoFocarVertice.AutoSize = true;
-            this.chkAutoFocarVertice.Checked = true;
-            this.chkAutoFocarVertice.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoFocarVertice.Location = new System.Drawing.Point(55, 42);
-            this.chkAutoFocarVertice.Name = "chkAutoFocarVertice";
-            this.chkAutoFocarVertice.Size = new System.Drawing.Size(72, 17);
-            this.chkAutoFocarVertice.TabIndex = 47;
-            this.chkAutoFocarVertice.Text = "Auto foco";
-            this.chkAutoFocarVertice.UseVisualStyleBackColor = true;
-            // 
             // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1638,6 +1642,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmEditor_KeyUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.FrmEditor_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).EndInit();
             this.panel1.ResumeLayout(false);

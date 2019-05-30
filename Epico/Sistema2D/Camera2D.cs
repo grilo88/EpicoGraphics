@@ -145,8 +145,8 @@ namespace Epico.Sistema2D
             }
             else
             {
-                novaPos.X = obj.Pos.X;
-                novaPos.Y = obj.Pos.Y;
+                novaPos.X = obj.Centro.Global.X;
+                novaPos.Y = obj.Centro.Global.Y;
             }
             return novaPos;
         }
