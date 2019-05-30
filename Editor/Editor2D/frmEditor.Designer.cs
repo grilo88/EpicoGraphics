@@ -66,7 +66,7 @@
             this.label24 = new System.Windows.Forms.Label();
             this.tabVetor = new System.Windows.Forms.TabPage();
             this.tabVertice = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnFocarVertice = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -147,6 +147,15 @@
             this.fPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.desligarZoomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.portaDeVisãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resoluçãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x242ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x480ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x600ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoRedimensionarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.esticarQuadroNaTelaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jogosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -157,15 +166,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.resoluçãoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x480ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x600ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoRedimensionarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x242ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.esticarQuadroNaTelaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkAutoFocarOrigem = new System.Windows.Forms.CheckBox();
+            this.chkAutoFocarVertice = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -493,6 +495,7 @@
             // 
             // tabOrigem
             // 
+            this.tabOrigem.Controls.Add(this.chkAutoFocarOrigem);
             this.tabOrigem.Controls.Add(this.label22);
             this.tabOrigem.Controls.Add(this.txtOrigemPosX);
             this.tabOrigem.Controls.Add(this.txtOrigemPosY);
@@ -520,7 +523,7 @@
             // 
             // txtOrigemPosX
             // 
-            this.txtOrigemPosX.Location = new System.Drawing.Point(55, 47);
+            this.txtOrigemPosX.Location = new System.Drawing.Point(55, 74);
             this.txtOrigemPosX.Name = "txtOrigemPosX";
             this.txtOrigemPosX.Size = new System.Drawing.Size(59, 20);
             this.txtOrigemPosX.TabIndex = 40;
@@ -528,7 +531,7 @@
             // 
             // txtOrigemPosY
             // 
-            this.txtOrigemPosY.Location = new System.Drawing.Point(178, 47);
+            this.txtOrigemPosY.Location = new System.Drawing.Point(178, 74);
             this.txtOrigemPosY.Name = "txtOrigemPosY";
             this.txtOrigemPosY.Size = new System.Drawing.Size(59, 20);
             this.txtOrigemPosY.TabIndex = 39;
@@ -537,7 +540,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(127, 49);
+            this.label23.Location = new System.Drawing.Point(127, 76);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(35, 13);
             this.label23.TabIndex = 37;
@@ -565,7 +568,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(6, 49);
+            this.label24.Location = new System.Drawing.Point(6, 76);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(35, 13);
             this.label24.TabIndex = 36;
@@ -584,7 +587,8 @@
             // 
             // tabVertice
             // 
-            this.tabVertice.Controls.Add(this.button4);
+            this.tabVertice.Controls.Add(this.chkAutoFocarVertice);
+            this.tabVertice.Controls.Add(this.btnFocarVertice);
             this.tabVertice.Controls.Add(this.label18);
             this.tabVertice.Controls.Add(this.label17);
             this.tabVertice.Controls.Add(this.label19);
@@ -603,19 +607,20 @@
             this.tabVertice.UseVisualStyleBackColor = true;
             this.tabVertice.Enter += new System.EventHandler(this.TabVertice_Enter);
             // 
-            // button4
+            // btnFocarVertice
             // 
-            this.button4.Location = new System.Drawing.Point(193, 14);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(44, 23);
-            this.button4.TabIndex = 46;
-            this.button4.Text = "Focar";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnFocarVertice.Location = new System.Drawing.Point(193, 14);
+            this.btnFocarVertice.Name = "btnFocarVertice";
+            this.btnFocarVertice.Size = new System.Drawing.Size(44, 23);
+            this.btnFocarVertice.TabIndex = 46;
+            this.btnFocarVertice.Text = "Focar";
+            this.btnFocarVertice.UseVisualStyleBackColor = true;
+            this.btnFocarVertice.Click += new System.EventHandler(this.BtnFocarVertice_Click);
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(6, 49);
+            this.label18.Location = new System.Drawing.Point(6, 76);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(35, 13);
             this.label18.TabIndex = 38;
@@ -633,7 +638,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(127, 49);
+            this.label19.Location = new System.Drawing.Point(127, 76);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(35, 13);
             this.label19.TabIndex = 39;
@@ -651,7 +656,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(6, 75);
+            this.label20.Location = new System.Drawing.Point(6, 102);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(43, 13);
             this.label20.TabIndex = 40;
@@ -659,7 +664,7 @@
             // 
             // txtVerticePosX
             // 
-            this.txtVerticePosX.Location = new System.Drawing.Point(55, 47);
+            this.txtVerticePosX.Location = new System.Drawing.Point(55, 74);
             this.txtVerticePosX.Name = "txtVerticePosX";
             this.txtVerticePosX.Size = new System.Drawing.Size(59, 20);
             this.txtVerticePosX.TabIndex = 45;
@@ -668,7 +673,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(127, 75);
+            this.label21.Location = new System.Drawing.Point(127, 102);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(32, 13);
             this.label21.TabIndex = 41;
@@ -676,7 +681,7 @@
             // 
             // txtVerticePosY
             // 
-            this.txtVerticePosY.Location = new System.Drawing.Point(178, 47);
+            this.txtVerticePosY.Location = new System.Drawing.Point(178, 74);
             this.txtVerticePosY.Name = "txtVerticePosY";
             this.txtVerticePosY.Size = new System.Drawing.Size(59, 20);
             this.txtVerticePosY.TabIndex = 44;
@@ -684,7 +689,7 @@
             // 
             // txtVerticeAngulo
             // 
-            this.txtVerticeAngulo.Location = new System.Drawing.Point(55, 73);
+            this.txtVerticeAngulo.Location = new System.Drawing.Point(55, 100);
             this.txtVerticeAngulo.Name = "txtVerticeAngulo";
             this.txtVerticeAngulo.Size = new System.Drawing.Size(59, 20);
             this.txtVerticeAngulo.TabIndex = 42;
@@ -692,7 +697,7 @@
             // 
             // txtVerticeRaio
             // 
-            this.txtVerticeRaio.Location = new System.Drawing.Point(178, 73);
+            this.txtVerticeRaio.Location = new System.Drawing.Point(178, 100);
             this.txtVerticeRaio.Name = "txtVerticeRaio";
             this.txtVerticeRaio.Size = new System.Drawing.Size(59, 20);
             this.txtVerticeRaio.TabIndex = 43;
@@ -1440,18 +1445,80 @@
             this.portaDeVisãoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.portaDeVisãoToolStripMenuItem.Text = "Tela";
             // 
+            // resoluçãoToolStripMenuItem
+            // 
+            this.resoluçãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x242ToolStripMenuItem,
+            this.x480ToolStripMenuItem,
+            this.xToolStripMenuItem,
+            this.x600ToolStripMenuItem,
+            this.x768ToolStripMenuItem,
+            this.autoRedimensionarToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.esticarQuadroNaTelaToolStripMenuItem});
+            this.resoluçãoToolStripMenuItem.Name = "resoluçãoToolStripMenuItem";
+            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.resoluçãoToolStripMenuItem.Text = "Resolução";
+            // 
+            // x242ToolStripMenuItem
+            // 
+            this.x242ToolStripMenuItem.Name = "x242ToolStripMenuItem";
+            this.x242ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.x242ToolStripMenuItem.Text = "320x242";
+            // 
+            // x480ToolStripMenuItem
+            // 
+            this.x480ToolStripMenuItem.Name = "x480ToolStripMenuItem";
+            this.x480ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.x480ToolStripMenuItem.Text = "640x480";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.xToolStripMenuItem.Text = "720x480";
+            // 
+            // x600ToolStripMenuItem
+            // 
+            this.x600ToolStripMenuItem.Name = "x600ToolStripMenuItem";
+            this.x600ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.x600ToolStripMenuItem.Text = "800x600";
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.x768ToolStripMenuItem.Text = "1024x768";
+            // 
+            // autoRedimensionarToolStripMenuItem
+            // 
+            this.autoRedimensionarToolStripMenuItem.Name = "autoRedimensionarToolStripMenuItem";
+            this.autoRedimensionarToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.autoRedimensionarToolStripMenuItem.Text = "Auto-redimensionar";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(188, 6);
+            // 
+            // esticarQuadroNaTelaToolStripMenuItem
+            // 
+            this.esticarQuadroNaTelaToolStripMenuItem.Name = "esticarQuadroNaTelaToolStripMenuItem";
+            this.esticarQuadroNaTelaToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.esticarQuadroNaTelaToolStripMenuItem.Text = "Esticar Quadro na Tela";
+            // 
             // efeitosToolStripMenuItem
             // 
             this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.multiplicarQuadrosToolStripMenuItem});
             this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
-            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.efeitosToolStripMenuItem.Text = "Efeitos";
             // 
             // multiplicarQuadrosToolStripMenuItem
             // 
             this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
-            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.multiplicarQuadrosToolStripMenuItem.Text = "Motion Blur";
             this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
@@ -1528,67 +1595,29 @@
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
-            // resoluçãoToolStripMenuItem
+            // chkAutoFocarOrigem
             // 
-            this.resoluçãoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x242ToolStripMenuItem,
-            this.x480ToolStripMenuItem,
-            this.xToolStripMenuItem,
-            this.x600ToolStripMenuItem,
-            this.x768ToolStripMenuItem,
-            this.autoRedimensionarToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.esticarQuadroNaTelaToolStripMenuItem});
-            this.resoluçãoToolStripMenuItem.Name = "resoluçãoToolStripMenuItem";
-            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.resoluçãoToolStripMenuItem.Text = "Resolução";
+            this.chkAutoFocarOrigem.AutoSize = true;
+            this.chkAutoFocarOrigem.Checked = true;
+            this.chkAutoFocarOrigem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarOrigem.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarOrigem.Name = "chkAutoFocarOrigem";
+            this.chkAutoFocarOrigem.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarOrigem.TabIndex = 43;
+            this.chkAutoFocarOrigem.Text = "Auto foco";
+            this.chkAutoFocarOrigem.UseVisualStyleBackColor = true;
             // 
-            // x480ToolStripMenuItem
+            // chkAutoFocarVertice
             // 
-            this.x480ToolStripMenuItem.Name = "x480ToolStripMenuItem";
-            this.x480ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x480ToolStripMenuItem.Text = "640x480";
-            // 
-            // x768ToolStripMenuItem
-            // 
-            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
-            this.x768ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x768ToolStripMenuItem.Text = "1024x768";
-            // 
-            // x600ToolStripMenuItem
-            // 
-            this.x600ToolStripMenuItem.Name = "x600ToolStripMenuItem";
-            this.x600ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x600ToolStripMenuItem.Text = "800x600";
-            // 
-            // xToolStripMenuItem
-            // 
-            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
-            this.xToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.xToolStripMenuItem.Text = "720x480";
-            // 
-            // autoRedimensionarToolStripMenuItem
-            // 
-            this.autoRedimensionarToolStripMenuItem.Name = "autoRedimensionarToolStripMenuItem";
-            this.autoRedimensionarToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.autoRedimensionarToolStripMenuItem.Text = "Auto-redimensionar";
-            // 
-            // x242ToolStripMenuItem
-            // 
-            this.x242ToolStripMenuItem.Name = "x242ToolStripMenuItem";
-            this.x242ToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.x242ToolStripMenuItem.Text = "320x242";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(188, 6);
-            // 
-            // esticarQuadroNaTelaToolStripMenuItem
-            // 
-            this.esticarQuadroNaTelaToolStripMenuItem.Name = "esticarQuadroNaTelaToolStripMenuItem";
-            this.esticarQuadroNaTelaToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.esticarQuadroNaTelaToolStripMenuItem.Text = "Esticar Quadro na Tela";
+            this.chkAutoFocarVertice.AutoSize = true;
+            this.chkAutoFocarVertice.Checked = true;
+            this.chkAutoFocarVertice.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutoFocarVertice.Location = new System.Drawing.Point(55, 42);
+            this.chkAutoFocarVertice.Name = "chkAutoFocarVertice";
+            this.chkAutoFocarVertice.Size = new System.Drawing.Size(72, 17);
+            this.chkAutoFocarVertice.TabIndex = 47;
+            this.chkAutoFocarVertice.Text = "Auto foco";
+            this.chkAutoFocarVertice.UseVisualStyleBackColor = true;
             // 
             // frmEditor
             // 
@@ -1755,7 +1784,7 @@
         private System.Windows.Forms.TabPage tabVetor;
         private System.Windows.Forms.TabPage tabVertice;
         private System.Windows.Forms.ToolStripButton toolStripVetor;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnFocarVertice;
         private System.Windows.Forms.Button BtnHexagono;
         private System.Windows.Forms.Button BtnLosango;
         private System.Windows.Forms.Button BtnEstrela;
@@ -1799,6 +1828,8 @@
         private System.Windows.Forms.ToolStripMenuItem autoRedimensionarToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem esticarQuadroNaTelaToolStripMenuItem;
+        private System.Windows.Forms.CheckBox chkAutoFocarOrigem;
+        private System.Windows.Forms.CheckBox chkAutoFocarVertice;
     }
 }
 

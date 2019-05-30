@@ -29,6 +29,7 @@ namespace Editor2D
         const int _raio_padrao = 50;
         Vetor2 NovaPosCamera = new Vetor2();
         Vetor3 NovoAnguloCamera = new Vetor3();
+        float NovoZoomCamera = 1;
 
         EpicoGraphics  _epico = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
@@ -103,6 +104,7 @@ namespace Editor2D
             #region  Loop principal de rotinas do simulador 2D
             bool lerpAngCamCompletado;
             bool lerpPosCamCompletado;
+            bool lerpZoomCamCompletado;
 
             while (!_sair)
             {
@@ -128,7 +130,16 @@ namespace Editor2D
 
                 if (lerpAngCamCompletado)
                 {
-                    _epico.Camera.Angulo = new Vetor3(NovoAnguloCamera);
+                    propGrid.Refresh();
+                }
+                #endregion
+
+                #region Efeito suave no Zoom da câmera
+                _epico.Camera.ZoomCamera = Eixos.Lerp(
+                    _epico.Camera.ZoomCamera, NovoZoomCamera, 1F * _epico.Camera.TempoDelta * 0.000001F, out lerpZoomCamCompletado);
+
+                if (lerpZoomCamCompletado)
+                {
                     propGrid.Refresh();
                 }
                 #endregion
@@ -139,12 +150,11 @@ namespace Editor2D
 
                 if (lerpPosCamCompletado)
                 {
-                    _epico.Camera.Pos = new Vetor2(NovaPosCamera);
                     propGrid.Refresh();
                 }
                 #endregion
 
-                #region Reajuste no tamanho da tela
+                #region Reajuste na resolução da tela
                 if (_epico.Camera.ResWidth != picScreen.ClientRectangle.Width ||
                     _epico.Camera.ResHeight != picScreen.ClientRectangle.Height)
                 {
@@ -469,8 +479,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamPosX.Text, out float camPosX))
                 {
-                    _epico.Camera.Pos.X = camPosX;
-                    propGrid.Refresh();
+                    NovaPosCamera.X = camPosX;
                 }
             }
         }
@@ -481,8 +490,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamPosY.Text, out float camPosY))
                 {
-                    _epico.Camera.Pos.Y = camPosY;
-                    propGrid.Refresh();
+                    NovaPosCamera.Y = camPosY;
                 }
             }
         }
@@ -554,7 +562,6 @@ namespace Editor2D
             if (cboObjeto2D.SelectedValue != null)
             {
                 NovaPosCamera = _epico.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
-                //_engine.Camera.Focar((Objeto2D)cboObjeto2D.SelectedValue);
             }
         }
 
@@ -714,7 +721,7 @@ namespace Editor2D
                     // Desenha o retângulo multi-seleção na tela
                     e.Graphics.FillRectangle(selBrush, selRect);
 
-                    #region Retângulo de colisão para o mundo 2D
+                    #region Retângulo de colisão no ambiente 2D
                     Vertice2[] rect = new Vertice2[4];
                     rect[0] = new Vertice2(selRect.X, selRect.Y);                                      // Superior Esquerdo
                     rect[1] = new Vertice2(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
@@ -730,9 +737,9 @@ namespace Editor2D
                         _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
-                        var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
+                        //var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
                         e.Graphics.DrawString(
-                            $"{tmp.Count()} objetos", new Font("Lucida Console", 10),
+                            $"{_obj_sel.Count()} objetos", new Font("Lucida Console", 10),
                             new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
                             new RectangleF(selRect.Location, selRect.Size),
                             new StringFormat(StringFormatFlags.NoWrap));
@@ -793,8 +800,7 @@ namespace Editor2D
             {
                 if (float.TryParse(txtCamZoom.Text, out float camZoom))
                 {
-                    _epico.Camera.DefinirZoom(camZoom);
-                    propGrid.Refresh();
+                    NovoZoomCamera = camZoom;
                 }
             }
         }
@@ -852,6 +858,9 @@ namespace Editor2D
                 _vertice_sel.Add((Vertice2)cboVertices.SelectedValue);
                 if (toolStripVertice.Checked) _vertice_sel.First().Sel = true;
                 AtualizarControlesVertice(_vertice_sel);
+
+                if (chkAutoFocarVertice.Checked)
+                    BtnFocarVertice_Click(sender, e);
             }
         }
 
@@ -1067,6 +1076,9 @@ namespace Editor2D
                 _origem_sel.Add((Origem2)cboOrigem.SelectedValue);
                 if (toolStripOrigem.Checked) _origem_sel.First().Sel = true;
                 AtualizarControlesPontoCentro(_origem_sel);
+
+                if (chkAutoFocarOrigem.Checked)
+                    BtnFocarOrigem_Click(sender, e);
             }
         }
 
@@ -1086,6 +1098,8 @@ namespace Editor2D
                     txtOrigemPosX.Text = selecionados.First().X.ToString();
                     txtOrigemPosY.Text = selecionados.First().Y.ToString();
                     propGrid.SelectedObject = selecionados.First();
+
+
                 }
                 else // Muitos objetos selecionados?
                 {
@@ -1124,7 +1138,8 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                _epico.Camera.Focar((Origem2)cboOrigem.SelectedValue);
+                NovaPosCamera = _epico.Camera.PosFoco((Origem2)cboOrigem.SelectedValue);
+                //_epico.Camera.Focar((Origem2)cboOrigem.SelectedValue);
             }
         }
 
@@ -1173,8 +1188,6 @@ namespace Editor2D
                 if (float.TryParse(txtCamAngulo.Text, out float ang))
                 {
                     NovoAnguloCamera.Z = ang;
-                    //_engine.Camera.Angulo.Z = ang;
-                    //propGrid.Refresh();
                 }
             }
         }
@@ -1391,6 +1404,14 @@ namespace Editor2D
                     engine.Camera.Focar(person);
                 }
             });
+        }
+
+        private void BtnFocarVertice_Click(object sender, EventArgs e)
+        {
+            if (cboVertices.SelectedValue != null)
+            {
+                NovaPosCamera = _epico.Camera.PosFoco((Vertice2)cboVertices.SelectedValue);
+            }
         }
     }
 }

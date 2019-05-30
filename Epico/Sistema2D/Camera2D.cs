@@ -45,6 +45,7 @@ namespace Epico.Sistema2D
 
         #region Propriedades
         public int FPS { get; private set; }
+        public int ObjetosVisiveis { get; private set; }
         private int _maxFPS { get; set; } = 60;
         private float _tickMaxFPS { get; set; }
         /// <summary>Tempo de atraso entre uma renderização e outra.</summary>
@@ -124,22 +125,6 @@ namespace Epico.Sistema2D
         }
 
         /// <summary>
-        /// Incrementa o Zoom
-        /// </summary>
-        public void Zoom(float valor)
-        {
-            this.ZoomCamera += valor;
-        }
-
-        /// <summary>
-        /// Define o Zoom da Câmera
-        /// </summary>
-        public void DefinirZoom(float zoom)
-        {
-            ZoomCamera = zoom;
-        }
-
-        /// <summary>
         /// Centraliza a camera no objeto
         /// </summary>
         /// <param name="obj"></param>
@@ -151,8 +136,10 @@ namespace Epico.Sistema2D
         public Vetor2 PosFoco(Objeto2D obj)
         {
             Vetor2 novaPos = (Vetor2)obj.Pos.NovaInstancia();
+            novaPos.Obj = obj;
+
             if (obj is Controle2D)
-            {
+            {     
                 novaPos.X = obj.Pos.X + ((Controle2D)obj).Width / 2;
                 novaPos.Y = obj.Pos.Y + ((Controle2D)obj).Height / 2;
             }
@@ -164,14 +151,22 @@ namespace Epico.Sistema2D
             return novaPos;
         }
 
-        public void Focar(Eixos2 xy)
+        public Vetor2 PosFoco(Eixos2 pos)
         {
-            Pos.X = xy.X;
-            Pos.Y = xy.Y;
-        }
+            Vetor2 novaPos = new Vetor2(pos.Obj);
 
-        public void Focar(Origem2 c) => Pos = new Vetor2(c.Global.X, c.Global.Y);
-        public void Focar(Vertice2 v) => Pos = new Vetor2(v.Global.X, v.Global.Y);
+            if (pos is Origem2 || pos is Vertice2)
+            {
+                novaPos.X = pos.Global.X;
+                novaPos.Y = pos.Global.Y;
+            }
+            else
+            {
+                novaPos.X = pos.X;
+                novaPos.Y = pos.Y;
+            }
+            return novaPos;
+        }
 
 #region Atributos de otimização do Renderizador
         PointF pontoA = new PointF();
@@ -196,6 +191,8 @@ namespace Epico.Sistema2D
             TempoDelta = DateTime.Now.Ticks - _tickRender; // Calcula o tempo delta (tempo de atraso)
             _tickRender = DateTime.Now.Ticks;
 
+            ObjetosVisiveis = 0;
+
             if (ResWidth > 0 && ResHeight > 0) // Janela não minimizada?
             {
                 if (EfeitoQuadroDuplicado)
@@ -212,45 +209,45 @@ namespace Epico.Sistema2D
                     {
                         Objeto2DRenderizar objProjecao = (Objeto2DRenderizar)obj.Clone();
 
-#region Calcula o ZOOM da câmera
-                        if (!DesligarSistemaZoom)
-                        {
-                            Objeto2D objZoom = ZoomEscalaObjeto2D(objProjecao, ZoomCamera);
-                            Objeto2D objPosZoom = ZoomPosObjeto2D(objProjecao, ZoomCamera);
-                            objZoom.Pos = objPosZoom.Pos;
-                        }
-                        #endregion
-
-                        #region Aplica ângulo na câmera
+                        #region Aplica zoom e ângulo na câmera
+                        Vetor2 PosCam = new Vetor2(Pos);
+                        Vetor2 PosCamZoomDiff = new Vetor2();
+                        PosCamZoomDiff = Pos * ZoomCamera - Pos;
+                        
                         for (int v = 0; v < objProjecao.Vertices.Count(); v++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                objProjecao.Vertices[v].Global.X,
-                                objProjecao.Vertices[v].Global.Y);
-                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
-                            objProjecao.Vertices[v].X = xy.X - objProjecao.Pos.X;
-                            objProjecao.Vertices[v].Y = xy.Y - objProjecao.Pos.Y;
+                                objProjecao.Vertices[v].Global.X * ZoomCamera,
+                                objProjecao.Vertices[v].Global.Y * ZoomCamera);
+                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * ZoomCamera, globalPos, -Angulo.Z);
+                            objProjecao.Vertices[v].X = rot.X - objProjecao.Pos.X;
+                            objProjecao.Vertices[v].Y = rot.Y - objProjecao.Pos.Y;
                         }
                         for (int c = 0; c < objProjecao.Origens.Count(); c++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                objProjecao.Origens[c].Global.X,
-                                objProjecao.Origens[c].Global.Y);
-                            Eixos2 xy = Util2D.RotacionarPonto2D(Pos, globalPos, -Angulo.Z);
-                            objProjecao.Origens[c].X = xy.X - objProjecao.Pos.X;
-                            objProjecao.Origens[c].Y = xy.Y - objProjecao.Pos.Y;
+                                objProjecao.Origens[c].Global.X * ZoomCamera,
+                                objProjecao.Origens[c].Global.Y * ZoomCamera);
+                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * ZoomCamera, globalPos, -Angulo.Z);
+                            objProjecao.Origens[c].X = rot.X - objProjecao.Pos.X;
+                            objProjecao.Origens[c].Y = rot.Y - objProjecao.Pos.Y;
                         }
-                        #endregion
                         objProjecao.AtualizarMinMax();
+                        
+                        #endregion
 
                         if (Objeto2DVisivelCamera(obj))
                         {
+                            ObjetosVisiveis++;
+
                             if (objProjecao.Mat_render.CorSolida.A > 0) // Pinta objeto materialmente visível
                             {
                                 GraphicsPath preenche = new GraphicsPath();
-                                preenche.AddLines(objProjecao.Vertices.AsEnumerable().Select(ponto => new PointF(
-                                    -Left + ponto.Global.X,
-                                    -Top + ponto.Global.Y)).ToArray());
+                                preenche.AddLines(objProjecao.Vertices.AsEnumerable()
+                                    .Select(ponto => new PointF(
+                                    -Left + ponto.Global.X - PosCamZoomDiff.X,
+                                    -Top + ponto.Global.Y - PosCamZoomDiff.Y
+                                    )).ToArray());
                                 g.FillPath(new SolidBrush(Color.FromArgb(objProjecao.Mat_render.CorSolida.A, objProjecao.Mat_render.CorSolida.R, objProjecao.Mat_render.CorSolida.G, objProjecao.Mat_render.CorSolida.B)), preenche);
                             }
 
@@ -267,9 +264,9 @@ namespace Epico.Sistema2D
                                 Pen pen = new Pen(new SolidBrush(Color.FromArgb(mat.CorBorda.A, mat.CorBorda.R, mat.CorBorda.G, mat.CorBorda.B)));
 
 #if Editor2D
-                                pen.Width = mat.LarguraBorda;
+                                pen.Width = mat.LarguraBorda * ZoomCamera;
 #elif EtoForms
-                                pen.Thickness = mat.LarguraBorda;
+                                pen.Thickness = mat.LarguraBorda * ZoomCamera;
 #endif
                                 for (int v = 1; v < objProjecao.Vertices.Count() + 1; v++)
                                 {
@@ -286,35 +283,36 @@ namespace Epico.Sistema2D
                                     }
 
                                     // Desenha as linhas entre as vértices na câmera
-                                    pontoA.X = -Left + v1.Global.X;
-                                    pontoA.Y = -Top + v1.Global.Y;
-                                    pontoB.X = -Left + v2.Global.X;
-                                    pontoB.Y = -Top + v2.Global.Y;
+                                    pontoA.X = -Left - PosCamZoomDiff.X + v1.Global.X;
+                                    pontoA.Y = -Top - PosCamZoomDiff.Y + v1.Global.Y;
+                                    pontoB.X = -Left - PosCamZoomDiff.X + v2.Global.X;
+                                    pontoB.Y = -Top - PosCamZoomDiff.Y + v2.Global.Y;
 
                                     g.DrawLine(pen, pontoA, pontoB);
                                 }
                             }
 
+                            // Exibe as vértices do objeto
                             for (int v = 0; v < objProjecao.Vertices.Count; v++)
                             {
                                 if (objProjecao.Vertices[v].Sel)
                                 {
                                     float width = 5;
-                                    float x = -Left + objProjecao.Vertices[v].Global.X;
-                                    float y = -Top + objProjecao.Vertices[v].Global.Y;
+                                    float x = -Left - PosCamZoomDiff.X + objProjecao.Vertices[v].Global.X;
+                                    float y = -Top - PosCamZoomDiff.Y + objProjecao.Vertices[v].Global.Y;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 0, 0) /*Vermelho*/), rect);
                                 }
                             }
 
-                            // Exibe o(s) ponto(s) de origem do objeto
+                            // Exibe os pontos de origem do objeto
                             for (int c = 0; c < objProjecao.Origens.Count; c++)
                             {
                                 if (objProjecao.Origens[c].Sel)
                                 {
                                     float width = 5;
-                                    float x = -Left + objProjecao.Origens[c].Global.X;
-                                    float y = -Top + objProjecao.Origens[c].Global.Y;
+                                    float x = -Left - PosCamZoomDiff.X + objProjecao.Origens[c].Global.X;
+                                    float y = -Top - PosCamZoomDiff.Y + objProjecao.Origens[c].Global.Y;
                                     RectangleF rect = new RectangleF(x - width / 2, y - width / 2, width, width);
                                     g.FillEllipse(new SolidBrush(Color.FromArgb(255, 255, 255, 0) /*Amarelo*/), rect);
                                 }
@@ -362,6 +360,10 @@ namespace Epico.Sistema2D
 #if Editor2D
                     g.DrawString(Nome.ToUpper(), font_debug, font_debug_color, new PointF(10, 10));
                     g.DrawString("FPS: " + FPS, font_debug, font_debug_color, new PointF(10, 30));
+
+                    string legenda = "Objetos visíveis: " + ObjetosVisiveis;
+                    SizeF tam = g.MeasureString(legenda, font_debug);
+                    g.DrawString(legenda, font_debug, font_debug_color, new PointF(ResWidth - tam.Width - 10, 10));
 #elif EtoForms
                     g.DrawText(font_debug, font_debug_color, new PointF(10, 10), Nome.ToUpper());
                     g.DrawText(font_debug, font_debug_color, new PointF(10, 30), "FPS: " + FPS);
@@ -397,52 +399,35 @@ namespace Epico.Sistema2D
         /// <returns></returns>
         public bool Objeto2DVisivelCamera(Objeto2D obj)
         {
+#error Corrigir este método devido o zoom da câmera
+            Vetor2 PosCam = new Vetor2(Pos);
+            PosCam *= ZoomCamera;
+
+            Vetor2 PosCamZoomDiff = new Vetor2();
+            PosCamZoomDiff = Pos * ZoomCamera - Pos;
+
+            float Left = (PosCam.X - ((ResWidth * -ZoomCamera) / 2))  ;
+            float Right = (PosCam.X + ((ResWidth * -ZoomCamera) / 2)) ;
+            float Top = (PosCam.Y - ((ResHeight *- ZoomCamera) / 2)) ;
+            float Bottom = (PosCam.Y + ((ResHeight * -ZoomCamera) / 2)) ;
+
+            //Vetor2 globalPos = new Vetor2(
+            //                    objProjecao.Vertices[v].Global.X * ZoomCamera,
+            //                    objProjecao.Vertices[v].Global.Y * ZoomCamera);
+
             Vertice2[] rectCam = new Vertice2[4];
-            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
-            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
-            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
-            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(Left, Bottom), Angulo.Z));       // Inferior Esquerda
+            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
+            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
+            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
+            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Bottom), Angulo.Z));
+
+            //rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
+            //rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
+            //rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
+            //rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Bottom), Angulo.Z));       // Inferior Esquerda
 
             return Util2D.IntersecaoEntrePoligonos(rectCam, 
                 obj.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
-        }
-
-        /// <summary>
-        /// Trabalha o Zoom orientado a escala do objeto
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="zoom"></param>
-        /// <returns></returns>
-        private Objeto2D ZoomEscalaObjeto2D(Objeto2D obj, float zoom)
-        {
-#warning Falhas nesta lógica
-            for (int i = 0; i < obj.Vertices.Count; i++)
-            {
-                obj.Vertices[i].X = (float)(Math.Sin(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo.Z)) * obj.Vertices[i].Raio * zoom);
-                obj.Vertices[i].Y = (float)(Math.Cos(obj.Vertices[i].Rad + Util2D.Angulo2Radiano(obj.Angulo.Z)) * obj.Vertices[i].Raio * zoom);
-            }
-            obj.AtualizarMinMax();
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Trabalha o Zoom orientado a posição do objeto em relação ao centro da camera
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="zoom"></param>
-        /// <returns></returns>
-        private Objeto2D ZoomPosObjeto2D(Objeto2D obj, float zoom)
-        {
-#warning Falhas nesta lógica
-            // TODO: Precisa rever este conceito. Há erro no cálculo!
-
-            float radZoom = Util2D.Angulo2Radiano(Util2D.AnguloEntreDoisPontos(Pos, obj.Pos));
-            float distZoom = (Util2D.DistanciaEntreDoisPontos(Pos, obj.Pos) * zoom);
-            obj.Pos.X += (float)(Math.Cos(radZoom) * distZoom);
-            obj.Pos.Y += (float)(Math.Sin(radZoom) * distZoom);
-            
-            return obj;
         }
 
         #region IDisposable Support

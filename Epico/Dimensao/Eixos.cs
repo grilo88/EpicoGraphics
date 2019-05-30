@@ -87,6 +87,16 @@ namespace Epico
             return (T)this;
         }
 
+        public static float Lerp(float origem, float destino, float distancia)
+        {
+            return Lerp(new Vetor2(origem, 0), new Vetor2(destino, 0), distancia).X;
+        }
+
+        public static float Lerp(float origem, float destino, float distancia, out bool completado)
+        {
+            return Lerp(new Vetor2(origem, 0), new Vetor2(destino, 0), distancia, out completado).X;
+        }
+
         /// <summary>
         /// Interpolação Linear
         /// </summary>
@@ -134,7 +144,7 @@ namespace Epico
             return ret;
         }
 
-        public static float Arredondar(float valor, int casasDecimais = 1)
+        public static float Arredondar(float valor, int casasDecimais = 3)
         {
             float mult = 1;
             for (int i = 0; i < casasDecimais; i++) mult *= 0.1F;

@@ -32,24 +32,26 @@ namespace Epico.Sistema
         public Vetor2 Min { get; set; }
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Extremidades")]
-        public Vetor2 Max { get; set; }
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        [Category("Extremidades")]
-        public Vetor2 GlobalMin {
-            get
-            {
-                return new Vetor2(Pos.X + Min.X, Pos.Y + Min.Y);
-            }
-        }
+        public Vetor2 Max { get;
 
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        [Category("Extremidades")]
-        public Vetor2 GlobalMax {
-            get
-            {
-                return new Vetor2(Pos.X + Max.X, Pos.Y + Max.Y);
-            }
-        }
+            set; }
+        //[TypeConverter(typeof(ExpandableObjectConverter))]
+        //[Category("Extremidades")]
+        //public Vetor2 GlobalMin {
+        //    get
+        //    {
+        //        return new Vetor2(Pos.X + Min.X, Pos.Y + Min.Y);
+        //    }
+        //}
+
+        //[TypeConverter(typeof(ExpandableObjectConverter))]
+        //[Category("Extremidades")]
+        //public Vetor2 GlobalMax {
+        //    get
+        //    {
+        //        return new Vetor2(Pos.X + Max.X, Pos.Y + Max.Y);
+        //    }
+        //}
 
         [Category("Ordenação")]
         [Description("Ordenação de objetos no espaço 2D. Objetos com Ordem Z maiores são renderizados por último deixando-os na frente dos objetos na Ordem Z menores que ele.")]
@@ -238,6 +240,7 @@ namespace Epico.Sistema
         {
             Objeto2D clone = (Objeto2D)MemberwiseClone();
 
+            clone.Pos = new Vetor2(clone.Pos);
             // Cria novas instâncias para os elementos
             clone.Vertices = Vertices
                 .Select(v => new Vertice2(this, v.X, v.Y)
