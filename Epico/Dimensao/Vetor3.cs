@@ -13,7 +13,7 @@ namespace Epico
     public class Vetor3 : Eixos3
     {
         public Vetor3() : base() { }
-        public Vetor3(Vetor3 vetor) : base(vetor) { }
+        public Vetor3(Eixos3 vetor) : base(vetor) { }
         public Vetor3(ObjetoEpico Obj) : base(Obj) { }
         public Vetor3(ObjetoEpico Obj, Vetor3 vetor) : base(Obj, vetor) { }
         public Vetor3(float X, float Y, float Z) : base(X, Y, Z) { }

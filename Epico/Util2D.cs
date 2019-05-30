@@ -17,8 +17,10 @@ namespace Epico
 {
     public static class Util2D
     {
-        public static float DistanciaEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => DistanciaEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
-        public static float AnguloEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => AnguloEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
+        public static float DistanciaEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => 
+            DistanciaEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
+        public static float AnguloEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => 
+            AnguloEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
 
         public static float DistanciaEntreDoisPontos(float x1, float y1, float x2, float y2)
         {
@@ -40,7 +42,8 @@ namespace Epico
         /// <param name="p">Ponto a ser rotacionado</param>
         /// <param name="graus">Diferença de ângulos no caso de rotação ou soma dos ângulo no caso de acoplamento de objetos.</param>
         /// <returns></returns>
-        public static Eixos2 RotacionarPonto2D(Eixos2 origem, Eixos2 ponto, float graus) => RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, graus);
+        public static Eixos2 RotacionarPonto2D(Eixos2 origem, Eixos2 ponto, float graus) => 
+            RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, graus);
 
         /// <summary>
         /// Rotaciona um ponto 2D a partir de um ponto de origem
@@ -62,18 +65,19 @@ namespace Epico
         /// </summary>
         /// <param name="cam"></param>
         /// <param name="posTela"></param>
-        /// <returns></returns>
+        /// <returns>Retorna ponto 2d pela coordenada X e Y da tela</returns>
         public static Eixos2 ObterPosEspaco2DPelaTela(
             this Camera2D cam, Eixos2 posTela)
         {
-            var camTop = cam.Pos.Y - (cam.ResHeight / 2);
-            var camLeft = cam.Pos.X - (cam.ResWidth / 2);
+            Vetor2 PosCamZoomDiff = new Vetor2();
+            PosCamZoomDiff = cam.Pos * cam.ZoomCamera - cam.Pos;
 
-            float x = camLeft + posTela.X;
-            float y = camTop + posTela.Y;
+            float x = cam.Left + posTela.X + PosCamZoomDiff.X;
+            float y = cam.Top + posTela.Y + PosCamZoomDiff.Y;
 
-            Eixos2 novoEixo = Util2D.RotacionarPonto2D(cam.Pos, new Vetor2(x, y), cam.Angulo.Z);
-            return novoEixo;
+            Vetor2 ponto = new Vetor2(x / cam.ZoomCamera, y / cam.ZoomCamera); // Reduz escala para tamanho real em 2D
+            Eixos2 ponto2D = Util2D.RotacionarPonto2D(cam.Pos, ponto, cam.Angulo.Z); // Rotaciona ponto no tamanho real
+            return ponto2D;
         }
 
         /// <summary>
@@ -126,16 +130,16 @@ namespace Epico
             return null;
         }
 
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(
+        public static IEnumerable<Objeto2D> ObterObjetos2DMouseXY(
             this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
         {
 
-            return ObterObjetos2DPelaTela(engine, camera, new Vertice2(ponto.X, ponto.Y));
+            return ObterObjetos2DMouseXY(engine, camera, new Vertice2(ponto.X, ponto.Y));
         }
 
-        public static Objeto2D ObterUnicoObjeto2DPelaTela(this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
+        public static Objeto2D ObterUnicoObjeto2DMouseXY(this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
         {
-            return ObterObjetos2DPelaTela(engine, camera, ponto).LastOrDefault();
+            return ObterObjetos2DMouseXY(engine, camera, ponto).LastOrDefault();
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace Epico
         /// <param name="cam"></param>
         /// <param name="verticesTela"></param>
         /// <returns></returns>
-        public static IEnumerable<Objeto2D> ObterObjetos2DPelaTela(this EpicoGraphics engine, Camera2D cam, params Vertice2[] verticesTela)
+        public static IEnumerable<Objeto2D> ObterObjetos2DMouseXY(this EpicoGraphics engine, Camera2D cam, params Vertice2[] verticesTela)
         {
             for (int i = 0; i < verticesTela.Length; i++)
             {

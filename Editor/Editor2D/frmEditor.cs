@@ -729,11 +729,13 @@ namespace Editor2D
                     rect[3] = new Vertice2(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
                     #endregion
 
+                    
+
                     if (toolStripSelecao.Checked)
                     {
                         _obj_sel.ForEach(x => x.Selecionado = false);
                         _obj_sel.Clear();
-                        _obj_sel = _epico.ObterObjetos2DPelaTela(_epico.Camera, rect).ToList();
+                        _obj_sel = _epico.ObterObjetos2DMouseXY(_epico.Camera, rect).ToList();
                         _obj_sel.ForEach(x => x.Selecionado = true);
 
                         // Informa a quantidade de objetos presentes na área do retângulo
@@ -895,7 +897,7 @@ namespace Editor2D
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
                         _obj_sel.ForEach(x => x.Selecionado = false);
-                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DPelaTela(_epico, _epico.Camera, new Vetor2(selStart.X, selStart.Y));
+                        Objeto2D objSel = Util2D.ObterUnicoObjeto2DMouseXY(_epico, _epico.Camera, new Vetor2(selStart.X, selStart.Y));
                         _obj_sel = new List<Objeto2D>();
                         if (objSel != null) _obj_sel.Add(objSel);
                     }
@@ -1322,7 +1324,7 @@ namespace Editor2D
         private void MultiplicarQuadrosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             multiplicarQuadrosToolStripMenuItem.Checked = !multiplicarQuadrosToolStripMenuItem.Checked;
-            _epico.Camera.EfeitoQuadroDuplicado = multiplicarQuadrosToolStripMenuItem.Checked;
+            _epico.Camera.EfeitoMotionBlur = multiplicarQuadrosToolStripMenuItem.Checked;
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)

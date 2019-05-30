@@ -60,7 +60,7 @@ namespace Epico.Sistema2D
         public float Top => Pos.Y - ResHeight / 2;
         public float Bottom => Pos.Y + ResHeight / 2;
 
-        public bool EfeitoQuadroDuplicado { get; set; }
+        public bool EfeitoMotionBlur { get; set; }
         #endregion
 
         public Camera2D(EpicoGraphics epico, int width, int height)
@@ -195,7 +195,7 @@ namespace Epico.Sistema2D
 
             if (ResWidth > 0 && ResHeight > 0) // Janela não minimizada?
             {
-                if (EfeitoQuadroDuplicado)
+                if (EfeitoMotionBlur)
                     g.FillRectangle(new SolidBrush(Color.FromArgb(50, 0, 0, 0)), new Rectangle(0, 0, ResWidth, ResHeight));
                 else
                     g.Clear(Color.FromArgb(255, 0, 0, 0) /*Preto*/);
@@ -233,7 +233,6 @@ namespace Epico.Sistema2D
                             objProjecao.Origens[c].Y = rot.Y - objProjecao.Pos.Y;
                         }
                         objProjecao.AtualizarMinMax();
-                        
                         #endregion
 
                         if (Objeto2DVisivelCamera(obj))
@@ -399,34 +398,20 @@ namespace Epico.Sistema2D
         /// <returns></returns>
         public bool Objeto2DVisivelCamera(Objeto2D obj)
         {
-#error Corrigir este método devido o zoom da câmera
-            Vetor2 PosCam = new Vetor2(Pos);
-            PosCam *= ZoomCamera;
-
-            Vetor2 PosCamZoomDiff = new Vetor2();
-            PosCamZoomDiff = Pos * ZoomCamera - Pos;
-
-            float Left = (PosCam.X - ((ResWidth * -ZoomCamera) / 2))  ;
-            float Right = (PosCam.X + ((ResWidth * -ZoomCamera) / 2)) ;
-            float Top = (PosCam.Y - ((ResHeight *- ZoomCamera) / 2)) ;
-            float Bottom = (PosCam.Y + ((ResHeight * -ZoomCamera) / 2)) ;
-
-            //Vetor2 globalPos = new Vetor2(
-            //                    objProjecao.Vertices[v].Global.X * ZoomCamera,
-            //                    objProjecao.Vertices[v].Global.Y * ZoomCamera);
-
             Vertice2[] rectCam = new Vertice2[4];
-            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
-            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
-            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
-            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Bottom), Angulo.Z));
 
-            //rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Top), Angulo.Z));          // Superior Esquerda
-            //rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Top), Angulo.Z));         // Superior Direita
-            //rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Right, Bottom), Angulo.Z));      // Inferior Direita
-            //rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(PosCam, new Vetor2(Left, Bottom), Angulo.Z));       // Inferior Esquerda
+            // Inverte escala no tamanho de projeção da tela (Menos zoom = maior tamanho de projeção)
+            float ProjLeft = Pos.X - (ResWidth / ZoomCamera) / 2; 
+            float ProjRight = Pos.X + (ResWidth / ZoomCamera) / 2;
+            float ProjTop = Pos.Y - (ResHeight / ZoomCamera) / 2;
+            float ProjBottom = Pos.Y + (ResHeight / ZoomCamera) / 2;
 
-            return Util2D.IntersecaoEntrePoligonos(rectCam, 
+            rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjLeft, ProjTop), Angulo.Z));          // Superior Esquerda
+            rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjRight, ProjTop), Angulo.Z));         // Superior Direita
+            rectCam[2] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjRight, ProjBottom), Angulo.Z));      // Inferior Direita
+            rectCam[3] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjLeft, ProjBottom), Angulo.Z));
+
+            return Util2D.IntersecaoEntrePoligonos(rectCam,
                 obj.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
         }
 

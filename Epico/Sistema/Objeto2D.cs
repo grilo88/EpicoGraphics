@@ -32,9 +32,8 @@ namespace Epico.Sistema
         public Vetor2 Min { get; set; }
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Extremidades")]
-        public Vetor2 Max { get;
+        public Vetor2 Max { get; set; }
 
-            set; }
         //[TypeConverter(typeof(ExpandableObjectConverter))]
         //[Category("Extremidades")]
         //public Vetor2 GlobalMin {
@@ -144,10 +143,10 @@ namespace Epico.Sistema
             for (int i = 0; i < Vertices.Count; i++)
             {
                 Vertices[i].Raio += Vertices[i].Raio * percentual / 100;
-
+                Vertices[i].X = (float)Math.Cos(Vertices[i].Rad) * Vertices[i].Raio;
+                Vertices[i].Y = (float)Math.Sin(Vertices[i].Rad) * Vertices[i].Raio;
             }
             Raio = raio;
-            AtualizarGeometria(Angulo);
             CriarArestasConvexa();
         }
 
@@ -178,7 +177,10 @@ namespace Epico.Sistema
 
         public void AdicionarVertice(Vertice2 vertice)
         {
+            vertice.Raio = Util2D.DistanciaEntreDoisPontos(new Vetor2(0, 0), vertice);
+            vertice.Rad = Util2D.Angulo2Radiano(Util2D.AnguloEntreDoisPontos(new Vetor2(0, 0), vertice));
             Vertices.Add(vertice);
+            Raio = Vertices.Max(x => x.Raio);
             AtualizarMinMax();
         }
 
