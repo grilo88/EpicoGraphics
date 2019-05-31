@@ -135,12 +135,6 @@
             this.toolStripOrigem = new System.Windows.Forms.ToolStripButton();
             this.toolStripVetor = new System.Windows.Forms.ToolStripButton();
             this.toolStripVertice = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMove = new System.Windows.Forms.ToolStripButton();
-            this.toolStripAngulo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripRaio = new System.Windows.Forms.ToolStripButton();
-            this.toolStripEscala = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tmrObjeto2D = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.telaInteiraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,6 +162,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
+            this.toolStripOrientacao = new System.Windows.Forms.ToolStrip();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.toolStripTransformacao = new System.Windows.Forms.ToolStrip();
+            this.toolStripMove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripAngulo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripRaio = new System.Windows.Forms.ToolStripButton();
+            this.toolStripEscala = new System.Windows.Forms.ToolStripButton();
+            this.toolStripOrientacaoEspacial = new System.Windows.Forms.ToolStripButton();
+            this.toolStripOrientacaoObjeto = new System.Windows.Forms.ToolStripButton();
+            this.toolStripOrientacaoCamera = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -205,6 +209,11 @@
             this.menuStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.toolStripOrientacao.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
+            this.toolStripTransformacao.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnTriangulo
@@ -252,9 +261,9 @@
             this.picScreen.BackColor = System.Drawing.Color.White;
             this.picScreen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picScreen.Location = new System.Drawing.Point(0, 25);
+            this.picScreen.Location = new System.Drawing.Point(0, 0);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(312, 597);
+            this.picScreen.Size = new System.Drawing.Size(315, 622);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
@@ -290,7 +299,7 @@
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.groupCamera);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 49);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(294, 622);
             this.panel1.TabIndex = 0;
@@ -1274,31 +1283,26 @@
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propGrid.Location = new System.Drawing.Point(312, 0);
+            this.propGrid.Location = new System.Drawing.Point(318, 0);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(272, 622);
+            this.propGrid.Size = new System.Drawing.Size(266, 622);
             this.propGrid.TabIndex = 4;
             this.propGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropGrid_PropertyValueChanged);
             this.propGrid.SelectedObjectsChanged += new System.EventHandler(this.PropGrid_SelectedObjectsChanged);
             // 
             // toolStrip1
             // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSelecao,
             this.toolStripOrigem,
             this.toolStripVetor,
-            this.toolStripVertice,
-            this.toolStripSeparator1,
-            this.toolStripMove,
-            this.toolStripAngulo,
-            this.toolStripRaio,
-            this.toolStripEscala,
-            this.toolStripButton1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripVertice});
+            this.toolStrip1.Location = new System.Drawing.Point(73, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(312, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(104, 25);
             this.toolStrip1.TabIndex = 3;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Text = "toolStripSelecao";
             // 
             // toolStripSelecao
             // 
@@ -1344,65 +1348,6 @@
             this.toolStripVertice.ToolTipText = "Vértice";
             this.toolStripVertice.Click += new System.EventHandler(this.ToolStripVertice_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripMove
-            // 
-            this.toolStripMove.Checked = true;
-            this.toolStripMove.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripMove.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMove.Image")));
-            this.toolStripMove.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripMove.Name = "toolStripMove";
-            this.toolStripMove.Size = new System.Drawing.Size(23, 22);
-            this.toolStripMove.Text = "Move";
-            this.toolStripMove.Click += new System.EventHandler(this.ToolStripMove_Click);
-            // 
-            // toolStripAngulo
-            // 
-            this.toolStripAngulo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripAngulo.Image = ((System.Drawing.Image)(resources.GetObject("toolStripAngulo.Image")));
-            this.toolStripAngulo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripAngulo.Name = "toolStripAngulo";
-            this.toolStripAngulo.Size = new System.Drawing.Size(23, 22);
-            this.toolStripAngulo.Text = "Ângulo";
-            this.toolStripAngulo.ToolTipText = "Ângulo";
-            this.toolStripAngulo.Click += new System.EventHandler(this.ToolStripAngulo_Click);
-            // 
-            // toolStripRaio
-            // 
-            this.toolStripRaio.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripRaio.Image = ((System.Drawing.Image)(resources.GetObject("toolStripRaio.Image")));
-            this.toolStripRaio.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripRaio.Name = "toolStripRaio";
-            this.toolStripRaio.Size = new System.Drawing.Size(23, 22);
-            this.toolStripRaio.Text = "Raio";
-            this.toolStripRaio.ToolTipText = "Raio";
-            this.toolStripRaio.Click += new System.EventHandler(this.ToolStripRaio_Click);
-            // 
-            // toolStripEscala
-            // 
-            this.toolStripEscala.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripEscala.Image = ((System.Drawing.Image)(resources.GetObject("toolStripEscala.Image")));
-            this.toolStripEscala.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripEscala.Name = "toolStripEscala";
-            this.toolStripEscala.Size = new System.Drawing.Size(23, 22);
-            this.toolStripEscala.Text = "Escala";
-            this.toolStripEscala.ToolTipText = "Escala";
-            this.toolStripEscala.Click += new System.EventHandler(this.ToolStripEscala_Click);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            // 
             // tmrObjeto2D
             // 
             this.tmrObjeto2D.Enabled = true;
@@ -1411,6 +1356,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.telaInteiraToolStripMenuItem,
             this.debugToolStripMenuItem,
@@ -1567,12 +1513,13 @@
             // 
             // toolStrip2
             // 
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDesfazer,
             this.toolStripRefazer});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 24);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(878, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(70, 25);
             this.toolStrip2.TabIndex = 5;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -1596,12 +1543,11 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.splitter1);
             this.panel2.Controls.Add(this.picScreen);
-            this.panel2.Controls.Add(this.toolStrip1);
+            this.panel2.Controls.Add(this.splitter1);
             this.panel2.Controls.Add(this.propGrid);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(294, 49);
+            this.panel2.Location = new System.Drawing.Point(294, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(584, 622);
             this.panel2.TabIndex = 6;
@@ -1609,30 +1555,155 @@
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(309, 25);
+            this.splitter1.Location = new System.Drawing.Point(315, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 597);
+            this.splitter1.Size = new System.Drawing.Size(3, 622);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
             // 
             // splitter2
             // 
-            this.splitter2.Location = new System.Drawing.Point(294, 49);
+            this.splitter2.Location = new System.Drawing.Point(294, 0);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(3, 622);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
+            // 
+            // toolStripOrientacao
+            // 
+            this.toolStripOrientacao.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripOrientacao.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripOrientacaoEspacial,
+            this.toolStripOrientacaoObjeto,
+            this.toolStripOrientacaoCamera});
+            this.toolStripOrientacao.Location = new System.Drawing.Point(283, 24);
+            this.toolStripOrientacao.Name = "toolStripOrientacao";
+            this.toolStripOrientacao.Size = new System.Drawing.Size(81, 25);
+            this.toolStripOrientacao.TabIndex = 6;
+            this.toolStripOrientacao.Text = "toolStripOrientacao";
+            // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.AutoScroll = true;
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitter2);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panel2);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panel1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(878, 622);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(878, 671);
+            this.toolStripContainer1.TabIndex = 7;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // toolStripContainer1.TopToolStripPanel
+            // 
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripOrientacao);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStripTransformacao);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
+            // 
+            // toolStripTransformacao
+            // 
+            this.toolStripTransformacao.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripTransformacao.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMove,
+            this.toolStripAngulo,
+            this.toolStripRaio,
+            this.toolStripEscala});
+            this.toolStripTransformacao.Location = new System.Drawing.Point(177, 24);
+            this.toolStripTransformacao.Name = "toolStripTransformacao";
+            this.toolStripTransformacao.Size = new System.Drawing.Size(104, 25);
+            this.toolStripTransformacao.TabIndex = 8;
+            this.toolStripTransformacao.Text = "toolStripTransformacao";
+            // 
+            // toolStripMove
+            // 
+            this.toolStripMove.Checked = true;
+            this.toolStripMove.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripMove.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMove.Image")));
+            this.toolStripMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripMove.Name = "toolStripMove";
+            this.toolStripMove.Size = new System.Drawing.Size(23, 22);
+            this.toolStripMove.Text = "Move";
+            this.toolStripMove.Click += new System.EventHandler(this.ToolStripMove_Click);
+            // 
+            // toolStripAngulo
+            // 
+            this.toolStripAngulo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripAngulo.Image = ((System.Drawing.Image)(resources.GetObject("toolStripAngulo.Image")));
+            this.toolStripAngulo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAngulo.Name = "toolStripAngulo";
+            this.toolStripAngulo.Size = new System.Drawing.Size(23, 22);
+            this.toolStripAngulo.Text = "Ângulo";
+            this.toolStripAngulo.ToolTipText = "Ângulo";
+            this.toolStripAngulo.Click += new System.EventHandler(this.ToolStripAngulo_Click);
+            // 
+            // toolStripRaio
+            // 
+            this.toolStripRaio.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripRaio.Image = ((System.Drawing.Image)(resources.GetObject("toolStripRaio.Image")));
+            this.toolStripRaio.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripRaio.Name = "toolStripRaio";
+            this.toolStripRaio.Size = new System.Drawing.Size(23, 22);
+            this.toolStripRaio.Text = "Raio";
+            this.toolStripRaio.ToolTipText = "Raio";
+            this.toolStripRaio.Click += new System.EventHandler(this.ToolStripRaio_Click);
+            // 
+            // toolStripEscala
+            // 
+            this.toolStripEscala.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripEscala.Image = ((System.Drawing.Image)(resources.GetObject("toolStripEscala.Image")));
+            this.toolStripEscala.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripEscala.Name = "toolStripEscala";
+            this.toolStripEscala.Size = new System.Drawing.Size(23, 22);
+            this.toolStripEscala.Text = "Escala";
+            this.toolStripEscala.ToolTipText = "Escala";
+            this.toolStripEscala.Click += new System.EventHandler(this.ToolStripEscala_Click);
+            // 
+            // toolStripOrientacaoEspacial
+            // 
+            this.toolStripOrientacaoEspacial.Checked = true;
+            this.toolStripOrientacaoEspacial.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripOrientacaoEspacial.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOrientacaoEspacial.Image = ((System.Drawing.Image)(resources.GetObject("toolStripOrientacaoEspacial.Image")));
+            this.toolStripOrientacaoEspacial.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOrientacaoEspacial.Name = "toolStripOrientacaoEspacial";
+            this.toolStripOrientacaoEspacial.Size = new System.Drawing.Size(23, 22);
+            this.toolStripOrientacaoEspacial.Text = "Orientação Espacial";
+            this.toolStripOrientacaoEspacial.Click += new System.EventHandler(this.ToolStripOrientacaoEspacial_Click);
+            // 
+            // toolStripOrientacaoObjeto
+            // 
+            this.toolStripOrientacaoObjeto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOrientacaoObjeto.Image = ((System.Drawing.Image)(resources.GetObject("toolStripOrientacaoObjeto.Image")));
+            this.toolStripOrientacaoObjeto.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOrientacaoObjeto.Name = "toolStripOrientacaoObjeto";
+            this.toolStripOrientacaoObjeto.Size = new System.Drawing.Size(23, 22);
+            this.toolStripOrientacaoObjeto.Text = "Orientação Objeto";
+            this.toolStripOrientacaoObjeto.Click += new System.EventHandler(this.ToolStripOrientacaoObjeto_Click);
+            // 
+            // toolStripOrientacaoCamera
+            // 
+            this.toolStripOrientacaoCamera.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOrientacaoCamera.Image = ((System.Drawing.Image)(resources.GetObject("toolStripOrientacaoCamera.Image")));
+            this.toolStripOrientacaoCamera.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOrientacaoCamera.Name = "toolStripOrientacaoCamera";
+            this.toolStripOrientacaoCamera.Size = new System.Drawing.Size(23, 22);
+            this.toolStripOrientacaoCamera.Text = "Orientação Câmera";
+            this.toolStripOrientacaoCamera.Click += new System.EventHandler(this.ToolStripOrientacaoCamera_Click);
             // 
             // frmEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(878, 671);
-            this.Controls.Add(this.splitter2);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.toolStrip2);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.toolStripContainer1);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmEditor";
@@ -1641,7 +1712,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmEditor_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmEditor_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmEditor_KeyUp);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.FrmEditor_PreviewKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).EndInit();
@@ -1690,9 +1761,16 @@
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.toolStripOrientacao.ResumeLayout(false);
+            this.toolStripOrientacao.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
+            this.toolStripTransformacao.ResumeLayout(false);
+            this.toolStripTransformacao.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1778,12 +1856,7 @@
         private System.Windows.Forms.NumericUpDown txtVerticePosX;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripSelecao;
-        private System.Windows.Forms.ToolStripButton toolStripEscala;
-        private System.Windows.Forms.ToolStripButton toolStripMove;
-        private System.Windows.Forms.ToolStripButton toolStripAngulo;
         private System.Windows.Forms.ToolStripButton toolStripVertice;
-        private System.Windows.Forms.ToolStripButton toolStripRaio;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TabControl tabControlObjeto;
         private System.Windows.Forms.TabPage tabObjeto;
         private System.Windows.Forms.TabPage tabVetor;
@@ -1812,7 +1885,6 @@
         private System.Windows.Forms.Button btnPanel;
         private System.Windows.Forms.Button btnForm2D;
         private System.Windows.Forms.PropertyGrid propGrid;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Splitter splitter2;
@@ -1835,6 +1907,16 @@
         private System.Windows.Forms.ToolStripMenuItem esticarQuadroNaTelaToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkAutoFocarOrigem;
         private System.Windows.Forms.CheckBox chkAutoFocarVertice;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.ToolStrip toolStripOrientacao;
+        private System.Windows.Forms.ToolStrip toolStripTransformacao;
+        private System.Windows.Forms.ToolStripButton toolStripMove;
+        private System.Windows.Forms.ToolStripButton toolStripAngulo;
+        private System.Windows.Forms.ToolStripButton toolStripRaio;
+        private System.Windows.Forms.ToolStripButton toolStripEscala;
+        private System.Windows.Forms.ToolStripButton toolStripOrientacaoEspacial;
+        private System.Windows.Forms.ToolStripButton toolStripOrientacaoObjeto;
+        private System.Windows.Forms.ToolStripButton toolStripOrientacaoCamera;
     }
 }
 

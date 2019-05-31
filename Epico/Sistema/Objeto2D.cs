@@ -18,7 +18,6 @@ namespace Epico.Sistema
         [TypeConverter(typeof(ExpandableObjectConverter))]
         [Category("Layout")]
         public Vetor3 Angulo { get; set; }
-
         public Vetor2 Escala { get; set; }
         public List<Vertice2> Vertices { get; set; } = new List<Vertice2>();
         public List<Origem2> Origens { get; set; } = new List<Origem2>();

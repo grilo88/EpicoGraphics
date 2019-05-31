@@ -85,7 +85,7 @@ namespace Epico
             return ponto2D;
         }
 
-        public static PointF ObterPontoTelaPeloEspaco2D(this Camera2D cam, Eixos2 pos2D)
+        public static PointF ObterXYTelaPeloEspaco2D(this Camera2D cam, Eixos2 pos2D)
         {
             Vetor2 PosCam = new Vetor2(cam.Pos);
             Vetor2 PosCamZoomDiff = new Vetor2();
