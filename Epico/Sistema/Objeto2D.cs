@@ -100,10 +100,12 @@ namespace Epico.Sistema
             _epico = engine;
         }
 
-        public void AtualizarGeometria(Vetor3 novoAngulo)
+        public void DefinirAngulo(Vetor3 novoAngulo)
         {
             Vetor3 graus = novoAngulo - Angulo;
             Angulo = novoAngulo;
+
+            Vetor2 centro = new Vetor2();
 
             // Vértices
             for (int i = 0; i < Vertices.Count; i++)
@@ -111,6 +113,9 @@ namespace Epico.Sistema
                 Eixos2 eixo = Util2D.RotacionarPonto2D(Origens[0], Vertices[i], graus.Z);
                 Vertices[i].X = eixo.X;
                 Vertices[i].Y = eixo.Y;
+
+                Vertices[i].Raio = Util2D.Angulo2Radiano(Util2D.AnguloEntreDoisPontos(centro, Vertices[i]));
+                Vertices[i].Rad = Util2D.Angulo2Radiano(Util2D.AnguloEntreDoisPontos(centro, Vertices[i]));
             }
 
             // Arestas
@@ -148,6 +153,43 @@ namespace Epico.Sistema
             }
             Raio = raio;
             CriarArestasConvexa();
+        }
+
+        public void DefinirRaio(Vertice2 vertice, float raio)
+        {
+            if (vertice.Obj != this) throw new Exception("Vértice não associada a este objeto");
+
+            vertice.X = (float)Math.Cos(vertice.Rad) * raio;
+            vertice.Y = (float)Math.Sin(vertice.Rad) * raio;
+            vertice.Raio = raio;
+        }
+
+        public void DefinirAngulo(Vertice2 vertice, float ang)
+        {
+            if (vertice.Obj != this) throw new Exception("Vértice não associada a este objeto");
+            vertice.Ang = ang;
+            vertice.X = (float)Math.Cos(vertice.Rad) * vertice.Raio;
+            vertice.Y = (float)Math.Sin(vertice.Rad) * vertice.Raio;
+        }
+
+        public void AtualizarAngulo(Vertice2 vertice)
+        {
+            if (vertice.Obj != this) throw new Exception("Vértice não associada a este objeto");
+
+            vertice.X = (float)Math.Cos(vertice.Rad) * vertice.Raio;
+            vertice.Y = (float)Math.Sin(vertice.Rad) * vertice.Raio;
+        }
+
+        /// <summary>
+        /// Atualiza o raio e o radiano da vértice quando sua posição é alterada
+        /// </summary>
+        /// <param name="vertice"></param>
+        public void AtualizarRaio(Vertice2 vertice)
+        {
+            if (vertice.Obj != this) throw new Exception("Vértice não associada a este objeto");
+
+            vertice.Raio = Util2D.DistanciaEntreDoisPontos(new Vetor2(), vertice);
+            vertice.Rad = Util2D.Angulo2Radiano(Util2D.AnguloEntreDoisPontos(new Vetor2(), vertice));
         }
 
         private int IndiceRaioMax()
@@ -192,6 +234,7 @@ namespace Epico.Sistema
             get
             {
                 Vetor2 centro = (Vetor2)Pos.NovaInstancia();
+                centro.Obj = this;
                 for (int v = 0; v < Vertices.Count; v++)
                     for (int i = 0; i < _quant_dim; i++)
                     {
@@ -213,7 +256,7 @@ namespace Epico.Sistema
         /// <param name="angulo"></param>
         public void DefinirAngulo(float angulo)
         {
-            AtualizarGeometria(new Vetor3(0, 0, angulo));
+            DefinirAngulo(new Vetor3(0, 0, angulo));
         }
 
         /// <summary>

@@ -27,9 +27,16 @@ namespace Editor2D
     {
         bool _sair = false;
         const int _raio_padrao = 50;
+
         Vetor2 NovaPosCamera = new Vetor2();
         Vetor3 NovoAnguloCamera = new Vetor3();
         float NovoZoomCamera = 1;
+
+        MouseEventArgs mouseDown = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
+        MouseEventArgs mouseUp = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
+        MouseEventArgs mouseMove = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
+        KeyEventArgs keyDown = new KeyEventArgs(Keys.None);
+        KeyEventArgs keyUp = new KeyEventArgs(Keys.None);
 
         EpicoGraphics  _epico = new EpicoGraphics();
         List<Objeto2D> _obj_sel = new List<Objeto2D>();
@@ -98,6 +105,8 @@ namespace Editor2D
                     Cam
                 }).ToList();
             #endregion
+
+            _epico.Camera.Pos = new Vetor2(NovaPosCamera); 
 
             Show();
 
@@ -241,8 +250,34 @@ namespace Editor2D
         }
 
         PointF cameraDrag;
+        Eixos2 objetoDrag = null;
+        Eixos2 objetoDragDiffPos = new Vetor2();
+
         private void PicDesign_MouseDown(object sender, MouseEventArgs e)
         {
+            mouseDown = e;
+
+            if (_obj_sel.Count == 1) // 1 Objeto selecionado
+            {
+                Objeto2D obj = _obj_sel.First();
+
+                // Intercepta o cursor do mouse sobre o objeto
+                Eixos2 pos2D = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vertice2(e.X, e.Y));
+                bool mouseSobreObjeto = Util2D.IntersecaoEntrePoligonos(new Vertice2[] { new Vertice2(pos2D.X, pos2D.Y) },
+                    obj.Vertices.Select(v => new Vertice2(v.Global.X, v.Global.Y)).ToArray());
+                
+                if (mouseSobreObjeto)
+                {
+                    objetoDrag = new Vetor2(pos2D);
+                    objetoDragDiffPos.X = pos2D.X - obj.Pos.X;
+                    objetoDragDiffPos.Y = pos2D.Y - obj.Pos.Y;
+                }
+                else
+                {
+                    objetoDrag = null;
+                }
+            }
+
             if (e.Button == MouseButtons.Middle)
             {
                 moveCamera = false;
@@ -432,6 +467,7 @@ namespace Editor2D
                 if (float.TryParse(txtPosY.Text, out float posY))
                 {
                     _obj_sel.First().PosicionarY(posY);
+                    
                     propGrid.Refresh();
                 }
             }
@@ -444,6 +480,7 @@ namespace Editor2D
                 if (float.TryParse(txtPosX.Text, out float posX))
                 {
                     _obj_sel.First().PosicionarX(posX);
+                    
                     propGrid.Refresh();
                 }
             }
@@ -451,7 +488,8 @@ namespace Editor2D
 
         private void PicDesign_MouseMove(object sender, MouseEventArgs e)
         {
-            
+            mouseMove = e;
+
             if (e.Button == MouseButtons.Left)
             {
                 if (toolStripSelecao.Checked || toolStripVertice.Checked ||
@@ -534,10 +572,26 @@ namespace Editor2D
                     txtVisivel.Text = "Não";
             }
 
-            if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)_epico.Camera.Pos.X;
-            if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)_epico.Camera.Pos.Y;
-            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)_epico.Camera.Angulo.Z;
-            if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)_epico.Camera.ZoomCamera;
+            if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Pos.X;
+            if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Pos.Y;
+            if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Angulo.Z;
+            if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)((Camera2D)cboCamera.SelectedValue).ZoomCamera;
+
+            if (cboVertices.SelectedValue != null)
+            {
+                if (!txtOrigemPosX.Focused) txtOrigemPosX.Value = (decimal)((Origem2)cboOrigem.SelectedValue).X;
+                if (!txtOrigemPosY.Focused) txtOrigemPosY.Value = (decimal)((Origem2)cboOrigem.SelectedValue).Y;
+            }
+
+#warning Falta Vetor
+
+            if (cboVertices.SelectedValue != null)
+            {
+                if (!txtVerticePosX.Focused) txtVerticePosX.Value = (decimal)((Vertice2)cboVertices.SelectedValue).X;
+                if (!txtVerticePosY.Focused) txtVerticePosY.Value = (decimal)((Vertice2)cboVertices.SelectedValue).Y;
+                if (!txtVerticeAngulo.Focused) txtVerticeAngulo.Value = (decimal)((Vertice2)cboVertices.SelectedValue).Ang;
+                if (!txtVerticeRaio.Focused) txtVerticeRaio.Value = (decimal)((Vertice2)cboVertices.SelectedValue).Raio;
+            }
         }
 
         private void BtnVarios_Click(object sender, EventArgs e)
@@ -611,9 +665,7 @@ namespace Editor2D
             }
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-        }
+        
 
         [DllImport("user32")]
         private static extern IntPtr GetWindowDC(IntPtr hwnd);
@@ -714,81 +766,150 @@ namespace Editor2D
 
         private void PicScreen_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            bool transformandoObjetoComMouse = false;
             if (picScreen.Image != null)
             {
-                if (selRect.Width > 0 && selRect.Height > 0) // Retângulo
+                if (_obj_sel.Count == 1) // 1 Objeto selecionado
                 {
-                    // Desenha o retângulo multi-seleção na tela
-                    e.Graphics.FillRectangle(selBrush, selRect);
-
-                    #region Retângulo de colisão no ambiente 2D
-                    Vertice2[] rect = new Vertice2[4];
-                    rect[0] = new Vertice2(selRect.X, selRect.Y);                                      // Superior Esquerdo
-                    rect[1] = new Vertice2(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
-                    rect[2] = new Vertice2(selRect.X + selRect.Width, selRect.Y + selRect.Height);     // Inferior Direito
-                    rect[3] = new Vertice2(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
-                    #endregion
-
-                    
-
-                    if (toolStripSelecao.Checked)
+                    if (objetoDrag != null && toolStripMove.Checked)
                     {
-                        _obj_sel.ForEach(x => x.Selecionado = false);
-                        _obj_sel.Clear();
-                        _obj_sel = _epico.ObterObjetos2DMouseXY(_epico.Camera, rect).ToList();
-                        _obj_sel.ForEach(x => x.Selecionado = true);
+                        // Clicar com botão esquerdo e arrastar o objeto selecionado
+                        if (mouseMove.Button == MouseButtons.Left)
+                        {
+                            transformandoObjetoComMouse = true;
 
-                        // Informa a quantidade de objetos presentes na área do retângulo
-                        //var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
-                        e.Graphics.DrawString(
-                            $"{_obj_sel.Count()} objetos", new Font("Lucida Console", 10),
-                            new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
-                            new RectangleF(selRect.Location, selRect.Size),
-                            new StringFormat(StringFormatFlags.NoWrap));
+                            Eixos2 ponto_inicial = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseDown.X, mouseDown.Y));
+                            Eixos2 ponto_final = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseMove.X, mouseMove.Y));
+
+                            if (keyDown.Control) // Movimento na grade
+                            {
+                                ponto_final.X = Eixos.Grade(ponto_final.X, 10);
+                                ponto_final.Y = Eixos.Grade(ponto_final.Y, 10);
+                            }
+
+                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X = ponto_final.X - objetoDragDiffPos.X;
+                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y = ponto_final.Y - objetoDragDiffPos.Y;
+                        }
                     }
-                    else if (toolStripOrigem.Checked)
+                    else if (toolStripAngulo.Checked)
                     {
-                        // Informa a quantidade de objetos presentes na área do retângulo
-                        _origem_sel.ForEach(x => x.Sel = false);
-                        _origem_sel.Clear();
-                        _origem_sel = Util2D.ObterOrigensObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
-                        _origem_sel.ForEach(x => x.Sel = true);
 
-                        e.Graphics.DrawString(
-                            $"{_origem_sel.Count()} origens", new Font("Lucida Console", 10),
-                            new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
-                            new RectangleF(selRect.Location, selRect.Size),
-                            new StringFormat(StringFormatFlags.NoWrap));
                     }
-                    else if (toolStripVetor.Checked)
+                    else if (toolStripRaio.Checked)
                     {
-                        // Informa a quantidade de objetos presentes na área do retângulo
-                        _vetor_sel.ForEach(x => x.Sel = false);
-                        _vetor_sel.Clear();
-                        _vetor_sel = Util2D.ObterVetoresObjeto2DPelaTela(_epico.Camera, _obj_sel, selRect).ToList();
-                        _vetor_sel.ForEach(x => x.Sel = true);
 
-                        e.Graphics.DrawString(
-                            $"{_vetor_sel.Count()} vetores", new Font("Lucida Console", 10),
-                            new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
-                            new RectangleF(selRect.Location, selRect.Size),
-                            new StringFormat(StringFormatFlags.NoWrap));
-                    }
-                    else if (toolStripVertice.Checked)
-                    {
-                        // Informa a quantidade de objetos presentes na área do retângulo
-                        _vertice_sel.ForEach(x => x.Sel = false);
-                        _vertice_sel.Clear();
-                        _vertice_sel = Util2D.ObterVerticesObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
-                        _vertice_sel.ForEach(x => x.Sel = true);
-
-                        e.Graphics.DrawString(
-                            $"{_vertice_sel.Count()} vértices", new Font("Lucida Console", 10),
-                            new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
-                            new RectangleF(selRect.Location, selRect.Size),
-                            new StringFormat(StringFormatFlags.NoWrap));
                     }
                 }
+
+                if (!transformandoObjetoComMouse)
+                    if (selRect.Width > 0 && selRect.Height > 0) // Seleção Retângulo
+                    {
+                        // Desenha o retângulo multi-seleção na tela
+                        e.Graphics.FillRectangle(selBrush, selRect);
+
+                        #region Retângulo de colisão no ambiente 2D
+                        Vertice2[] rect = new Vertice2[4];
+                        rect[0] = new Vertice2(selRect.X, selRect.Y);                                      // Superior Esquerdo
+                        rect[1] = new Vertice2(selRect.X + selRect.Width, selRect.Y);                      // Superior Direito
+                        rect[2] = new Vertice2(selRect.X + selRect.Width, selRect.Y + selRect.Height);     // Inferior Direito
+                        rect[3] = new Vertice2(selRect.X, selRect.Y + selRect.Height);                     // Inferior Esquerdo
+                        #endregion
+
+                        if (toolStripSelecao.Checked)
+                        {
+                            _obj_sel.ForEach(x => x.Selecionado = false);
+                            _obj_sel.Clear();
+                            _obj_sel = _epico.ObterObjetos2DMouseXY(_epico.Camera, rect).ToList();
+                            _obj_sel.ForEach(x => x.Selecionado = true);
+
+                            // Informa a quantidade de objetos presentes na área do retângulo
+                            //var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
+                            e.Graphics.DrawString(
+                                $"{_obj_sel.Count()} objetos", new Font("Lucida Console", 10),
+                                new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
+                                new RectangleF(selRect.Location, selRect.Size),
+                                new StringFormat(StringFormatFlags.NoWrap));
+                        }
+                        else if (toolStripOrigem.Checked)
+                        {
+                            // Informa a quantidade de objetos presentes na área do retângulo
+                            _origem_sel.ForEach(x => x.Sel = false);
+                            _origem_sel.Clear();
+                            _origem_sel = Util2D.ObterOrigensObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
+                            _origem_sel.ForEach(x => x.Sel = true);
+
+                            e.Graphics.DrawString(
+                                $"{_origem_sel.Count()} origens", new Font("Lucida Console", 10),
+                                new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
+                                new RectangleF(selRect.Location, selRect.Size),
+                                new StringFormat(StringFormatFlags.NoWrap));
+                        }
+                        else if (toolStripVetor.Checked)
+                        {
+                            // Informa a quantidade de objetos presentes na área do retângulo
+                            _vetor_sel.ForEach(x => x.Sel = false);
+                            _vetor_sel.Clear();
+                            _vetor_sel = Util2D.ObterVetoresObjeto2DPelaTela(_epico.Camera, _obj_sel, selRect).ToList();
+                            _vetor_sel.ForEach(x => x.Sel = true);
+
+                            e.Graphics.DrawString(
+                                $"{_vetor_sel.Count()} vetores", new Font("Lucida Console", 10),
+                                new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
+                                new RectangleF(selRect.Location, selRect.Size),
+                                new StringFormat(StringFormatFlags.NoWrap));
+                        }
+                        else if (toolStripVertice.Checked)
+                        {
+                            // Informa a quantidade de objetos presentes na área do retângulo
+                            _vertice_sel.ForEach(x => x.Sel = false);
+                            _vertice_sel.Clear();
+                            _vertice_sel = Util2D.ObterVerticesObjeto2DPelaTela(_epico.Camera, _obj_sel, rect).ToList();
+                            _vertice_sel.ForEach(x => x.Sel = true);
+
+                            e.Graphics.DrawString(
+                                $"{_vertice_sel.Count()} vértices", new Font("Lucida Console", 10),
+                                new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
+                                new RectangleF(selRect.Location, selRect.Size),
+                                new StringFormat(StringFormatFlags.NoWrap));
+                        }
+                    }
+
+                #region Eixos de Coordenadas
+                if (_obj_sel.Count == 1) // 1 objeto selecionado
+                {
+                    if (toolStripMove.Checked)
+                    {
+                        PointF pontoA = new PointF();
+                        PointF pontoB = new PointF();
+                        PointF pontoC = new PointF();
+
+                        Vetor2 centro = new Vetor2();
+                        centro = ((Objeto2D)cboObjeto2D.SelectedValue).Centro;
+                        centro.X = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X;
+                        centro.Y = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y;
+
+                        pontoA = Util2D.ObterPontoTelaPeloEspaco2D(
+                            (Camera2D)cboCamera.SelectedValue, centro);
+
+                        pontoB.Y = pontoA.Y;
+                        pontoB.X = pontoA.X + 40;
+
+                        pontoC = pontoA;
+                        pontoC.Y = pontoA.Y - 40;
+
+                        PointF pontoCoordX = new PointF(pontoB.X - 10, pontoB.Y + 3);
+                        PointF pontoCoordY = new PointF(pontoC.X + 3, pontoC.Y);
+
+                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Red), 2), pontoA, pontoB);
+                        e.Graphics.DrawString("X", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordX);
+
+                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Green), 2), pontoA, pontoC);
+                        e.Graphics.DrawString("Y", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordY);
+                    }
+                }
+                #endregion
             }
         }
 
@@ -888,6 +1009,8 @@ namespace Editor2D
 
         private void PicScreen_MouseUp(object sender, MouseEventArgs e)
         {
+            mouseUp = e;
+
             if (e.Button == MouseButtons.Left)
             {
                 if (toolStripSelecao.Checked) // Ferramenta Seleção de Objetos
@@ -952,6 +1075,8 @@ namespace Editor2D
             toolStripSelecao.Checked = true;
             LimparSelecoesGeometricas();
             tabControlObjeto.SelectedTab = tabObjeto;
+
+            CboObjeto2D_SelectedIndexChanged(sender, new EventArgs()); // Exibe o ponto de origem
         }
 
         private void ToolStripVertice_Click(object sender, EventArgs e)
@@ -1151,9 +1276,8 @@ namespace Editor2D
             {
                 if (float.TryParse(txtVerticePosX.Text, out float posX))
                 {
-                    // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
-                    // nas novas coordenadas de PosX e PosY
                     _vertice_sel.First().X = posX;
+                    _obj_sel.First().AtualizarRaio(_vertice_sel.First());
                     propGrid.Refresh();
                 }
             }
@@ -1165,9 +1289,8 @@ namespace Editor2D
             {
                 if (float.TryParse(txtVerticePosY.Text, out float posY))
                 {
-                    // TODO: Ao alterar posY deve recalcular o angulo e o radiano com base
-                    // nas novas coordenadas de PosX e PosY
                     _vertice_sel.First().Y = posY;
+                    _obj_sel.First().AtualizarRaio(_vertice_sel.First());
                     propGrid.Refresh();
                 }
             }
@@ -1175,12 +1298,26 @@ namespace Editor2D
 
         private void TxtVerticeRaio_ValueChanged(object sender, EventArgs e)
         {
-
+            if (_vertice_sel != null && txtVerticeRaio.Focused)
+            {
+                if (float.TryParse(txtVerticeRaio.Text, out float raio_v))
+                {
+                    _obj_sel.First().DefinirRaio(_vertice_sel.First(), raio_v);
+                    propGrid.Refresh();
+                }
+            }
         }
 
         private void TxtVerticeAngulo_ValueChanged(object sender, EventArgs e)
         {
-
+            if (_vertice_sel != null && txtVerticeAngulo.Focused)
+            {
+                if (float.TryParse(txtVerticeAngulo.Text, out float ang_v))
+                {
+                    _obj_sel.First().DefinirAngulo(_vertice_sel.First(), ang_v);
+                    propGrid.Refresh();
+                }
+            }
         }
 
         private void TxtCamAngulo_ValueChanged(object sender, EventArgs e)
@@ -1287,16 +1424,6 @@ namespace Editor2D
 
         private void FrmEditor_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
-            {
-                if (picScreen.Focused)
-                {
-                    _epico.objetos2D.Remove((Objeto2D)cboObjeto2D.SelectedItem);
-                    //_obj_sel.Clear();
-                    //AtualizarControlesObjeto2D(_obj_sel);
-
-                }
-            }
         }
 
         private void PicScreen_Click(object sender, EventArgs e)
@@ -1414,6 +1541,38 @@ namespace Editor2D
             {
                 NovaPosCamera = _epico.Camera.PosFoco((Vertice2)cboVertices.SelectedValue);
             }
+        }
+
+        private void TxtVerticeRaio_Enter(object sender, EventArgs e)
+        {
+            ToolStripRaio_Click(toolStripRaio, new EventArgs());
+        }
+
+        private void TxtVerticeAngulo_Enter(object sender, EventArgs e)
+        {
+            ToolStripAngulo_Click(toolStripAngulo, new EventArgs());
+        }
+
+        private void TxtVerticePosY_Enter(object sender, EventArgs e)
+        {
+            ToolStripMove_Click(toolStripMove, new EventArgs());
+        }
+
+        private void TxtVerticePosX_Enter(object sender, EventArgs e)
+        {
+            ToolStripMove_Click(toolStripMove, new EventArgs());
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            keyDown = e;
+            keyUp = new KeyEventArgs(Keys.None);
+        }
+
+        private void FrmEditor_KeyUp(object sender, KeyEventArgs e)
+        {
+            keyUp = e;
+            keyDown = new KeyEventArgs(Keys.None);
         }
     }
 }
