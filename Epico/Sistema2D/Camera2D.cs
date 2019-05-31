@@ -243,9 +243,9 @@ namespace Epico.Sistema2D
                             {
                                 GraphicsPath preenche = new GraphicsPath();
                                 preenche.AddLines(objProjecao.Vertices.AsEnumerable()
-                                    .Select(ponto => new PointF(
-                                    -Left + ponto.Global.X - PosCamZoomDiff.X,
-                                    -Top + ponto.Global.Y - PosCamZoomDiff.Y
+                                    .Select(v => new PointF(
+                                    -Left + v.Global.X - PosCamZoomDiff.X,
+                                    -Top + v.Global.Y - PosCamZoomDiff.Y
                                     )).ToArray());
                                 g.FillPath(new SolidBrush(Color.FromArgb(objProjecao.Mat_render.CorSolida.A, objProjecao.Mat_render.CorSolida.R, objProjecao.Mat_render.CorSolida.G, objProjecao.Mat_render.CorSolida.B)), preenche);
                             }

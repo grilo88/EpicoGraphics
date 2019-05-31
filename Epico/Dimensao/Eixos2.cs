@@ -79,5 +79,13 @@ namespace Epico
             ret.Y = a.Y - b.Y;
             return ret;
         }
+
+        public static Eixos2 operator *(Eixos2 a, float b)
+        {
+            Vetor2 ret = (Vetor2)a.NovaInstancia();
+            ret.X = a.X * b;
+            ret.Y = a.Y * b;
+            return ret;
+        }
     }
 }

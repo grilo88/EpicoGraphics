@@ -106,6 +106,8 @@ namespace Editor2D
                 }).ToList();
             #endregion
 
+            _epico.Camera.Pos = new Vetor2(NovaPosCamera); 
+
             Show();
 
             #region  Loop principal de rotinas do simulador 2D
@@ -248,9 +250,33 @@ namespace Editor2D
         }
 
         PointF cameraDrag;
+        Eixos2 objetoDrag = null;
+        Eixos2 objetoDragDiffPos = new Vetor2();
+
         private void PicDesign_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = e;
+
+            if (_obj_sel.Count == 1) // 1 Objeto selecionado
+            {
+                Objeto2D obj = _obj_sel.First();
+
+                // Intercepta o cursor do mouse sobre o objeto
+                Eixos2 pos2D = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vertice2(e.X, e.Y));
+                bool mouseSobreObjeto = Util2D.IntersecaoEntrePoligonos(new Vertice2[] { new Vertice2(pos2D.X, pos2D.Y) },
+                    obj.Vertices.Select(v => new Vertice2(v.Global.X, v.Global.Y)).ToArray());
+                
+                if (mouseSobreObjeto)
+                {
+                    objetoDrag = new Vetor2(pos2D);
+                    objetoDragDiffPos.X = pos2D.X - obj.Pos.X;
+                    objetoDragDiffPos.Y = pos2D.Y - obj.Pos.Y;
+                }
+                else
+                {
+                    objetoDrag = null;
+                }
+            }
 
             if (e.Button == MouseButtons.Middle)
             {
@@ -740,50 +766,40 @@ namespace Editor2D
 
         private void PicScreen_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
             bool transformandoObjetoComMouse = false;
             if (picScreen.Image != null)
             {
                 if (_obj_sel.Count == 1) // 1 Objeto selecionado
                 {
-                    // Intercepta o cursor do mouse sobre o objeto em ambiente 2D
-                    Eixos2 pos2D = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vertice2(mouseMove.X, mouseMove.Y));
-                    bool mouseSobreObjeto = Util2D.IntersecaoEntrePoligonos(new Vertice2[] { new Vertice2(pos2D.X, pos2D.Y) },
-                        _obj_sel.First().Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
-
-                    if (mouseSobreObjeto)
+                    if (objetoDrag != null && toolStripMove.Checked)
                     {
-                        if (toolStripMove.Checked)
+                        // Clicar com botão esquerdo e arrastar o objeto selecionado
+                        if (mouseMove.Button == MouseButtons.Left)
                         {
-                            // Clicar com botão esquerdo e arrastar o objeto selecionado
-                            if (mouseMove.Button == MouseButtons.Left)
+                            transformandoObjetoComMouse = true;
+
+                            Eixos2 ponto_inicial = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseDown.X, mouseDown.Y));
+                            Eixos2 ponto_final = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseMove.X, mouseMove.Y));
+
+                            if (keyDown.Control) // Movimento na grade
                             {
-                                transformandoObjetoComMouse = true;
-
-                                Eixos2 Pos2D = Util2D.ObterPosEspaco2DMouseXY(
-                                    (Camera2D)cboCamera.SelectedValue,
-                                    new Vetor2(mouseMove.X, mouseMove.Y));
-
-#warning Mover o objeto a partir do ponto clicado no objeto
-                                pos2D.X -= mouseDown.X;
-                                pos2D.Y -= mouseDown.Y;
-
-                                if (keyDown.Control) // Movimento na grade
-                                {
-                                    Pos2D.X = Eixos.Grade(Pos2D.X, 10);
-                                    Pos2D.Y = Eixos.Grade(Pos2D.Y, 10);
-                                }
-
-                                ((Objeto2D)cboObjeto2D.SelectedValue).Pos = new Vetor2(Pos2D);
+                                ponto_final.X = Eixos.Grade(ponto_final.X, 10);
+                                ponto_final.Y = Eixos.Grade(ponto_final.Y, 10);
                             }
-                        }
-                        else if (toolStripAngulo.Checked)
-                        {
 
+                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X = ponto_final.X - objetoDragDiffPos.X;
+                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y = ponto_final.Y - objetoDragDiffPos.Y;
                         }
-                        else if (toolStripRaio.Checked)
-                        {
+                    }
+                    else if (toolStripAngulo.Checked)
+                    {
 
-                        }
+                    }
+                    else if (toolStripRaio.Checked)
+                    {
+
                     }
                 }
 
@@ -859,6 +875,41 @@ namespace Editor2D
                                 new StringFormat(StringFormatFlags.NoWrap));
                         }
                     }
+
+                #region Eixos de Coordenadas
+                if (_obj_sel.Count == 1) // 1 objeto selecionado
+                {
+                    if (toolStripMove.Checked)
+                    {
+                        PointF pontoA = new PointF();
+                        PointF pontoB = new PointF();
+                        PointF pontoC = new PointF();
+
+                        Vetor2 centro = new Vetor2();
+                        centro = ((Objeto2D)cboObjeto2D.SelectedValue).Centro;
+                        centro.X = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X;
+                        centro.Y = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y;
+
+                        pontoA = Util2D.ObterPontoTelaPeloEspaco2D(
+                            (Camera2D)cboCamera.SelectedValue, centro);
+
+                        pontoB.Y = pontoA.Y;
+                        pontoB.X = pontoA.X + 40;
+
+                        pontoC = pontoA;
+                        pontoC.Y = pontoA.Y - 40;
+
+                        PointF pontoCoordX = new PointF(pontoB.X - 10, pontoB.Y + 3);
+                        PointF pontoCoordY = new PointF(pontoC.X + 3, pontoC.Y);
+
+                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Red), 2), pontoA, pontoB);
+                        e.Graphics.DrawString("X", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordX);
+
+                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Green), 2), pontoA, pontoC);
+                        e.Graphics.DrawString("Y", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordY);
+                    }
+                }
+                #endregion
             }
         }
 

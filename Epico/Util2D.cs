@@ -85,55 +85,71 @@ namespace Epico
             return ponto2D;
         }
 
-        /// <summary>
-        /// Obtém objeto 2d através do espaço global.
-        /// </summary>
-        /// <param name="ponto"></param>
-        /// <returns></returns>
-        public static Objeto2D ObterObjeto2DPeloEspaco(this EpicoGraphics engine, Vetor2 ponto)
+        public static PointF ObterPontoTelaPeloEspaco2D(this Camera2D cam, Eixos2 pos2D)
         {
-            for (int i = 0; i < engine.objetos2D.Count; i++)
-            {
-                Objeto2D obj = engine.objetos2D[i];
+            Vetor2 PosCam = new Vetor2(cam.Pos);
+            Vetor2 PosCamZoomDiff = new Vetor2();
+            PosCamZoomDiff = cam.Pos * cam.ZoomCamera - cam.Pos;
 
-                float xMax = obj.Pos.X + obj.Max.X;
-                float xMin = obj.Pos.X + obj.Min.X;
-                float yMax = obj.Pos.Y + obj.Max.Y;
-                float yMin = obj.Pos.Y + obj.Min.Y;
+            Vetor2 globalPos = (Vetor2)pos2D * cam.ZoomCamera;
+            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * cam.ZoomCamera, globalPos, -cam.Angulo.Z);
 
-                if (ponto.X >= xMin && ponto.X <= xMax)
-                    if (ponto.Y >= yMin && ponto.Y <= yMax)
-                    {
-                        return engine.objetos2D[i];
-                    }
-            }
-            return null;
+            PointF pontoTela = new PointF();
+            pontoTela.X = -cam.Left - PosCamZoomDiff.X + rot.X;
+            pontoTela.Y = -cam.Top - PosCamZoomDiff.Y + rot.Y;
+
+            return pontoTela;
         }
 
-        /// <summary>
-        /// Obtém objeto 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
-        /// </summary>
-        /// <param name="ponto"></param>
-        /// <returns></returns>
-        public static Objeto2D ObterObjeto2DPelaTela(this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
-        {
-            for (int i = 0; i < engine.objetos2D.Count; i++)
-            {
-                Objeto2D obj = engine.objetos2D[i];
+        ///// <summary>
+        ///// Obtém objeto 2d através do espaço global.
+        ///// </summary>
+        ///// <param name="ponto"></param>
+        ///// <returns></returns>
+        //public static Objeto2D ObterObjeto2DPeloEspaco(this EpicoGraphics engine, Vetor2 ponto)
+        //{
+        //    for (int i = 0; i < engine.objetos2D.Count; i++)
+        //    {
+        //        Objeto2D obj = engine.objetos2D[i];
 
-                float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Max.X;
-                float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Min.X;
-                float yMaxTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Max.Y;
-                float yMinTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Min.Y;
+        //        float xMax = obj.Pos.X + obj.Max.X;
+        //        float xMin = obj.Pos.X + obj.Min.X;
+        //        float yMax = obj.Pos.Y + obj.Max.Y;
+        //        float yMin = obj.Pos.Y + obj.Min.Y;
 
-                if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
-                    if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
-                    {
-                        return engine.objetos2D[i];
-                    }
-            }
-            return null;
-        }
+        //        if (ponto.X >= xMin && ponto.X <= xMax)
+        //            if (ponto.Y >= yMin && ponto.Y <= yMax)
+        //            {
+        //                return engine.objetos2D[i];
+        //            }
+        //    }
+        //    return null;
+        //}
+
+        ///// <summary>
+        ///// Obtém objeto 2d através da tela. X = 0 a Largura da camera, Y = 0 ao tamanho da camera.
+        ///// </summary>
+        ///// <param name="ponto"></param>
+        ///// <returns></returns>
+        //public static Objeto2D ObterObjeto2DPelaTela(this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
+        //{
+        //    for (int i = 0; i < engine.objetos2D.Count; i++)
+        //    {
+        //        Objeto2D obj = engine.objetos2D[i];
+
+        //        float xMaxTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Max.X;
+        //        float xMinTela = -(camera.Pos.X - camera.ResWidth / 2) + obj.Pos.X + obj.Min.X;
+        //        float yMaxTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Max.Y;
+        //        float yMinTela = -(camera.Pos.Y - camera.ResHeight / 2) + obj.Pos.Y + obj.Min.Y;
+
+        //        if (ponto.X >= xMinTela && ponto.X <= xMaxTela)
+        //            if (ponto.Y >= yMinTela && ponto.Y <= yMaxTela)
+        //            {
+        //                return engine.objetos2D[i];
+        //            }
+        //    }
+        //    return null;
+        //}
 
         public static IEnumerable<Objeto2D> ObterObjetos2DMouseXY(
             this EpicoGraphics engine, Camera2D camera, Eixos2 ponto)
