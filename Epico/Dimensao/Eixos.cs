@@ -116,6 +116,15 @@ namespace Epico
             return (T)eixos;
         }
 
+        /// <summary>
+        /// Interpolação Linear
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="origem"></param>
+        /// <param name="destino"></param>
+        /// <param name="distancia"></param>
+        /// <param name="completado"></param>
+        /// <returns></returns>
         public static T Lerp<T>(T origem, T destino, float distancia, out bool completado) where T : Eixos
         {
             completado = false;

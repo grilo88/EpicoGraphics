@@ -23,14 +23,14 @@ using Epico.Sistema;
 
 namespace Editor2D
 {
-    enum SentidoManipulaObjeto
+    enum SentidoEixo
     {
         ESPACIAL, OBJETO, CAMERA
     }
 
     public partial class frmEditor : Form
     {
-        SentidoManipulaObjeto SentidoManipulaObjeto = SentidoManipulaObjeto.ESPACIAL;
+        SentidoEixo SentidoManipulaObjeto = SentidoEixo.ESPACIAL;
 
         bool _sair = false;
         const int _raio_padrao = 50;
@@ -38,6 +38,7 @@ namespace Editor2D
         Vetor2 NovaPosCamera = new Vetor2();
         Vetor3 NovoAnguloCamera = new Vetor3();
         float NovoZoomCamera = 1;
+        float AnguloZ_SentidoManipulaObjeto = 0F;
 
         MouseEventArgs mouseDown = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
         MouseEventArgs mouseUp = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
@@ -256,8 +257,11 @@ namespace Editor2D
         }
 
         PointF cameraDrag;
-        Eixos2 objetoDrag = null;
-        Eixos2 objetoDragDiffPos = new Vetor2();
+        Eixos2 objetoDragMove = null;
+        Eixos3 objetoDragAng = null;
+
+        Eixos2 objetoDragMoveDiff = new Vetor2();
+        Eixos3 objetoDragAngDiff = new Vetor3();
 
         private void PicDesign_MouseDown(object sender, MouseEventArgs e)
         {
@@ -269,18 +273,41 @@ namespace Editor2D
 
                 // Intercepta o cursor do mouse sobre o objeto
                 Eixos2 pos2D = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vertice2(e.X, e.Y));
-                bool mouseSobreObjeto = Util2D.IntersecaoEntrePoligonos(new Vertice2[] { new Vertice2(pos2D.X, pos2D.Y) },
+                bool cliqueSobreObjeto = Util2D.IntersecaoEntrePoligonos(new Vertice2[] { new Vertice2(pos2D.X, pos2D.Y) },
                     obj.Vertices.Select(v => new Vertice2(v.Global.X, v.Global.Y)).ToArray());
-                
-                if (mouseSobreObjeto)
+
+                if (toolStripMove.Checked)
                 {
-                    objetoDrag = new Vetor2(pos2D);
-                    objetoDragDiffPos.X = pos2D.X - obj.Pos.X;
-                    objetoDragDiffPos.Y = pos2D.Y - obj.Pos.Y;
+                    if (cliqueSobreObjeto)
+                    {
+                        objetoDragMove = new Vetor2(pos2D);
+                        objetoDragMoveDiff.X = pos2D.X - obj.Pos.X;
+                        objetoDragMoveDiff.Y = pos2D.Y - obj.Pos.Y;
+                    }
+                    else
+                    {
+                        objetoDragMove = null;
+                    }
                 }
-                else
+                else if (toolStripAngulo.Checked)
                 {
-                    objetoDrag = null;
+                    if (cliqueSobreObjeto)
+                    {
+                        objetoDragAng = new Vetor3(obj.Angulo);
+
+                        float angMouseClick = Util2D.AnguloEntreDoisPontos(
+                            new Vetor2(obj.Centro.Global.X, obj.Centro.Global.Y), pos2D);
+
+                        objetoDragAngDiff.Z = angMouseClick;
+                    }
+                    else
+                    {
+                        objetoDragAng = null;
+                    }
+                }
+                else if (toolStripEscala.Checked)
+                {
+
                 }
             }
 
@@ -633,9 +660,6 @@ namespace Editor2D
                 _obj_sel.Add((Objeto2D)cboObjeto2D.SelectedValue);
                 _obj_sel.First().Selecionado = true;
                 AtualizarControlesObjeto2D(_obj_sel);
-                
-                //_vertices_sel.ForEach(x => x.sel = false);
-                //_vertices_sel.Clear();
 
                 LimparSelecoesGeometricas();
 
@@ -668,22 +692,6 @@ namespace Editor2D
                 if (chkAutoFocarObjeto.Checked)
                     BtnFocarObjeto_Click(sender, e);
             }
-        }
-
-        
-
-        [DllImport("user32")]
-        private static extern IntPtr GetWindowDC(IntPtr hwnd);
-
-        // you also need ReleaseDC
-        [DllImport("user32")]
-        private static extern IntPtr ReleaseDC(IntPtr hwnd, IntPtr hdc);
-        private void TelaCheiaToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //IntPtr hdc = GetWindowDC(this.Handle);
-            //Graphics g = Graphics.FromHdc(hdc);
-
-            //engine2D.Camera.g = g;
         }
 
         private void FPSToolStripMenuItem_Click(object sender, EventArgs e)
@@ -771,6 +779,7 @@ namespace Editor2D
 
         private void PicScreen_Paint(object sender, PaintEventArgs e)
         {
+            Camera2D cam = (Camera2D)cboCamera.SelectedValue;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             bool transformandoObjetoComMouse = false;
@@ -778,29 +787,51 @@ namespace Editor2D
             {
                 if (_obj_sel.Count == 1) // 1 Objeto selecionado
                 {
-                    if (objetoDrag != null && toolStripMove.Checked)
+                    Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
+
+                    if (objetoDragMove != null && toolStripMove.Checked)
                     {
-                        // Clicar com botão esquerdo e arrastar o objeto selecionado
+                        // Clicar com botão esquerdo e arrastar a posição do objeto selecionado
                         if (mouseMove.Button == MouseButtons.Left)
                         {
                             transformandoObjetoComMouse = true;
 
-                            Eixos2 ponto_inicial = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseDown.X, mouseDown.Y));
-                            Eixos2 ponto_final = Util2D.ObterPosEspaco2DMouseXY((Camera2D)cboCamera.SelectedValue, new Vetor2(mouseMove.X, mouseMove.Y));
+                            Eixos2 ponto_inicial = Util2D.ObterPosEspaco2DMouseXY(cam, new Vetor2(mouseDown.X, mouseDown.Y));
+                            Eixos2 ponto_final = Util2D.ObterPosEspaco2DMouseXY(cam, new Vetor2(mouseMove.X, mouseMove.Y));
 
-                            if (keyDown.Control) // Movimento na grade
+                            if (keyDown.Control) // Transladação na grade
                             {
                                 ponto_final.X = Eixos.Grade(ponto_final.X, 10);
                                 ponto_final.Y = Eixos.Grade(ponto_final.Y, 10);
                             }
 
-                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X = ponto_final.X - objetoDragDiffPos.X;
-                            ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y = ponto_final.Y - objetoDragDiffPos.Y;
+                            obj.Pos.X = ponto_final.X - objetoDragMoveDiff.X;
+                            obj.Pos.Y = ponto_final.Y - objetoDragMoveDiff.Y;
                         }
                     }
                     else if (toolStripAngulo.Checked)
                     {
+                        // Clicar com botão esquerdo e arrastar o ângulo do objeto selecionado
+                        if (mouseMove.Button == MouseButtons.Left)
+                        {
+                            transformandoObjetoComMouse = true;
 
+                            //Eixos2 ponto_inicial = Util2D.ObterPosEspaco2DMouseXY(cam, new Vetor2(mouseDown.X, mouseDown.Y));
+                            Eixos2 ponto_final = Util2D.ObterPosEspaco2DMouseXY(cam, new Vetor2(mouseMove.X, mouseMove.Y));
+
+                            //float anguloInicial = Util2D.AnguloEntreDoisPontos(
+                            //    new Vetor2(obj.Centro.Global.X, obj.Centro.Global.Y), new Vetor2(ponto_inicial.X, ponto_inicial.Y));
+
+                            float anguloMouseMove = Util2D.AnguloEntreDoisPontos(
+                                new Vetor2(obj.Centro.Global.X, obj.Centro.Global.Y), new Vetor2(ponto_final.X, ponto_final.Y));
+
+                            if (keyDown.Control) // Angulação na grade
+                            {
+                                anguloMouseMove = Eixos.Grade(anguloMouseMove, 10);
+                            }
+
+                            obj.DefinirAngulo(anguloMouseMove - objetoDragAngDiff.Z + objetoDragAng.Z);
+                        }
                     }
                     else if (toolStripRaio.Checked)
                     {
@@ -830,7 +861,6 @@ namespace Editor2D
                             _obj_sel.ForEach(x => x.Selecionado = true);
 
                             // Informa a quantidade de objetos presentes na área do retângulo
-                            //var tmp = Util2D.ObterObjetos2DPelaTela(_epico, _epico.Camera, rect);
                             e.Graphics.DrawString(
                                 $"{_obj_sel.Count()} objetos", new Font("Lucida Console", 10),
                                 new SolidBrush(Color.FromArgb(selAlpha, 255, 255, 255)),
@@ -881,71 +911,158 @@ namespace Editor2D
                         }
                     }
 
-                #region Setas dos Eixos de Coordenadas
+                #region Linhas de Orientação dos Eixos de Coordenadas
                 if (_obj_sel.Count == 1) // 1 objeto selecionado
                 {
                     if (toolStripMove.Checked)
                     {
-                        Camera2D cam = (Camera2D)cboCamera.SelectedValue;
-                        Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
-
-                        PointF pontoA = new PointF();
-                        PointF pontoB = new PointF();
-                        PointF pontoC = new PointF();
-
-                        Vetor2 centro = new Vetor2();
-                        centro = ((Objeto2D)cboObjeto2D.SelectedValue).Centro;
-                        centro.X = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.X;
-                        centro.Y = ((Objeto2D)cboObjeto2D.SelectedValue).Pos.Y;
-
-                        pontoA = Util2D.ObterXYTelaPeloEspaco2D(cam, centro);
-
-                        float AnguloZ_ManipulaObjeto = 0F;
-
-                        switch (SentidoManipulaObjeto)
+                        Vetor2 ponto2D = new Vetor2();
+                        if (toolStripSelecao.Checked) // Objeto
                         {
-                            case SentidoManipulaObjeto.ESPACIAL:
-                                AnguloZ_ManipulaObjeto = -cam.Angulo.Z;
-                                break;
-                            case SentidoManipulaObjeto.OBJETO:
-                                AnguloZ_ManipulaObjeto = obj.Angulo.Z;
-                                break;
-                            case SentidoManipulaObjeto.CAMERA:
-                                AnguloZ_ManipulaObjeto = 0;
-                                break;
-                            default:
-                                throw new NotImplementedException(nameof(SentidoManipulaObjeto));
+                            Vetor2 centro = ((Objeto2D)cboObjeto2D.SelectedValue).Centro;
+                            ponto2D.X = centro.Global.X;
+                            ponto2D.Y = centro.Global.Y;
                         }
-
-                        #region Sentido Espaço 2D
-                        float tamanhoLinha = 40;
-                        // Traça a linha do eixo X
-                        pontoB.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_ManipulaObjeto)) * tamanhoLinha;
-                        pontoB.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_ManipulaObjeto)) * tamanhoLinha;
-
-                        // Traça a linha do eixo Y
-                        pontoC.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_ManipulaObjeto - 90)) * tamanhoLinha;
-                        pontoC.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_ManipulaObjeto - 90)) * tamanhoLinha;
-
-                        PointF pontoCoordX = new PointF(pontoB.X - 10, pontoB.Y + 3);
-                        PointF pontoCoordY = new PointF(pontoC.X + 3, pontoC.Y);
-                        #endregion
-
-                        #region Sentido ângulo do Objeto
-                        #endregion
-
-                        #region Sentido ângulo da Camera
-                        #endregion
-
-                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Red), 2), pontoA, pontoB);
-                        e.Graphics.DrawString("X", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordX);
-
-                        e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Green), 2), pontoA, pontoC);
-                        e.Graphics.DrawString("Y", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), pontoCoordY);
+                        else if (toolStripVertice.Checked) // Vértice
+                        {
+                            Vertice2 vertice = ((Vertice2)cboVertices.SelectedValue);
+                            ponto2D.X = vertice.Global.X;
+                            ponto2D.Y = vertice.Global.Y;
+                        }
+                        else if (toolStripOrigem.Checked) // Origem
+                        {
+                            Origem2 origem = ((Origem2)cboOrigem.SelectedValue);
+                            ponto2D.X = origem.Global.X;
+                            ponto2D.Y = origem.Global.Y;
+                        }
+                        DesenharLinhasOrientacaoEixosXYNaTela(e.Graphics, ponto2D, SentidoManipulaObjeto);
+                    }
+                    else if (toolStripAngulo.Checked)
+                    {
+                        Vetor2 ponto2D = new Vetor2();
+                        if (toolStripSelecao.Checked)
+                        {
+                            Vetor2 centro = ((Objeto2D)cboObjeto2D.SelectedValue).Centro;
+                            ponto2D.X = centro.Global.X;
+                            ponto2D.Y = centro.Global.Y;
+                        }
+                        //DesenharCirculosRotacaoEixosXYTela(e.Graphics, ponto2D, SentidoManipulaObjeto);
                     }
                 }
                 #endregion
             }
+
+            DesenharLinhasOrientacaoEixosXYNaTela(e.Graphics, 
+                new Vetor2(30, cam.ResHeight - 30), SentidoEixo.ESPACIAL, false, 30);
+        }
+
+        private void DesenharCirculosRotacaoEixosXYTela(
+            Graphics g, Eixos2 ponto2D, SentidoEixo sentido, bool espaco2D = true, float raioCirculos = 40)
+        {
+            Camera2D cam = (Camera2D)cboCamera.SelectedValue;
+            Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
+
+            RectangleF rect = new RectangleF();
+            rect.X = ponto2D.X;
+            rect.Y = ponto2D.Y;
+            rect.Width = obj.Max.X;
+            rect.Height = obj.Max.Y;
+
+            if (espaco2D)
+            {
+                //pontoA = Util2D.ObterXYTelaPeloEspaco2D(cam, ponto2D);
+                rect.Location = Util2D.ObterXYTelaPeloEspaco2D(cam, ponto2D);
+                var size = Util2D.ObterXYTelaPeloEspaco2D(cam, new Vetor2(obj.Max.Global.X, obj.Max.Global.Y));
+                rect.Width = size.X;
+                rect.Height = size.Y;
+            }
+
+            switch (sentido)
+            {
+                case SentidoEixo.ESPACIAL:
+                    AnguloZ_SentidoManipulaObjeto = -cam.Angulo.Z;
+                    break;
+                case SentidoEixo.OBJETO:
+                    AnguloZ_SentidoManipulaObjeto = obj.Angulo.Z + -cam.Angulo.Z;
+                    break;
+                case SentidoEixo.CAMERA:
+                    AnguloZ_SentidoManipulaObjeto = 0;
+                    break;
+                default:
+                    throw new NotImplementedException(nameof(SentidoManipulaObjeto));
+            }
+
+            //// Traça a linha do eixo X
+            //pontoB.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto)) * compLinhas;
+            //pontoB.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto)) * compLinhas;
+
+            //// Traça a linha do eixo Y
+            //pontoC.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto - 90)) * compLinhas;
+            //pontoC.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto - 90)) * compLinhas;
+
+            //PointF LetraCoordX = new PointF(pontoB.X - 10, pontoB.Y + 3);
+            //PointF LetraCoordY = new PointF(pontoC.X + 3, pontoC.Y);
+
+            g.DrawEllipse(new Pen(new SolidBrush(Color.Red), 1), rect);
+
+            //g.DrawLine(new Pen(new SolidBrush(Color.Red), 2), pontoA, pontoB);
+            //g.DrawString("X", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), LetraCoordX);
+
+            //g.DrawLine(new Pen(new SolidBrush(Color.Green), 2), pontoA, pontoC);
+            //g.DrawString("Y", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), LetraCoordY);
+        }
+
+        private void DesenharLinhasOrientacaoEixosXYNaTela(
+            Graphics g, Eixos2 ponto2D, SentidoEixo sentido, bool espaco2D = true, float compLinhas = 40)
+        {
+            Camera2D cam = (Camera2D)cboCamera.SelectedValue;
+            Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
+
+            PointF pontoA = new PointF();
+            PointF pontoB = new PointF();
+            PointF pontoC = new PointF();
+
+            if (espaco2D)
+            {
+                pontoA = Util2D.ObterXYTelaPeloEspaco2D(cam, ponto2D);
+            }
+            else
+            {
+                pontoA.X = ponto2D.X;
+                pontoA.Y = ponto2D.Y;
+            }
+
+            switch (sentido)
+            {
+                case SentidoEixo.ESPACIAL:
+                    AnguloZ_SentidoManipulaObjeto = -cam.Angulo.Z;
+                    break;
+                case SentidoEixo.OBJETO:
+                    AnguloZ_SentidoManipulaObjeto = obj.Angulo.Z + -cam.Angulo.Z;
+                    break;
+                case SentidoEixo.CAMERA:
+                    AnguloZ_SentidoManipulaObjeto = 0;
+                    break;
+                default:
+                    throw new NotImplementedException(nameof(SentidoManipulaObjeto));
+            }
+
+            // Traça a linha do eixo X
+            pontoB.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto)) * compLinhas;
+            pontoB.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto)) * compLinhas;
+
+            // Traça a linha do eixo Y
+            pontoC.X = pontoA.X + (float)Math.Cos(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto - 90)) * compLinhas;
+            pontoC.Y = pontoA.Y + (float)Math.Sin(Util2D.Angulo2Radiano(AnguloZ_SentidoManipulaObjeto - 90)) * compLinhas;
+
+            PointF LetraCoordX = new PointF(pontoB.X - 10, pontoB.Y + 3);
+            PointF LetraCoordY = new PointF(pontoC.X + 3, pontoC.Y);
+
+            g.DrawLine(new Pen(new SolidBrush(Color.Red), 2), pontoA, pontoB);
+            g.DrawString("X", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), LetraCoordX);
+
+            g.DrawLine(new Pen(new SolidBrush(Color.Green), 2), pontoA, pontoC);
+            g.DrawString("Y", new Font("Lucida Console", 10, FontStyle.Bold), new SolidBrush(Color.White), LetraCoordY);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -1050,7 +1167,7 @@ namespace Editor2D
             {
                 if (toolStripSelecao.Checked) // Ferramenta Seleção de Objetos
                 {
-                    if (selRect.Width == 0 && selRect.Height == 0) // Não formou retângulo multi-seleção?
+                    if (selRect.Width == 0 && selRect.Height == 0) // Não formou o retângulo multi-seleção?
                     {
                         _vertice_sel.ForEach(x => x.Sel = false);
                         _vertice_sel.Clear();
@@ -1620,21 +1737,21 @@ namespace Editor2D
         {
             ResetaFerramentasOrientacao((ToolStripButton)sender);
             toolStripOrientacaoEspacial.Checked = true;
-            SentidoManipulaObjeto = SentidoManipulaObjeto.ESPACIAL;
+            SentidoManipulaObjeto = SentidoEixo.ESPACIAL;
         }
 
         private void ToolStripOrientacaoObjeto_Click(object sender, EventArgs e)
         {
             ResetaFerramentasOrientacao((ToolStripButton)sender);
             toolStripOrientacaoObjeto.Checked = true;
-            SentidoManipulaObjeto = SentidoManipulaObjeto.OBJETO;
+            SentidoManipulaObjeto = SentidoEixo.OBJETO;
         }
 
         private void ToolStripOrientacaoCamera_Click(object sender, EventArgs e)
         {
             ResetaFerramentasOrientacao((ToolStripButton)sender);
             toolStripOrientacaoCamera.Checked = true;
-            SentidoManipulaObjeto = SentidoManipulaObjeto.CAMERA;
+            SentidoManipulaObjeto = SentidoEixo.CAMERA;
         }
     }
 }
