@@ -172,6 +172,7 @@
             this.toolStripAngulo = new System.Windows.Forms.ToolStripButton();
             this.toolStripRaio = new System.Windows.Forms.ToolStripButton();
             this.toolStripEscala = new System.Windows.Forms.ToolStripButton();
+            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -263,7 +264,7 @@
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picScreen.Location = new System.Drawing.Point(0, 0);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(315, 622);
+            this.picScreen.Size = new System.Drawing.Size(315, 572);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
@@ -301,7 +302,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(294, 622);
+            this.panel1.Size = new System.Drawing.Size(294, 572);
             this.panel1.TabIndex = 0;
             // 
             // tabControlObjeto
@@ -315,7 +316,7 @@
             this.tabControlObjeto.Location = new System.Drawing.Point(9, 317);
             this.tabControlObjeto.Name = "tabControlObjeto";
             this.tabControlObjeto.SelectedIndex = 0;
-            this.tabControlObjeto.Size = new System.Drawing.Size(239, 234);
+            this.tabControlObjeto.Size = new System.Drawing.Size(222, 234);
             this.tabControlObjeto.TabIndex = 4;
             this.tabControlObjeto.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControlObjeto_Selecting);
             // 
@@ -343,7 +344,7 @@
             this.tabObjeto.Location = new System.Drawing.Point(4, 22);
             this.tabObjeto.Name = "tabObjeto";
             this.tabObjeto.Padding = new System.Windows.Forms.Padding(3);
-            this.tabObjeto.Size = new System.Drawing.Size(231, 208);
+            this.tabObjeto.Size = new System.Drawing.Size(214, 208);
             this.tabObjeto.TabIndex = 0;
             this.tabObjeto.Text = "Objeto";
             this.tabObjeto.UseVisualStyleBackColor = true;
@@ -515,7 +516,7 @@
             this.tabOrigem.Location = new System.Drawing.Point(4, 22);
             this.tabOrigem.Name = "tabOrigem";
             this.tabOrigem.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOrigem.Size = new System.Drawing.Size(231, 208);
+            this.tabOrigem.Size = new System.Drawing.Size(214, 208);
             this.tabOrigem.TabIndex = 3;
             this.tabOrigem.Text = "Origem";
             this.tabOrigem.UseVisualStyleBackColor = true;
@@ -600,7 +601,7 @@
             this.tabVetor.Location = new System.Drawing.Point(4, 22);
             this.tabVetor.Name = "tabVetor";
             this.tabVetor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVetor.Size = new System.Drawing.Size(231, 208);
+            this.tabVetor.Size = new System.Drawing.Size(214, 208);
             this.tabVetor.TabIndex = 1;
             this.tabVetor.Text = "Vetor";
             this.tabVetor.UseVisualStyleBackColor = true;
@@ -622,7 +623,7 @@
             this.tabVertice.Controls.Add(this.txtVerticeRaio);
             this.tabVertice.Location = new System.Drawing.Point(4, 22);
             this.tabVertice.Name = "tabVertice";
-            this.tabVertice.Size = new System.Drawing.Size(231, 208);
+            this.tabVertice.Size = new System.Drawing.Size(214, 208);
             this.tabVertice.TabIndex = 2;
             this.tabVertice.Text = "Vértice";
             this.tabVertice.UseVisualStyleBackColor = true;
@@ -747,7 +748,7 @@
             this.groupBox5.Controls.Add(this.tabModelagem);
             this.groupBox5.Location = new System.Drawing.Point(9, 9);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(239, 175);
+            this.groupBox5.Size = new System.Drawing.Size(222, 175);
             this.groupBox5.TabIndex = 38;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Modelagem";
@@ -765,7 +766,7 @@
             this.tabModelagem.Location = new System.Drawing.Point(6, 19);
             this.tabModelagem.Name = "tabModelagem";
             this.tabModelagem.SelectedIndex = 0;
-            this.tabModelagem.Size = new System.Drawing.Size(229, 150);
+            this.tabModelagem.Size = new System.Drawing.Size(212, 150);
             this.tabModelagem.TabIndex = 0;
             // 
             // tabPrimitivos
@@ -784,7 +785,7 @@
             this.tabPrimitivos.Location = new System.Drawing.Point(4, 22);
             this.tabPrimitivos.Name = "tabPrimitivos";
             this.tabPrimitivos.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPrimitivos.Size = new System.Drawing.Size(221, 124);
+            this.tabPrimitivos.Size = new System.Drawing.Size(204, 124);
             this.tabPrimitivos.TabIndex = 0;
             this.tabPrimitivos.Text = "Primitivos";
             this.tabPrimitivos.UseVisualStyleBackColor = true;
@@ -859,7 +860,7 @@
             this.tabAvancado.Location = new System.Drawing.Point(4, 22);
             this.tabAvancado.Name = "tabAvancado";
             this.tabAvancado.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAvancado.Size = new System.Drawing.Size(221, 124);
+            this.tabAvancado.Size = new System.Drawing.Size(204, 124);
             this.tabAvancado.TabIndex = 3;
             this.tabAvancado.Text = "Avançado";
             this.tabAvancado.UseVisualStyleBackColor = true;
@@ -919,7 +920,7 @@
             this.tabDesenho.Location = new System.Drawing.Point(4, 22);
             this.tabDesenho.Name = "tabDesenho";
             this.tabDesenho.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDesenho.Size = new System.Drawing.Size(221, 124);
+            this.tabDesenho.Size = new System.Drawing.Size(204, 124);
             this.tabDesenho.TabIndex = 1;
             this.tabDesenho.Text = "Desenho";
             this.tabDesenho.UseVisualStyleBackColor = true;
@@ -934,7 +935,7 @@
             this.tabControles.Location = new System.Drawing.Point(4, 22);
             this.tabControles.Name = "tabControles";
             this.tabControles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControles.Size = new System.Drawing.Size(221, 124);
+            this.tabControles.Size = new System.Drawing.Size(204, 124);
             this.tabControles.TabIndex = 2;
             this.tabControles.Text = "Controles";
             this.tabControles.UseVisualStyleBackColor = true;
@@ -995,7 +996,7 @@
             this.tabLuzes.Location = new System.Drawing.Point(4, 22);
             this.tabLuzes.Name = "tabLuzes";
             this.tabLuzes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLuzes.Size = new System.Drawing.Size(221, 124);
+            this.tabLuzes.Size = new System.Drawing.Size(204, 124);
             this.tabLuzes.TabIndex = 4;
             this.tabLuzes.Text = "Luzes";
             this.tabLuzes.UseVisualStyleBackColor = true;
@@ -1035,7 +1036,7 @@
             this.tabOutros.Location = new System.Drawing.Point(4, 22);
             this.tabOutros.Name = "tabOutros";
             this.tabOutros.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutros.Size = new System.Drawing.Size(221, 124);
+            this.tabOutros.Size = new System.Drawing.Size(204, 124);
             this.tabOutros.TabIndex = 5;
             this.tabOutros.Text = "Outros";
             this.tabOutros.UseVisualStyleBackColor = true;
@@ -1053,7 +1054,7 @@
             this.groupBox4.Controls.Add(this.cboAnimacao);
             this.groupBox4.Location = new System.Drawing.Point(9, 697);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(239, 379);
+            this.groupBox4.Size = new System.Drawing.Size(222, 379);
             this.groupBox4.TabIndex = 36;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Animação:";
@@ -1124,7 +1125,7 @@
             this.groupBox3.Controls.Add(this.numericUpDown1);
             this.groupBox3.Location = new System.Drawing.Point(9, 591);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(239, 100);
+            this.groupBox3.Size = new System.Drawing.Size(222, 100);
             this.groupBox3.TabIndex = 35;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Física:";
@@ -1162,7 +1163,7 @@
             this.groupCamera.Controls.Add(this.txtCamPosY);
             this.groupCamera.Location = new System.Drawing.Point(9, 190);
             this.groupCamera.Name = "groupCamera";
-            this.groupCamera.Size = new System.Drawing.Size(239, 121);
+            this.groupCamera.Size = new System.Drawing.Size(222, 121);
             this.groupCamera.TabIndex = 27;
             this.groupCamera.TabStop = false;
             this.groupCamera.Text = "Câmera:";
@@ -1285,7 +1286,7 @@
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
             this.propGrid.Location = new System.Drawing.Point(318, 0);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(266, 622);
+            this.propGrid.Size = new System.Drawing.Size(266, 572);
             this.propGrid.TabIndex = 4;
             this.propGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropGrid_PropertyValueChanged);
             this.propGrid.SelectedObjectsChanged += new System.EventHandler(this.PropGrid_SelectedObjectsChanged);
@@ -1430,7 +1431,7 @@
             this.toolStripMenuItem1,
             this.esticarQuadroNaTelaToolStripMenuItem});
             this.resoluçãoToolStripMenuItem.Name = "resoluçãoToolStripMenuItem";
-            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.resoluçãoToolStripMenuItem.Text = "Resolução";
             // 
             // x242ToolStripMenuItem
@@ -1483,15 +1484,16 @@
             // efeitosToolStripMenuItem
             // 
             this.efeitosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.multiplicarQuadrosToolStripMenuItem});
+            this.multiplicarQuadrosToolStripMenuItem,
+            this.dToolStripMenuItem});
             this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
-            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.efeitosToolStripMenuItem.Text = "Efeitos";
             // 
             // multiplicarQuadrosToolStripMenuItem
             // 
             this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
-            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.multiplicarQuadrosToolStripMenuItem.Text = "Motion Blur";
             this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
             // 
@@ -1548,7 +1550,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(294, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(584, 622);
+            this.panel2.Size = new System.Drawing.Size(584, 572);
             this.panel2.TabIndex = 6;
             // 
             // splitter1
@@ -1556,7 +1558,7 @@
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter1.Location = new System.Drawing.Point(315, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 622);
+            this.splitter1.Size = new System.Drawing.Size(3, 572);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
             // 
@@ -1564,7 +1566,7 @@
             // 
             this.splitter2.Location = new System.Drawing.Point(294, 0);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 622);
+            this.splitter2.Size = new System.Drawing.Size(3, 572);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
@@ -1575,7 +1577,7 @@
             this.toolStripOrientacaoEspacial,
             this.toolStripOrientacaoObjeto,
             this.toolStripOrientacaoCamera});
-            this.toolStripOrientacao.Location = new System.Drawing.Point(293, 24);
+            this.toolStripOrientacao.Location = new System.Drawing.Point(69, 74);
             this.toolStripOrientacao.Name = "toolStripOrientacao";
             this.toolStripOrientacao.Size = new System.Drawing.Size(81, 25);
             this.toolStripOrientacao.TabIndex = 6;
@@ -1622,7 +1624,7 @@
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitter2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panel2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panel1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(878, 622);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(878, 572);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -1646,7 +1648,7 @@
             this.toolStripAngulo,
             this.toolStripRaio,
             this.toolStripEscala});
-            this.toolStripTransformacao.Location = new System.Drawing.Point(179, 24);
+            this.toolStripTransformacao.Location = new System.Drawing.Point(46, 49);
             this.toolStripTransformacao.Name = "toolStripTransformacao";
             this.toolStripTransformacao.Size = new System.Drawing.Size(104, 25);
             this.toolStripTransformacao.TabIndex = 8;
@@ -1696,6 +1698,13 @@
             this.toolStripEscala.Text = "Escala";
             this.toolStripEscala.ToolTipText = "Escala";
             this.toolStripEscala.Click += new System.EventHandler(this.ToolStripEscala_Click);
+            // 
+            // dToolStripMenuItem
+            // 
+            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dToolStripMenuItem.Text = "3D";
+            this.dToolStripMenuItem.Click += new System.EventHandler(this.DToolStripMenuItem_Click);
             // 
             // frmEditor
             // 
@@ -1916,6 +1925,7 @@
         private System.Windows.Forms.ToolStripButton toolStripOrientacaoEspacial;
         private System.Windows.Forms.ToolStripButton toolStripOrientacaoObjeto;
         private System.Windows.Forms.ToolStripButton toolStripOrientacaoCamera;
+        private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
     }
 }
 

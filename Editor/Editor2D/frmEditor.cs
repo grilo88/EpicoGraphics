@@ -809,7 +809,7 @@ namespace Editor2D
                             obj.Pos.Y = ponto_final.Y - objetoDragMoveDiff.Y;
                         }
                     }
-                    else if (toolStripAngulo.Checked)
+                    else if (objetoDragAng != null && toolStripAngulo.Checked)
                     {
                         // Clicar com botão esquerdo e arrastar o ângulo do objeto selecionado
                         if (mouseMove.Button == MouseButtons.Left)
@@ -1752,6 +1752,12 @@ namespace Editor2D
             ResetaFerramentasOrientacao((ToolStripButton)sender);
             toolStripOrientacaoCamera.Checked = true;
             SentidoManipulaObjeto = SentidoEixo.CAMERA;
+        }
+
+        private void DToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dToolStripMenuItem.Checked = !dToolStripMenuItem.Checked;
+            _epico.Camera.Efeito3D = dToolStripMenuItem.Checked;
         }
     }
 }

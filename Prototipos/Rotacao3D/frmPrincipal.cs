@@ -110,22 +110,22 @@ namespace Rotacao3D
 
             // Converte pontos 3D em 2D
             Vetor2 origem = new Vetor2(0, 0);
-            Vetor3 vec;
+            Vetor3 vertice;
             for (int i = 0; i < Vertices.Count(); i++)
             {
-                vec = new Vetor3(Vertices[i]);
-                if (vec.Z - cameraPos.Z >= 0)
+                vertice = new Vetor3(Vertices[i]);
+                if (vertice.Z - cameraPos.Z >= 0)
                 {
-                    tela[i].X = (int)(-(vec.X - cameraPos.X) / (-0.1f) * zoom) + pontoTela.X;
-                    tela[i].Y = (int)((vec.Y - cameraPos.Y) / (-0.1f) * zoom) + pontoTela.Y;
+                    tela[i].X = (int)(-(vertice.X - cameraPos.X) / (-0.1f) * zoom) + pontoTela.X;
+                    tela[i].Y = (int)((vertice.Y - cameraPos.Y) / (-0.1f) * zoom) + pontoTela.Y;
                 }
                 else
                 {
                     origem.X = (int)((Centro().X - cameraPos.X) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.X;
                     origem.Y = (int)(-(Centro().Y - cameraPos.Y) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.Y;
 
-                    tela[i].X = ((vec.X - cameraPos.X) / (vec.Z - cameraPos.Z) * zoom + Centro().X);
-                    tela[i].Y = (-(vec.Y - cameraPos.Y) / (vec.Z - cameraPos.Z) * zoom + Centro().Y);
+                    tela[i].X = ((vertice.X - cameraPos.X) / (vertice.Z - cameraPos.Z) * zoom + Centro().X);
+                    tela[i].Y = (-(vertice.Y - cameraPos.Y) / (vertice.Z - cameraPos.Z) * zoom + Centro().Y);
 
                     tela[i].X = (int)tela[i].X;
                     tela[i].Y = (int)tela[i].Y;

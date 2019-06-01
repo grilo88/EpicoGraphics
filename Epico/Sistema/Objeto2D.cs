@@ -10,6 +10,8 @@ namespace Epico.Sistema
     {
         int _quant_dim => Pos.Dim.Length;
 
+        public object Tag { get; set; }
+
         public float Raio { get; set; }
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
