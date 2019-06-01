@@ -703,8 +703,17 @@ namespace Editor2D
         private void BtnNovaCamera_Click(object sender, EventArgs e)
         {
             #region Cria a Câmera 2D
-            Camera2D camera = _epico.CriarCamera(picScreen.Width, picScreen.Height);
-            camera.Pos = new Vetor2(_obj_sel.First().Pos.X, _obj_sel.First().Pos.Y);
+            Camera2D camera_old = (Camera2D)cboCamera.SelectedValue;
+            Camera2D nova_camera = _epico.CriarCamera(picScreen.Width, picScreen.Height);
+
+            if (cboObjeto2D.SelectedValue != null)
+            {
+                nova_camera.Pos.X = camera_old.Pos.X;
+                nova_camera.Pos.Y = camera_old.Pos.Y;
+                NovaPosCamera.X = camera_old.Pos.X;
+                NovaPosCamera.Y = camera_old.Pos.Y;
+                NovoZoomCamera = 1F;
+            }
             #endregion
 
             cboCamera.DataSource = _epico.Cameras
@@ -714,12 +723,21 @@ namespace Editor2D
                     cam
                 }).ToList();
 
-            cboCamera.SelectedValue = camera;
+            cboCamera.SelectedValue = nova_camera;
         }
 
         private void CboCamera_SelectedValueChanged(object sender, EventArgs e)
         {
-            _epico.Camera = (Camera2D)cboCamera.SelectedValue;
+            Camera2D sel_camera = (Camera2D)cboCamera.SelectedValue;
+
+            if (sel_camera != null)
+            {
+                NovaPosCamera.X = sel_camera.Pos.X;
+                NovaPosCamera.Y = sel_camera.Pos.Y;
+                NovoAnguloCamera.Z = sel_camera.Angulo.Z;
+                NovoZoomCamera = sel_camera.ZoomCamera;
+                _epico.Camera = sel_camera;
+            }
         }
 
         private void BtnQuadrilatero_Click(object sender, EventArgs e)
@@ -1423,8 +1441,8 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                NovaPosCamera = _epico.Camera.PosFoco((Origem2)cboOrigem.SelectedValue);
-                //_epico.Camera.Focar((Origem2)cboOrigem.SelectedValue);
+                NovaPosCamera = ((Camera2D)cboCamera.SelectedValue)
+                    .PosFoco((Origem2)cboOrigem.SelectedValue);
             }
         }
 
@@ -1494,7 +1512,8 @@ namespace Editor2D
             Form2D form = new Form2D();
             form.Pos = new Vetor2(form, 200, 200);
             _epico.AddObjeto2D(form);
-            _epico.Camera.Focar(form);
+
+            ((Camera2D)cboCamera.SelectedValue).Focar(form);
 
             AtualizarComboObjetos2D();
             cboObjeto2D.SelectedValue = form;

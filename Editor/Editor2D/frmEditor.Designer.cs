@@ -154,6 +154,7 @@
             this.esticarQuadroNaTelaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.efeitosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplicarQuadrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jogosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.andePeloEspaço2DToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
@@ -172,7 +173,7 @@
             this.toolStripAngulo = new System.Windows.Forms.ToolStripButton();
             this.toolStripRaio = new System.Windows.Forms.ToolStripButton();
             this.toolStripEscala = new System.Windows.Forms.ToolStripButton();
-            this.dToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pnFerramentas = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.picScreen)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabControlObjeto.SuspendLayout();
@@ -215,6 +216,7 @@
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripTransformacao.SuspendLayout();
+            this.pnFerramentas.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnTriangulo
@@ -264,7 +266,7 @@
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picScreen.Location = new System.Drawing.Point(0, 0);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(315, 572);
+            this.picScreen.Size = new System.Drawing.Size(272, 572);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
@@ -294,15 +296,11 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.tabControlObjeto);
-            this.panel1.Controls.Add(this.groupBox5);
-            this.panel1.Controls.Add(this.groupBox4);
-            this.panel1.Controls.Add(this.groupBox3);
-            this.panel1.Controls.Add(this.groupCamera);
+            this.panel1.Controls.Add(this.pnFerramentas);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(294, 572);
+            this.panel1.Size = new System.Drawing.Size(337, 572);
             this.panel1.TabIndex = 0;
             // 
             // tabControlObjeto
@@ -313,10 +311,10 @@
             this.tabControlObjeto.Controls.Add(this.tabOrigem);
             this.tabControlObjeto.Controls.Add(this.tabVetor);
             this.tabControlObjeto.Controls.Add(this.tabVertice);
-            this.tabControlObjeto.Location = new System.Drawing.Point(9, 317);
+            this.tabControlObjeto.Location = new System.Drawing.Point(3, 311);
             this.tabControlObjeto.Name = "tabControlObjeto";
             this.tabControlObjeto.SelectedIndex = 0;
-            this.tabControlObjeto.Size = new System.Drawing.Size(222, 234);
+            this.tabControlObjeto.Size = new System.Drawing.Size(294, 234);
             this.tabControlObjeto.TabIndex = 4;
             this.tabControlObjeto.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControlObjeto_Selecting);
             // 
@@ -344,7 +342,7 @@
             this.tabObjeto.Location = new System.Drawing.Point(4, 22);
             this.tabObjeto.Name = "tabObjeto";
             this.tabObjeto.Padding = new System.Windows.Forms.Padding(3);
-            this.tabObjeto.Size = new System.Drawing.Size(214, 208);
+            this.tabObjeto.Size = new System.Drawing.Size(286, 208);
             this.tabObjeto.TabIndex = 0;
             this.tabObjeto.Text = "Objeto";
             this.tabObjeto.UseVisualStyleBackColor = true;
@@ -516,7 +514,7 @@
             this.tabOrigem.Location = new System.Drawing.Point(4, 22);
             this.tabOrigem.Name = "tabOrigem";
             this.tabOrigem.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOrigem.Size = new System.Drawing.Size(214, 208);
+            this.tabOrigem.Size = new System.Drawing.Size(180, 208);
             this.tabOrigem.TabIndex = 3;
             this.tabOrigem.Text = "Origem";
             this.tabOrigem.UseVisualStyleBackColor = true;
@@ -601,7 +599,7 @@
             this.tabVetor.Location = new System.Drawing.Point(4, 22);
             this.tabVetor.Name = "tabVetor";
             this.tabVetor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVetor.Size = new System.Drawing.Size(214, 208);
+            this.tabVetor.Size = new System.Drawing.Size(180, 208);
             this.tabVetor.TabIndex = 1;
             this.tabVetor.Text = "Vetor";
             this.tabVetor.UseVisualStyleBackColor = true;
@@ -623,7 +621,7 @@
             this.tabVertice.Controls.Add(this.txtVerticeRaio);
             this.tabVertice.Location = new System.Drawing.Point(4, 22);
             this.tabVertice.Name = "tabVertice";
-            this.tabVertice.Size = new System.Drawing.Size(214, 208);
+            this.tabVertice.Size = new System.Drawing.Size(180, 208);
             this.tabVertice.TabIndex = 2;
             this.tabVertice.Text = "Vértice";
             this.tabVertice.UseVisualStyleBackColor = true;
@@ -746,9 +744,9 @@
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.tabModelagem);
-            this.groupBox5.Location = new System.Drawing.Point(9, 9);
+            this.groupBox5.Location = new System.Drawing.Point(3, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(222, 175);
+            this.groupBox5.Size = new System.Drawing.Size(294, 175);
             this.groupBox5.TabIndex = 38;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Modelagem";
@@ -766,7 +764,7 @@
             this.tabModelagem.Location = new System.Drawing.Point(6, 19);
             this.tabModelagem.Name = "tabModelagem";
             this.tabModelagem.SelectedIndex = 0;
-            this.tabModelagem.Size = new System.Drawing.Size(212, 150);
+            this.tabModelagem.Size = new System.Drawing.Size(284, 150);
             this.tabModelagem.TabIndex = 0;
             // 
             // tabPrimitivos
@@ -785,7 +783,7 @@
             this.tabPrimitivos.Location = new System.Drawing.Point(4, 22);
             this.tabPrimitivos.Name = "tabPrimitivos";
             this.tabPrimitivos.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPrimitivos.Size = new System.Drawing.Size(204, 124);
+            this.tabPrimitivos.Size = new System.Drawing.Size(276, 124);
             this.tabPrimitivos.TabIndex = 0;
             this.tabPrimitivos.Text = "Primitivos";
             this.tabPrimitivos.UseVisualStyleBackColor = true;
@@ -860,7 +858,7 @@
             this.tabAvancado.Location = new System.Drawing.Point(4, 22);
             this.tabAvancado.Name = "tabAvancado";
             this.tabAvancado.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAvancado.Size = new System.Drawing.Size(204, 124);
+            this.tabAvancado.Size = new System.Drawing.Size(170, 124);
             this.tabAvancado.TabIndex = 3;
             this.tabAvancado.Text = "Avançado";
             this.tabAvancado.UseVisualStyleBackColor = true;
@@ -920,7 +918,7 @@
             this.tabDesenho.Location = new System.Drawing.Point(4, 22);
             this.tabDesenho.Name = "tabDesenho";
             this.tabDesenho.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDesenho.Size = new System.Drawing.Size(204, 124);
+            this.tabDesenho.Size = new System.Drawing.Size(170, 124);
             this.tabDesenho.TabIndex = 1;
             this.tabDesenho.Text = "Desenho";
             this.tabDesenho.UseVisualStyleBackColor = true;
@@ -935,7 +933,7 @@
             this.tabControles.Location = new System.Drawing.Point(4, 22);
             this.tabControles.Name = "tabControles";
             this.tabControles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControles.Size = new System.Drawing.Size(204, 124);
+            this.tabControles.Size = new System.Drawing.Size(170, 124);
             this.tabControles.TabIndex = 2;
             this.tabControles.Text = "Controles";
             this.tabControles.UseVisualStyleBackColor = true;
@@ -996,7 +994,7 @@
             this.tabLuzes.Location = new System.Drawing.Point(4, 22);
             this.tabLuzes.Name = "tabLuzes";
             this.tabLuzes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLuzes.Size = new System.Drawing.Size(204, 124);
+            this.tabLuzes.Size = new System.Drawing.Size(170, 124);
             this.tabLuzes.TabIndex = 4;
             this.tabLuzes.Text = "Luzes";
             this.tabLuzes.UseVisualStyleBackColor = true;
@@ -1036,7 +1034,7 @@
             this.tabOutros.Location = new System.Drawing.Point(4, 22);
             this.tabOutros.Name = "tabOutros";
             this.tabOutros.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutros.Size = new System.Drawing.Size(204, 124);
+            this.tabOutros.Size = new System.Drawing.Size(170, 124);
             this.tabOutros.TabIndex = 5;
             this.tabOutros.Text = "Outros";
             this.tabOutros.UseVisualStyleBackColor = true;
@@ -1052,9 +1050,9 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.cboTipoAnimacao);
             this.groupBox4.Controls.Add(this.cboAnimacao);
-            this.groupBox4.Location = new System.Drawing.Point(9, 697);
+            this.groupBox4.Location = new System.Drawing.Point(3, 657);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(222, 379);
+            this.groupBox4.Size = new System.Drawing.Size(294, 379);
             this.groupBox4.TabIndex = 36;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Animação:";
@@ -1070,9 +1068,11 @@
             // 
             // trackLinhaDoTempoAnimacao
             // 
+            this.trackLinhaDoTempoAnimacao.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.trackLinhaDoTempoAnimacao.Location = new System.Drawing.Point(9, 185);
             this.trackLinhaDoTempoAnimacao.Name = "trackLinhaDoTempoAnimacao";
-            this.trackLinhaDoTempoAnimacao.Size = new System.Drawing.Size(228, 45);
+            this.trackLinhaDoTempoAnimacao.Size = new System.Drawing.Size(277, 45);
             this.trackLinhaDoTempoAnimacao.TabIndex = 5;
             // 
             // label14
@@ -1086,10 +1086,12 @@
             // 
             // cboEfeitoAnimacao
             // 
+            this.cboEfeitoAnimacao.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboEfeitoAnimacao.FormattingEnabled = true;
             this.cboEfeitoAnimacao.Location = new System.Drawing.Point(9, 119);
             this.cboEfeitoAnimacao.Name = "cboEfeitoAnimacao";
-            this.cboEfeitoAnimacao.Size = new System.Drawing.Size(228, 21);
+            this.cboEfeitoAnimacao.Size = new System.Drawing.Size(277, 21);
             this.cboEfeitoAnimacao.TabIndex = 3;
             // 
             // label13
@@ -1103,18 +1105,22 @@
             // 
             // cboTipoAnimacao
             // 
+            this.cboTipoAnimacao.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboTipoAnimacao.FormattingEnabled = true;
             this.cboTipoAnimacao.Location = new System.Drawing.Point(9, 69);
             this.cboTipoAnimacao.Name = "cboTipoAnimacao";
-            this.cboTipoAnimacao.Size = new System.Drawing.Size(228, 21);
+            this.cboTipoAnimacao.Size = new System.Drawing.Size(277, 21);
             this.cboTipoAnimacao.TabIndex = 1;
             // 
             // cboAnimacao
             // 
+            this.cboAnimacao.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cboAnimacao.FormattingEnabled = true;
             this.cboAnimacao.Location = new System.Drawing.Point(9, 19);
             this.cboAnimacao.Name = "cboAnimacao";
-            this.cboAnimacao.Size = new System.Drawing.Size(228, 21);
+            this.cboAnimacao.Size = new System.Drawing.Size(277, 21);
             this.cboAnimacao.TabIndex = 0;
             // 
             // groupBox3
@@ -1123,9 +1129,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.numericUpDown1);
-            this.groupBox3.Location = new System.Drawing.Point(9, 591);
+            this.groupBox3.Location = new System.Drawing.Point(3, 551);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(222, 100);
+            this.groupBox3.Size = new System.Drawing.Size(294, 100);
             this.groupBox3.TabIndex = 35;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Física:";
@@ -1161,9 +1167,9 @@
             this.groupCamera.Controls.Add(this.txtCamPosX);
             this.groupCamera.Controls.Add(this.label6);
             this.groupCamera.Controls.Add(this.txtCamPosY);
-            this.groupCamera.Location = new System.Drawing.Point(9, 190);
+            this.groupCamera.Location = new System.Drawing.Point(3, 184);
             this.groupCamera.Name = "groupCamera";
-            this.groupCamera.Size = new System.Drawing.Size(222, 121);
+            this.groupCamera.Size = new System.Drawing.Size(294, 121);
             this.groupCamera.TabIndex = 27;
             this.groupCamera.TabStop = false;
             this.groupCamera.Text = "Câmera:";
@@ -1284,7 +1290,7 @@
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propGrid.Location = new System.Drawing.Point(318, 0);
+            this.propGrid.Location = new System.Drawing.Point(275, 0);
             this.propGrid.Name = "propGrid";
             this.propGrid.Size = new System.Drawing.Size(266, 572);
             this.propGrid.TabIndex = 4;
@@ -1431,7 +1437,7 @@
             this.toolStripMenuItem1,
             this.esticarQuadroNaTelaToolStripMenuItem});
             this.resoluçãoToolStripMenuItem.Name = "resoluçãoToolStripMenuItem";
-            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resoluçãoToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.resoluçãoToolStripMenuItem.Text = "Resolução";
             // 
             // x242ToolStripMenuItem
@@ -1487,15 +1493,22 @@
             this.multiplicarQuadrosToolStripMenuItem,
             this.dToolStripMenuItem});
             this.efeitosToolStripMenuItem.Name = "efeitosToolStripMenuItem";
-            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.efeitosToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.efeitosToolStripMenuItem.Text = "Efeitos";
             // 
             // multiplicarQuadrosToolStripMenuItem
             // 
             this.multiplicarQuadrosToolStripMenuItem.Name = "multiplicarQuadrosToolStripMenuItem";
-            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.multiplicarQuadrosToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.multiplicarQuadrosToolStripMenuItem.Text = "Motion Blur";
             this.multiplicarQuadrosToolStripMenuItem.Click += new System.EventHandler(this.MultiplicarQuadrosToolStripMenuItem_Click);
+            // 
+            // dToolStripMenuItem
+            // 
+            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
+            this.dToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.dToolStripMenuItem.Text = "3D";
+            this.dToolStripMenuItem.Click += new System.EventHandler(this.DToolStripMenuItem_Click);
             // 
             // jogosToolStripMenuItem
             // 
@@ -1548,15 +1561,15 @@
             this.panel2.Controls.Add(this.splitter1);
             this.panel2.Controls.Add(this.propGrid);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(294, 0);
+            this.panel2.Location = new System.Drawing.Point(337, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(584, 572);
+            this.panel2.Size = new System.Drawing.Size(541, 572);
             this.panel2.TabIndex = 6;
             // 
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(315, 0);
+            this.splitter1.Location = new System.Drawing.Point(272, 0);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(3, 572);
             this.splitter1.TabIndex = 5;
@@ -1564,7 +1577,7 @@
             // 
             // splitter2
             // 
-            this.splitter2.Location = new System.Drawing.Point(294, 0);
+            this.splitter2.Location = new System.Drawing.Point(337, 0);
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(3, 572);
             this.splitter2.TabIndex = 7;
@@ -1699,12 +1712,19 @@
             this.toolStripEscala.ToolTipText = "Escala";
             this.toolStripEscala.Click += new System.EventHandler(this.ToolStripEscala_Click);
             // 
-            // dToolStripMenuItem
+            // pnFerramentas
             // 
-            this.dToolStripMenuItem.Name = "dToolStripMenuItem";
-            this.dToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.dToolStripMenuItem.Text = "3D";
-            this.dToolStripMenuItem.Click += new System.EventHandler(this.DToolStripMenuItem_Click);
+            this.pnFerramentas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnFerramentas.Controls.Add(this.tabControlObjeto);
+            this.pnFerramentas.Controls.Add(this.groupBox5);
+            this.pnFerramentas.Controls.Add(this.groupCamera);
+            this.pnFerramentas.Controls.Add(this.groupBox4);
+            this.pnFerramentas.Controls.Add(this.groupBox3);
+            this.pnFerramentas.Location = new System.Drawing.Point(12, 10);
+            this.pnFerramentas.Name = "pnFerramentas";
+            this.pnFerramentas.Size = new System.Drawing.Size(300, 960);
+            this.pnFerramentas.TabIndex = 6;
             // 
             // frmEditor
             // 
@@ -1778,6 +1798,7 @@
             this.toolStripContainer1.PerformLayout();
             this.toolStripTransformacao.ResumeLayout(false);
             this.toolStripTransformacao.PerformLayout();
+            this.pnFerramentas.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1926,6 +1947,7 @@
         private System.Windows.Forms.ToolStripButton toolStripOrientacaoObjeto;
         private System.Windows.Forms.ToolStripButton toolStripOrientacaoCamera;
         private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
+        private System.Windows.Forms.Panel pnFerramentas;
     }
 }
 
