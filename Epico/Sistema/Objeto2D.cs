@@ -101,7 +101,7 @@ namespace Epico.Sistema
             _epico = engine;
         }
 
-        public void DefinirAngulo(Vetor3 novoAngulo)
+        public void DefinirAngulo(Eixos2 origem, Vetor3 novoAngulo)
         {
             Vetor3 graus = novoAngulo - Angulo;
             Angulo = novoAngulo;
@@ -111,7 +111,7 @@ namespace Epico.Sistema
             // Vértices
             for (int i = 0; i < Vertices.Count; i++)
             {
-                Eixos2 eixo = Util2D.RotacionarPonto2D(Origens[0], Vertices[i], graus.Z);
+                Eixos2 eixo = Util2D.RotacionarPonto2D(origem, Vertices[i], graus.Z);
                 Vertices[i].X = eixo.X;
                 Vertices[i].Y = eixo.Y;
 
@@ -251,13 +251,18 @@ namespace Epico.Sistema
             }
         }
 
+        public void DefinirAngulo(Eixos2 origem, float angulo)
+        {
+            DefinirAngulo(origem, new Vetor3(0, 0, angulo));
+        }
+
         /// <summary>
         /// Define o ângulo do objeto
         /// </summary>
         /// <param name="angulo"></param>
         public void DefinirAngulo(float angulo)
         {
-            DefinirAngulo(new Vetor3(0, 0, angulo));
+            DefinirAngulo(Origens[0], new Vetor3(0, 0, angulo));
         }
 
         /// <summary>

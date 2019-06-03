@@ -42,7 +42,7 @@ namespace Epico
         public float Y { get => Dim[1]; set => Dim[1] = value; }
 
         /// <summary>
-        /// Posição global em relação ao espaço dimensional
+        /// Posição global em relação ao espaço
         /// </summary>
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public Eixos2 Global

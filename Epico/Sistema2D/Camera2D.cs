@@ -68,7 +68,7 @@ namespace Epico.Sistema2D
         public bool EfeitoMotionBlur { get; set; }
         public bool Efeito3D { get; set; }
 
-        public float Efeito3DEixoZ => (float)Math.Sqrt(_zoomCamera) - 0.3F;
+        public float Efeito3DEixoZ => (float)Math.Sqrt(_zoomCamera * _zoomCamera) - 0.1F;
         #endregion
 
         public Camera2D(EpicoGraphics epico, int width, int height)
@@ -198,6 +198,7 @@ namespace Epico.Sistema2D
             //sw.Stop();
             //TempoDelta = sw.ElapsedMilliseconds;
             //sw.Start();
+
             TempoDelta = DateTime.Now.Ticks - _tickRender; // Calcula o tempo delta (tempo de atraso)
             _tickRender = DateTime.Now.Ticks;
 
