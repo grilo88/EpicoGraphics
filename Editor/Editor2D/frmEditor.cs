@@ -267,6 +267,11 @@ namespace Editor2D
         {
             _mouseDown = e;
 
+            rotacaoVoltas = 0;
+            direcaoRotacao = 1;
+            direcaoRotacaoAnterior = 1;
+            quadranteAnteriorRotacao = 1;
+
             if (_obj_sel.Count == 1) // 1 Objeto selecionado
             {
                 Objeto2D obj = ((Objeto2D)cboObjeto2D.SelectedValue);
@@ -1140,6 +1145,11 @@ namespace Editor2D
             g.DrawString("Y", fonte, new SolidBrush(Color.White), LetraCoordY);
         }
 
+        int rotacaoVoltas = 0;
+        int direcaoRotacao = 0;
+        int direcaoRotacaoAnterior = 0;
+        int quadranteAnteriorRotacao = 0;
+
         private void DesenharAnguloEixosXYTela(
             Graphics g, Eixos2 centro, SentidoEixos sentido, float angulo_inicial, float angulo_final,
             bool espaco2D = true, float raio = 60)
@@ -1179,6 +1189,8 @@ namespace Editor2D
                     throw new NotImplementedException(nameof(SentidoManipulaObjeto));
             }
 
+            Font fontM = new Font("Lucida Console", 8, FontStyle.Regular);
+
             if (angulo_inicial != angulo_final)
             {
                 // Linha do Ângulo Inicial
@@ -1204,7 +1216,7 @@ namespace Editor2D
                 Rectangle rect2 = new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height);
 
                 // Corrige o ângulo final para desenhar o pedaço de pizza da elipse
-                if (angulo_inicial < 0 && angulo_final < 0 && 
+                if (angulo_inicial < 0 && angulo_final < 0 &&
                     angulo_final > angulo_inicial) {
                 }
                 else if (angulo_final < 0)
@@ -1216,17 +1228,63 @@ namespace Editor2D
                     angulo_final = 360 + angulo_final;
                 }
 
-                // Desenha o pedaço de pizza
+                float anguloRotacao = angulo_final - angulo_inicial;
+                int quadrante = 1;
+
+                if (anguloRotacao >= 180) {
+                    direcaoRotacao = -1; // Esquerda
+
+                    if (anguloRotacao > 225)
+                        quadrante = 2;
+                    else if (anguloRotacao >= 180 && anguloRotacao <= 225)
+                        quadrante = 3;
+                }
+                else if (anguloRotacao >= 0) {
+                    direcaoRotacao = 1; // Direita
+
+                    if (anguloRotacao >= 0 && anguloRotacao <= 90)
+                        quadrante = 1;
+                    else if (anguloRotacao > 90 && anguloRotacao < 180)
+                        quadrante = 4;
+                }
+
+                if (direcaoRotacao != direcaoRotacaoAnterior)
+                {
+                    if (direcaoRotacao == -1 && 
+                        quadranteAnteriorRotacao == 1 && quadrante == 2)
+                    {
+                        rotacaoVoltas--;
+                    }
+                    else if (direcaoRotacao == 1 &&
+                        quadranteAnteriorRotacao == 2 && quadrante == 1)
+                    {
+                        rotacaoVoltas++;
+                    }
+                }
+
+                direcaoRotacaoAnterior = direcaoRotacao;
+                quadranteAnteriorRotacao = quadrante;
+
+                // Desenha o pedaço da pizza
                 g.FillPie(new SolidBrush(Color.FromArgb(50, Color.White)), rect2,
                     angulo_inicial, angulo_final - angulo_inicial);
 
-                Font fontM = new Font("Lucida Console", 8, FontStyle.Regular);
-                string txtM = $"[{angulo_final - angulo_inicial}º]";
+                if (rotacaoVoltas < 0)
+                {
+                    anguloRotacao = -(360 - anguloRotacao);
+                    anguloRotacao = ((rotacaoVoltas + 1) * 360) + anguloRotacao;
+                }
+                else
+                {
+                    anguloRotacao = rotacaoVoltas * 360 + anguloRotacao;
+                }
+
+                string txtM = $"[{anguloRotacao}º]";
                 SizeF sizeM = g.MeasureString(txtM, fontM);
 
                 PointF pontoM = new PointF();
-                pontoM.X = posTela.X - (rect.Width / 2) - rect.Width / 2;
-                pontoM.Y = (posTela.Y - rect.Height / 2) - sizeM.Height;
+                pontoM.X = posTela.X - sizeM.Width / 2;
+                pontoM.Y = (posTela.Y - rect.Height / 2) - sizeM.Height * 2;
 
                 //g.DrawLine(new Pen(new SolidBrush(Color.Black)), pontoInicialA, pontoInicialB);
                 g.DrawLine(new Pen(new SolidBrush(Color.Red)), pontoFinalA, pontoFinalB);
@@ -1259,6 +1317,15 @@ namespace Editor2D
             // Centro do Ângulo
             g.FillEllipse(new SolidBrush(Color.Blue), posTela.X - 2, posTela.Y - 2, 4, 4);
 
+            if (Math.Abs(rotacaoVoltas) > 0)
+            {
+                string strVoltas = $"{rotacaoVoltas}x";
+                SizeF sVoltas = g.MeasureString(strVoltas, fontM);
+                PointF pontoV = new PointF();
+                pontoV.X = posTela.X - sVoltas.Width / 2;
+                pontoV.Y = posTela.Y + sVoltas.Height;
+                g.DrawString(strVoltas, fontM, new SolidBrush(Color.Aquamarine), pontoV);
+            }
         }
 
         private void DesenharLinhasOrientacaoEixosXYNaTela(
