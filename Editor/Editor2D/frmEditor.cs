@@ -824,6 +824,7 @@ namespace Editor2D
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Camera2D cam = (Camera2D)cboCamera.SelectedValue;
+            Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
 
             float angulo_inicial = 0F;
             float angulo_final = 0F;
@@ -835,8 +836,6 @@ namespace Editor2D
             {
                 if (_obj_sel.Count == 1) // 1 Objeto selecionado
                 {
-                    Objeto2D obj = (Objeto2D)cboObjeto2D.SelectedValue;
-
                     if (objetoDragMove != null && toolStripMove.Checked)
                     {
                         // Clicar com botão esquerdo e arrastar a posição do objeto selecionado
@@ -1013,9 +1012,18 @@ namespace Editor2D
                             ponto2D.X = origem.Global.X;
                             ponto2D.Y = origem.Global.Y;
                         }
+
                         DesenharAnguloEixosXYTela(
                             e.Graphics, ponto2D, SentidoManipulaObjeto,
                             angulo_inicial + -cam.Angulo.Z, angulo_final + -cam.Angulo.Z);
+
+                        if (_mouseUp.Button == MouseButtons.Left)
+                        {
+                            //((Objeto2D)cboObjeto2D.SelectedValue).DefinirAngulo(ponto2D,
+                            //    ((Objeto2D)cboObjeto2D.SelectedValue).Angulo.Z + -grausRotacao);
+
+                            //obj.DefinirAngulo(ponto2D, (angulo_final - objetoDragAngDiff.Z + objetoDragAng.Z) - grausRotacao);
+                        }
                     }
                     else if (toolStripEscala.Checked)
                     {
@@ -1039,15 +1047,17 @@ namespace Editor2D
                             ponto2D.Y = origem.Global.Y;
                         }
                         DesenharEscalaEixosXYTela(
-                            e.Graphics, ponto2D, SentidoManipulaObjeto, 
+                            e.Graphics, ponto2D, SentidoManipulaObjeto,
                             ponto_inicial, ponto_final);
                     }
                 }
                 #endregion
             }
-
-            DesenharLinhasOrientacaoEixosXYNaTela(e.Graphics, 
+            DesenharLinhasOrientacaoEixosXYNaTela(e.Graphics,
                 new Vetor2(30, cam.ResHeight - 30), SentidoEixos.ESPACIAL, false, 30);
+
+            if (_mouseUp.Button != MouseButtons.None)
+                _mouseUp = new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0);
         }
 
         private void DesenharEscalaEixosXYTela(
@@ -1149,9 +1159,10 @@ namespace Editor2D
         int direcaoRotacao = 0;
         int direcaoRotacaoAnterior = 0;
         int quadranteAnteriorRotacao = 0;
+        float grausRotacao = 0;
 
         private void DesenharAnguloEixosXYTela(
-            Graphics g, Eixos2 centro, SentidoEixos sentido, float angulo_inicial, float angulo_final,
+            Graphics g, Eixos2 centro, SentidoEixos sentido, float angulo_inicial, float angulo_final, 
             bool espaco2D = true, float raio = 60)
         {
             float diametro = raio * 2;
@@ -1278,6 +1289,8 @@ namespace Editor2D
                 {
                     anguloRotacao = rotacaoVoltas * 360 + anguloRotacao;
                 }
+
+                grausRotacao = anguloRotacao;
 
                 string txtM = $"[{anguloRotacao}º]";
                 SizeF sizeM = g.MeasureString(txtM, fontM);
@@ -1552,7 +1565,7 @@ namespace Editor2D
                     }
                 }
             }
-
+            
             propGrid.Refresh();
         }
 

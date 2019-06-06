@@ -11,6 +11,5 @@ namespace Epico.Sistema
         public string Nome { get; set; } = "Objeto2D";
         public bool Selecionado { get; set; }
         public virtual RGBA Cor { get; set; }
-
     }
 }

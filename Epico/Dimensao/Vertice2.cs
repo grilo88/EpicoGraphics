@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 namespace Epico
 {
 
+    public enum TipoVertice
+    {
+        Nenhum,
+        CantoArredondado,
+    }
+
     /// <summary>
     /// Vértice de 2 dimensões
     /// </summary>
@@ -19,6 +25,8 @@ namespace Epico
 
         public Vertice2(ObjetoEpico Obj) : base(Obj) { }
         public Vertice2(ObjetoEpico Obj, float X, float Y) : base(Obj, X, Y) { }
+
+        public TipoVertice Tipo { get; set; } = TipoVertice.Nenhum;
 
         public float Raio { get; set; }
 
