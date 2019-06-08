@@ -34,9 +34,11 @@
             this.NumX = new System.Windows.Forms.NumericUpDown();
             this.NumY = new System.Windows.Forms.NumericUpDown();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.trackBarZ = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.NumZ)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarZ)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -72,8 +74,6 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(420, 106);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(48, 17);
@@ -81,11 +81,22 @@
             this.checkBox1.Text = "Auto";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // trackBarZ
+            // 
+            this.trackBarZ.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.trackBarZ.Location = new System.Drawing.Point(0, 487);
+            this.trackBarZ.Maximum = 5000;
+            this.trackBarZ.Name = "trackBarZ";
+            this.trackBarZ.Size = new System.Drawing.Size(571, 45);
+            this.trackBarZ.TabIndex = 4;
+            this.trackBarZ.Scroll += new System.EventHandler(this.TrackBarZ_Scroll);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(571, 532);
+            this.Controls.Add(this.trackBarZ);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.NumY);
             this.Controls.Add(this.NumX);
@@ -98,6 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NumZ)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarZ)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,6 +122,7 @@
         private System.Windows.Forms.NumericUpDown NumX;
         private System.Windows.Forms.NumericUpDown NumY;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TrackBar trackBarZ;
     }
 }
 

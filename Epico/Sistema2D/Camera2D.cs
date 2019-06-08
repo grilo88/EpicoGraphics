@@ -52,9 +52,11 @@ namespace Epico.Sistema2D
         public long TempoDelta { get; private set; }
 
 
-        float _zoomCamera = 1F;
+        float _zoomCamera = 100F;
 
-        public float ZoomCamera { get => _zoomCamera; set => _zoomCamera = value; }
+        public float ZoomCamera {
+            get => _zoomCamera;
+            set => _zoomCamera = value; }
 
         public bool DesligarSistemaZoom { get; set; } = true;
         public bool AntiSerrilhado { get; set; } = true;
@@ -66,9 +68,10 @@ namespace Epico.Sistema2D
         public float Bottom => Pos.Y + ResHeight / 2;
 
         public bool EfeitoMotionBlur { get; set; }
-        public bool Efeito3D { get; set; }
+        public bool Efeito3D { get; set; } = true;
 
-        public float Efeito3DEixoZ => (float)Math.Sqrt(_zoomCamera * _zoomCamera) - 0.1F;
+        public float EixoZ => _zoomCamera * 1.2F;
+        public float PosZ { get; set; } = 100F;
         #endregion
 
         public Camera2D(EpicoGraphics epico, int width, int height)
@@ -228,26 +231,33 @@ namespace Epico.Sistema2D
                         #region Aplica zoom e ângulo na câmera
                         Vetor2 PosCam = new Vetor2(Pos);
                         Vetor2 PosCamZoomDiff = new Vetor2();
-                        PosCamZoomDiff = Pos * _zoomCamera - Pos;
+                        PosCamZoomDiff = (Pos / PosZ * _zoomCamera - Pos);
 
                         Vetor2 PosCamZoomDiff_Efeito3D = new Vetor2();
-                        PosCamZoomDiff_Efeito3D = Pos * Efeito3DEixoZ - Pos;
+                        PosCamZoomDiff_Efeito3D = Pos / PosZ * EixoZ - Pos;
+
+                        //float cameraZ = -(((pontoAncora.X - Centro().X) * zoom) / Centro().X) + pontoAncora.Z;
 
                         for (int v = 0; v < objProjecao.Vertices.Count(); v++)
                         {
+                            //var pontoAncora = objProjecao.Vertices[v];
+                            //var cameraZ = -(((pontoAncora.X - objProjecao.Centro.X) * ZoomCamera) / objProjecao.Centro.X) + 100;
+
                             Vetor2 globalPos = new Vetor2(
-                                objProjecao.Vertices[v].Global.X * _zoomCamera,
-                                objProjecao.Vertices[v].Global.Y * _zoomCamera);
-                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * _zoomCamera, globalPos, -Angulo.Z);
+                                objProjecao.Vertices[v].Global.X / PosZ * _zoomCamera ,
+                                objProjecao.Vertices[v].Global.Y / PosZ * _zoomCamera);
+
+                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam / PosZ * _zoomCamera, globalPos, -Angulo.Z);
                             objProjecao.Vertices[v].X = rot.X - objProjecao.Pos.X;
                             objProjecao.Vertices[v].Y = rot.Y - objProjecao.Pos.Y;
 
                             if (Efeito3D)
                             {
                                 globalPos = new Vetor2(
-                                ((Objeto2D)objProjecao.Tag).Vertices[v].Global.X * Efeito3DEixoZ,
-                                ((Objeto2D)objProjecao.Tag).Vertices[v].Global.Y * Efeito3DEixoZ);
-                                rot = Util2D.RotacionarPonto2D(PosCam * Efeito3DEixoZ, globalPos, -Angulo.Z);
+                                ((Objeto2D)objProjecao.Tag).Vertices[v].Global.X / PosZ * EixoZ,
+                                ((Objeto2D)objProjecao.Tag).Vertices[v].Global.Y / PosZ * EixoZ);
+
+                                rot = Util2D.RotacionarPonto2D(PosCam / PosZ * EixoZ, globalPos, -Angulo.Z);
                                 ((Objeto2D)objProjecao.Tag).Vertices[v].X = rot.X - ((Objeto2D)objProjecao.Tag).Pos.X;
                                 ((Objeto2D)objProjecao.Tag).Vertices[v].Y = rot.Y - ((Objeto2D)objProjecao.Tag).Pos.Y;
                             }
@@ -255,9 +265,9 @@ namespace Epico.Sistema2D
                         for (int c = 0; c < objProjecao.Origens.Count(); c++)
                         {
                             Vetor2 globalPos = new Vetor2(
-                                objProjecao.Origens[c].Global.X * _zoomCamera,
-                                objProjecao.Origens[c].Global.Y * _zoomCamera);
-                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * _zoomCamera, globalPos, -Angulo.Z);
+                                objProjecao.Origens[c].Global.X / PosZ * _zoomCamera,
+                                objProjecao.Origens[c].Global.Y / PosZ * _zoomCamera);
+                            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam / PosZ * _zoomCamera, globalPos, -Angulo.Z);
                             objProjecao.Origens[c].X = rot.X - objProjecao.Pos.X;
                             objProjecao.Origens[c].Y = rot.Y - objProjecao.Pos.Y;
                         }
@@ -303,9 +313,9 @@ namespace Epico.Sistema2D
                                 Pen pen = new Pen(new SolidBrush(Color.FromArgb(mat.CorBorda.A, mat.CorBorda.R, mat.CorBorda.G, mat.CorBorda.B)));
 
 #if Editor2D
-                                pen.Width = mat.LarguraBorda * _zoomCamera;
+                                pen.Width = -Math.Abs(mat.LarguraBorda / PosZ * _zoomCamera);
 #elif EtoForms
-                                pen.Thickness = mat.LarguraBorda * ZoomCamera;
+                                pen.Thickness = mat.LarguraBorda / PosZ * _zoomCamera;
 #endif
                                 for (int v = 1; v < objProjecao.Vertices.Count() + 1; v++)
                                 {
@@ -490,10 +500,10 @@ namespace Epico.Sistema2D
             Vertice2[] rectCam = new Vertice2[4];
 
             // Inverte escala no tamanho de projeção da tela (Menos zoom = maior tamanho de projeção)
-            float ProjLeft = Pos.X - (ResWidth / _zoomCamera) / 2; 
-            float ProjRight = Pos.X + (ResWidth / _zoomCamera) / 2;
-            float ProjTop = Pos.Y - (ResHeight / _zoomCamera) / 2;
-            float ProjBottom = Pos.Y + (ResHeight / _zoomCamera) / 2;
+            float ProjLeft = Pos.X - (ResWidth / ZoomCamera * PosZ) / 2; 
+            float ProjRight = Pos.X + (ResWidth / ZoomCamera * PosZ) / 2;
+            float ProjTop = Pos.Y - (ResHeight / ZoomCamera * PosZ) / 2;
+            float ProjBottom = Pos.Y + (ResHeight / ZoomCamera * PosZ) / 2;
 
             rectCam[0] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjLeft, ProjTop), Angulo.Z));          // Superior Esquerda
             rectCam[1] = new Vertice2(Util2D.RotacionarPonto2D(Pos, new Vetor2(ProjRight, ProjTop), Angulo.Z));         // Superior Direita
@@ -543,3 +553,4 @@ namespace Epico.Sistema2D
         #endregion
     }
 }
+

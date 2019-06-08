@@ -118,7 +118,9 @@
             this.txtCamZoom = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.txtCamPosX = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.txtCamPosZ = new System.Windows.Forms.NumericUpDown();
             this.txtCamPosY = new System.Windows.Forms.NumericUpDown();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -204,6 +206,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCamAngulo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCamPosZ)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosY)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackLinhaDoTempoAnimacao)).BeginInit();
@@ -267,7 +270,7 @@
             this.picScreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picScreen.Location = new System.Drawing.Point(0, 0);
             this.picScreen.Name = "picScreen";
-            this.picScreen.Size = new System.Drawing.Size(272, 622);
+            this.picScreen.Size = new System.Drawing.Size(269, 572);
             this.picScreen.TabIndex = 2;
             this.picScreen.TabStop = false;
             this.picScreen.Paint += new System.Windows.Forms.PaintEventHandler(this.PicScreen_Paint);
@@ -301,7 +304,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(337, 622);
+            this.panel1.Size = new System.Drawing.Size(340, 572);
             this.panel1.TabIndex = 0;
             // 
             // pnFerramentas
@@ -315,7 +318,7 @@
             this.pnFerramentas.Controls.Add(this.groupBox3);
             this.pnFerramentas.Location = new System.Drawing.Point(12, 10);
             this.pnFerramentas.Name = "pnFerramentas";
-            this.pnFerramentas.Size = new System.Drawing.Size(305, 960);
+            this.pnFerramentas.Size = new System.Drawing.Size(308, 960);
             this.pnFerramentas.TabIndex = 6;
             // 
             // tabControlObjeto
@@ -327,10 +330,10 @@
             this.tabControlObjeto.Controls.Add(this.tabVetor);
             this.tabControlObjeto.Controls.Add(this.tabVertice);
             this.tabControlObjeto.Controls.Add(this.tabFace);
-            this.tabControlObjeto.Location = new System.Drawing.Point(3, 311);
+            this.tabControlObjeto.Location = new System.Drawing.Point(3, 342);
             this.tabControlObjeto.Name = "tabControlObjeto";
             this.tabControlObjeto.SelectedIndex = 0;
-            this.tabControlObjeto.Size = new System.Drawing.Size(299, 234);
+            this.tabControlObjeto.Size = new System.Drawing.Size(302, 234);
             this.tabControlObjeto.TabIndex = 4;
             this.tabControlObjeto.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.TabControlObjeto_Selecting);
             // 
@@ -358,7 +361,7 @@
             this.tabObjeto.Location = new System.Drawing.Point(4, 22);
             this.tabObjeto.Name = "tabObjeto";
             this.tabObjeto.Padding = new System.Windows.Forms.Padding(3);
-            this.tabObjeto.Size = new System.Drawing.Size(291, 208);
+            this.tabObjeto.Size = new System.Drawing.Size(294, 208);
             this.tabObjeto.TabIndex = 0;
             this.tabObjeto.Text = "Objeto";
             this.tabObjeto.UseVisualStyleBackColor = true;
@@ -530,7 +533,7 @@
             this.tabOrigem.Location = new System.Drawing.Point(4, 22);
             this.tabOrigem.Name = "tabOrigem";
             this.tabOrigem.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOrigem.Size = new System.Drawing.Size(235, 208);
+            this.tabOrigem.Size = new System.Drawing.Size(240, 208);
             this.tabOrigem.TabIndex = 3;
             this.tabOrigem.Text = "Origem";
             this.tabOrigem.UseVisualStyleBackColor = true;
@@ -615,7 +618,7 @@
             this.tabVetor.Location = new System.Drawing.Point(4, 22);
             this.tabVetor.Name = "tabVetor";
             this.tabVetor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVetor.Size = new System.Drawing.Size(235, 208);
+            this.tabVetor.Size = new System.Drawing.Size(240, 208);
             this.tabVetor.TabIndex = 1;
             this.tabVetor.Text = "Vetor";
             this.tabVetor.UseVisualStyleBackColor = true;
@@ -637,7 +640,7 @@
             this.tabVertice.Controls.Add(this.txtVerticeRaio);
             this.tabVertice.Location = new System.Drawing.Point(4, 22);
             this.tabVertice.Name = "tabVertice";
-            this.tabVertice.Size = new System.Drawing.Size(235, 208);
+            this.tabVertice.Size = new System.Drawing.Size(240, 208);
             this.tabVertice.TabIndex = 2;
             this.tabVertice.Text = "Vértice";
             this.tabVertice.UseVisualStyleBackColor = true;
@@ -760,7 +763,7 @@
             this.tabFace.Location = new System.Drawing.Point(4, 22);
             this.tabFace.Name = "tabFace";
             this.tabFace.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFace.Size = new System.Drawing.Size(235, 208);
+            this.tabFace.Size = new System.Drawing.Size(240, 208);
             this.tabFace.TabIndex = 4;
             this.tabFace.Text = "Face";
             this.tabFace.UseVisualStyleBackColor = true;
@@ -772,7 +775,7 @@
             this.groupBox5.Controls.Add(this.tabModelagem);
             this.groupBox5.Location = new System.Drawing.Point(3, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(299, 175);
+            this.groupBox5.Size = new System.Drawing.Size(302, 175);
             this.groupBox5.TabIndex = 38;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Modelagem";
@@ -790,7 +793,7 @@
             this.tabModelagem.Location = new System.Drawing.Point(6, 19);
             this.tabModelagem.Name = "tabModelagem";
             this.tabModelagem.SelectedIndex = 0;
-            this.tabModelagem.Size = new System.Drawing.Size(289, 150);
+            this.tabModelagem.Size = new System.Drawing.Size(292, 150);
             this.tabModelagem.TabIndex = 0;
             // 
             // tabPrimitivos
@@ -809,7 +812,7 @@
             this.tabPrimitivos.Location = new System.Drawing.Point(4, 22);
             this.tabPrimitivos.Name = "tabPrimitivos";
             this.tabPrimitivos.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPrimitivos.Size = new System.Drawing.Size(281, 124);
+            this.tabPrimitivos.Size = new System.Drawing.Size(284, 124);
             this.tabPrimitivos.TabIndex = 0;
             this.tabPrimitivos.Text = "Primitivos";
             this.tabPrimitivos.UseVisualStyleBackColor = true;
@@ -884,7 +887,7 @@
             this.tabAvancado.Location = new System.Drawing.Point(4, 22);
             this.tabAvancado.Name = "tabAvancado";
             this.tabAvancado.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAvancado.Size = new System.Drawing.Size(225, 124);
+            this.tabAvancado.Size = new System.Drawing.Size(230, 124);
             this.tabAvancado.TabIndex = 3;
             this.tabAvancado.Text = "Avançado";
             this.tabAvancado.UseVisualStyleBackColor = true;
@@ -944,7 +947,7 @@
             this.tabDesenho.Location = new System.Drawing.Point(4, 22);
             this.tabDesenho.Name = "tabDesenho";
             this.tabDesenho.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDesenho.Size = new System.Drawing.Size(225, 124);
+            this.tabDesenho.Size = new System.Drawing.Size(230, 124);
             this.tabDesenho.TabIndex = 1;
             this.tabDesenho.Text = "Desenho";
             this.tabDesenho.UseVisualStyleBackColor = true;
@@ -959,7 +962,7 @@
             this.tabControles.Location = new System.Drawing.Point(4, 22);
             this.tabControles.Name = "tabControles";
             this.tabControles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControles.Size = new System.Drawing.Size(225, 124);
+            this.tabControles.Size = new System.Drawing.Size(230, 124);
             this.tabControles.TabIndex = 2;
             this.tabControles.Text = "Controles";
             this.tabControles.UseVisualStyleBackColor = true;
@@ -1020,7 +1023,7 @@
             this.tabLuzes.Location = new System.Drawing.Point(4, 22);
             this.tabLuzes.Name = "tabLuzes";
             this.tabLuzes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLuzes.Size = new System.Drawing.Size(225, 124);
+            this.tabLuzes.Size = new System.Drawing.Size(230, 124);
             this.tabLuzes.TabIndex = 4;
             this.tabLuzes.Text = "Luzes";
             this.tabLuzes.UseVisualStyleBackColor = true;
@@ -1060,7 +1063,7 @@
             this.tabOutros.Location = new System.Drawing.Point(4, 22);
             this.tabOutros.Name = "tabOutros";
             this.tabOutros.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutros.Size = new System.Drawing.Size(225, 124);
+            this.tabOutros.Size = new System.Drawing.Size(230, 124);
             this.tabOutros.TabIndex = 5;
             this.tabOutros.Text = "Outros";
             this.tabOutros.UseVisualStyleBackColor = true;
@@ -1078,11 +1081,13 @@
             this.groupCamera.Controls.Add(this.txtCamZoom);
             this.groupCamera.Controls.Add(this.label7);
             this.groupCamera.Controls.Add(this.txtCamPosX);
+            this.groupCamera.Controls.Add(this.label25);
             this.groupCamera.Controls.Add(this.label6);
+            this.groupCamera.Controls.Add(this.txtCamPosZ);
             this.groupCamera.Controls.Add(this.txtCamPosY);
             this.groupCamera.Location = new System.Drawing.Point(3, 184);
             this.groupCamera.Name = "groupCamera";
-            this.groupCamera.Size = new System.Drawing.Size(299, 121);
+            this.groupCamera.Size = new System.Drawing.Size(302, 121);
             this.groupCamera.TabIndex = 27;
             this.groupCamera.TabStop = false;
             this.groupCamera.Text = "Câmera:";
@@ -1136,7 +1141,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(135, 83);
+            this.label8.Location = new System.Drawing.Point(6, 109);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(37, 13);
             this.label8.TabIndex = 27;
@@ -1150,7 +1155,7 @@
             0,
             0,
             65536});
-            this.txtCamZoom.Location = new System.Drawing.Point(178, 81);
+            this.txtCamZoom.Location = new System.Drawing.Point(55, 107);
             this.txtCamZoom.Name = "txtCamZoom";
             this.txtCamZoom.Size = new System.Drawing.Size(59, 20);
             this.txtCamZoom.TabIndex = 28;
@@ -1178,6 +1183,15 @@
             this.txtCamPosX.TabIndex = 26;
             this.txtCamPosX.ValueChanged += new System.EventHandler(this.TxtCamPosX_ValueChanged);
             // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(137, 83);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(35, 13);
+            this.label25.TabIndex = 24;
+            this.label25.Text = "PosZ:";
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -1186,6 +1200,14 @@
             this.label6.Size = new System.Drawing.Size(35, 13);
             this.label6.TabIndex = 24;
             this.label6.Text = "PosY:";
+            // 
+            // txtCamPosZ
+            // 
+            this.txtCamPosZ.Location = new System.Drawing.Point(178, 81);
+            this.txtCamPosZ.Name = "txtCamPosZ";
+            this.txtCamPosZ.Size = new System.Drawing.Size(59, 20);
+            this.txtCamPosZ.TabIndex = 25;
+            this.txtCamPosZ.ValueChanged += new System.EventHandler(this.TxtCamPosZ_ValueChanged);
             // 
             // txtCamPosY
             // 
@@ -1211,9 +1233,9 @@
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.cboTipoAnimacao);
             this.groupBox4.Controls.Add(this.cboAnimacao);
-            this.groupBox4.Location = new System.Drawing.Point(3, 657);
+            this.groupBox4.Location = new System.Drawing.Point(3, 688);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(299, 379);
+            this.groupBox4.Size = new System.Drawing.Size(302, 379);
             this.groupBox4.TabIndex = 36;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Animação:";
@@ -1233,7 +1255,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trackLinhaDoTempoAnimacao.Location = new System.Drawing.Point(9, 185);
             this.trackLinhaDoTempoAnimacao.Name = "trackLinhaDoTempoAnimacao";
-            this.trackLinhaDoTempoAnimacao.Size = new System.Drawing.Size(282, 45);
+            this.trackLinhaDoTempoAnimacao.Size = new System.Drawing.Size(285, 45);
             this.trackLinhaDoTempoAnimacao.TabIndex = 5;
             // 
             // label14
@@ -1252,7 +1274,7 @@
             this.cboEfeitoAnimacao.FormattingEnabled = true;
             this.cboEfeitoAnimacao.Location = new System.Drawing.Point(9, 119);
             this.cboEfeitoAnimacao.Name = "cboEfeitoAnimacao";
-            this.cboEfeitoAnimacao.Size = new System.Drawing.Size(282, 21);
+            this.cboEfeitoAnimacao.Size = new System.Drawing.Size(285, 21);
             this.cboEfeitoAnimacao.TabIndex = 3;
             // 
             // label13
@@ -1271,7 +1293,7 @@
             this.cboTipoAnimacao.FormattingEnabled = true;
             this.cboTipoAnimacao.Location = new System.Drawing.Point(9, 69);
             this.cboTipoAnimacao.Name = "cboTipoAnimacao";
-            this.cboTipoAnimacao.Size = new System.Drawing.Size(282, 21);
+            this.cboTipoAnimacao.Size = new System.Drawing.Size(285, 21);
             this.cboTipoAnimacao.TabIndex = 1;
             // 
             // cboAnimacao
@@ -1281,7 +1303,7 @@
             this.cboAnimacao.FormattingEnabled = true;
             this.cboAnimacao.Location = new System.Drawing.Point(9, 19);
             this.cboAnimacao.Name = "cboAnimacao";
-            this.cboAnimacao.Size = new System.Drawing.Size(282, 21);
+            this.cboAnimacao.Size = new System.Drawing.Size(285, 21);
             this.cboAnimacao.TabIndex = 0;
             // 
             // groupBox3
@@ -1290,9 +1312,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.numericUpDown1);
-            this.groupBox3.Location = new System.Drawing.Point(3, 551);
+            this.groupBox3.Location = new System.Drawing.Point(3, 582);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(299, 100);
+            this.groupBox3.Size = new System.Drawing.Size(302, 100);
             this.groupBox3.TabIndex = 35;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Física:";
@@ -1316,9 +1338,9 @@
             // propGrid
             // 
             this.propGrid.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propGrid.Location = new System.Drawing.Point(275, 0);
+            this.propGrid.Location = new System.Drawing.Point(272, 0);
             this.propGrid.Name = "propGrid";
-            this.propGrid.Size = new System.Drawing.Size(266, 622);
+            this.propGrid.Size = new System.Drawing.Size(266, 572);
             this.propGrid.TabIndex = 4;
             this.propGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropGrid_PropertyValueChanged);
             this.propGrid.SelectedObjectsChanged += new System.EventHandler(this.PropGrid_SelectedObjectsChanged);
@@ -1587,25 +1609,25 @@
             this.panel2.Controls.Add(this.splitter1);
             this.panel2.Controls.Add(this.propGrid);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(337, 0);
+            this.panel2.Location = new System.Drawing.Point(340, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(541, 622);
+            this.panel2.Size = new System.Drawing.Size(538, 572);
             this.panel2.TabIndex = 6;
             // 
             // splitter1
             // 
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter1.Location = new System.Drawing.Point(272, 0);
+            this.splitter1.Location = new System.Drawing.Point(269, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 622);
+            this.splitter1.Size = new System.Drawing.Size(3, 572);
             this.splitter1.TabIndex = 5;
             this.splitter1.TabStop = false;
             // 
             // splitter2
             // 
-            this.splitter2.Location = new System.Drawing.Point(337, 0);
+            this.splitter2.Location = new System.Drawing.Point(340, 0);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(3, 622);
+            this.splitter2.Size = new System.Drawing.Size(3, 572);
             this.splitter2.TabIndex = 7;
             this.splitter2.TabStop = false;
             // 
@@ -1616,7 +1638,7 @@
             this.toolStripOrientacaoEspacial,
             this.toolStripOrientacaoObjeto,
             this.toolStripOrientacaoCamera});
-            this.toolStripOrientacao.Location = new System.Drawing.Point(285, 24);
+            this.toolStripOrientacao.Location = new System.Drawing.Point(69, 74);
             this.toolStripOrientacao.Name = "toolStripOrientacao";
             this.toolStripOrientacao.Size = new System.Drawing.Size(81, 25);
             this.toolStripOrientacao.TabIndex = 6;
@@ -1663,7 +1685,7 @@
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitter2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panel2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panel1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(878, 622);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(878, 572);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -1687,7 +1709,7 @@
             this.toolStripAngulo,
             this.toolStripRaio,
             this.toolStripEscala});
-            this.toolStripTransformacao.Location = new System.Drawing.Point(178, 24);
+            this.toolStripTransformacao.Location = new System.Drawing.Point(46, 49);
             this.toolStripTransformacao.Name = "toolStripTransformacao";
             this.toolStripTransformacao.Size = new System.Drawing.Size(104, 25);
             this.toolStripTransformacao.TabIndex = 8;
@@ -1788,6 +1810,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtCamAngulo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtCamPosZ)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtCamPosY)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -1961,6 +1984,8 @@
         private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem;
         private System.Windows.Forms.Panel pnFerramentas;
         private System.Windows.Forms.TabPage tabFace;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.NumericUpDown txtCamPosZ;
     }
 }
 

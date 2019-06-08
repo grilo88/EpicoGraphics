@@ -10,7 +10,7 @@ namespace Epico.Sistema2D
     public class Material
     {
         [DisplayName("Borda")]
-        public float LarguraBorda { get; set; } = 2F;
+        public float LarguraBorda { get; set; } = 0.1F;
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public RGBA CorBorda { get; set; } = new RGBA(255, 255, 255, 255);    // Branco
         [TypeConverter(typeof(ExpandableObjectConverter))]

@@ -35,7 +35,8 @@ namespace Editor2D
         bool _sair = false;
         const int _raio_padrao = 50;
 
-        Vetor2 _novaPosCamera = new Vetor2();
+        Vetor3 _novaPosCamera = new Vetor3();
+
         Vetor3 _novoAnguloCamera = new Vetor3();
         float _novoZoomCamera = 1;
         float _anguloZ_SentidoManipulaObjeto = 0F;
@@ -95,7 +96,7 @@ namespace Editor2D
             HabilitarFerramentasTransformacao(false);
 
             DefineMaxMinValues(
-                txtCamPosX, txtCamPosY, txtCamAngulo, txtCamZoom,
+                txtCamPosX, txtCamPosY, txtCamPosZ, txtCamAngulo, txtCamZoom,
                 txtPosX, txtPosY, txtRaio, txtAngulo, txtEscalaX, txtEscalaY,
                 txtOrigemPosX, txtOrigemPosY,
                 txtVerticePosX, txtVerticePosY, txtVerticeRaio, txtVerticeAngulo);
@@ -117,7 +118,8 @@ namespace Editor2D
                 }).ToList();
             #endregion
 
-            _epico.Camera.Pos = new Vetor2(_novaPosCamera); 
+            _epico.Camera.Pos = new Vetor2(_novaPosCamera.X, _novaPosCamera.Y);
+            _novaPosCamera.Z = _epico.Camera.PosZ;
 
             Show();
 
@@ -161,10 +163,14 @@ namespace Editor2D
                 #endregion
 
                 #region Efeito suave na transladação da câmera
-                _epico.Camera.Pos = Eixos.Lerp(
-                    _epico.Camera.Pos, _novaPosCamera, 1F * _epico.Camera.TempoDelta * 0.000001F, out bool lerpPosCamCompletado);
 
-                if (lerpPosCamCompletado)
+                _epico.Camera.Pos = Eixos.Lerp(
+                    _epico.Camera.Pos, new Vetor2(_novaPosCamera.X, _novaPosCamera.Y), 1F * _epico.Camera.TempoDelta * 0.000001F, out bool lerpPosCamCompletado);
+
+                _epico.Camera.PosZ = Eixos.Lerp(
+                    _epico.Camera.PosZ, _novaPosCamera.Z, 1F * _epico.Camera.TempoDelta * 0.000001F, out bool lerpPosZCamCompletado);
+
+                if (lerpPosCamCompletado && lerpPosZCamCompletado)
                 {
                     propGrid.Refresh();
                 }
@@ -632,6 +638,7 @@ namespace Editor2D
 
             if (!txtCamPosX.Focused) txtCamPosX.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Pos.X;
             if (!txtCamPosY.Focused) txtCamPosY.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Pos.Y;
+            if (!txtCamPosZ.Focused) txtCamPosZ.Value = (decimal)((Camera2D)cboCamera.SelectedValue).PosZ;
             if (!txtCamAngulo.Focused) txtCamAngulo.Value = (decimal)((Camera2D)cboCamera.SelectedValue).Angulo.Z;
             if (!txtCamZoom.Focused) txtCamZoom.Value = (decimal)((Camera2D)cboCamera.SelectedValue).ZoomCamera;
 
@@ -673,7 +680,8 @@ namespace Editor2D
         {
             if (cboObjeto2D.SelectedValue != null)
             {
-                _novaPosCamera = _epico.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
+                var pos = _epico.Camera.PosFoco((Objeto2D)cboObjeto2D.SelectedValue);
+                _novaPosCamera = new Vetor3(pos.X, pos.Y, _novaPosCamera.Z);
             }
         }
 
@@ -1772,8 +1780,8 @@ namespace Editor2D
         {
             if (cboOrigem.SelectedValue != null)
             {
-                _novaPosCamera = ((Camera2D)cboCamera.SelectedValue)
-                    .PosFoco((Origem2)cboOrigem.SelectedValue);
+                var pos = ((Camera2D)cboCamera.SelectedValue).PosFoco((Origem2)cboOrigem.SelectedValue);
+                _novaPosCamera = new Vetor3(pos.X, pos.Y, _novaPosCamera.Z);
             }
         }
 
@@ -2047,7 +2055,8 @@ namespace Editor2D
         {
             if (cboVertices.SelectedValue != null)
             {
-                _novaPosCamera = _epico.Camera.PosFoco((Vertice2)cboVertices.SelectedValue);
+                var pos = _epico.Camera.PosFoco((Vertice2)cboVertices.SelectedValue);
+                _novaPosCamera = new Vetor3(pos.X, pos.Y, _novaPosCamera.Z);
             }
         }
 
@@ -2108,6 +2117,17 @@ namespace Editor2D
         {
             dToolStripMenuItem.Checked = !dToolStripMenuItem.Checked;
             _epico.Camera.Efeito3D = dToolStripMenuItem.Checked;
+        }
+
+        private void TxtCamPosZ_ValueChanged(object sender, EventArgs e)
+        {
+            if (txtCamPosZ.Focused)
+            {
+                if (float.TryParse(txtCamPosZ.Text, out float camPosZ))
+                {
+                    _novaPosCamera.Z = camPosZ;
+                }
+            }
         }
     }
 }

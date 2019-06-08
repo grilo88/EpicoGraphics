@@ -78,9 +78,13 @@ namespace Rotacao3D
                 Vertices[i].Z *= 300;
             }
 
-            AngX = 30;
-            AngY = 30;
-            AngZ = 30;
+            cameraPos.X = 100;
+            cameraPos.Y = -50;
+            cameraPos.Z = 0;
+
+            AngX = 0;
+            AngY = 0;
+            AngZ = 0;
 
             Rotacionar(
                 (float)(NumX.Value = (decimal)AngX),
@@ -88,6 +92,7 @@ namespace Rotacao3D
                 (float)(NumZ.Value = (decimal)AngZ));
         }
 
+        float Z;
         Vetor2 pontoTela = new Vetor2();
         private void FrmPrincipal_Paint(object sender, PaintEventArgs e)
         {
@@ -103,7 +108,10 @@ namespace Rotacao3D
             // Calcule a posição da câmera Z para permanecer constante apesar da rotação            
             Vetor3 pontoAncora = new Vetor3(Vertices[4]); //anchor point
             float cameraZ = -(((pontoAncora.X - Centro().X) * zoom) / Centro().X) + pontoAncora.Z;
-            cameraPos = new Vetor3(Centro().X, Centro().Y, cameraZ);
+            var camPos = new Vetor3(
+                Centro().X + cameraPos.X, 
+                Centro().Y + cameraPos.Y, 
+                cameraZ + cameraPos.Z);
 
             // 
             Vetor2[] tela = Vertices.Select(x => new Vetor2(0, 0)).ToArray();
@@ -111,43 +119,45 @@ namespace Rotacao3D
             // Converte pontos 3D em 2D
             Vetor2 origem = new Vetor2(0, 0);
             Vetor3 vertice;
+
+            Vetor2 telaAnt = new Vetor2();
+
             for (int i = 0; i < Vertices.Count(); i++)
             {
                 vertice = new Vetor3(Vertices[i]);
-                if (vertice.Z - cameraPos.Z >= 0)
+                if (vertice.Z - camPos.Z >= 0)
                 {
-                    tela[i].X = (int)(-(vertice.X - cameraPos.X) / (-0.1f) * zoom) + pontoTela.X;
-                    tela[i].Y = (int)((vertice.Y - cameraPos.Y) / (-0.1f) * zoom) + pontoTela.Y;
+                    tela[i].X = (int)(-(vertice.X - camPos.X) / (-0.1f) * zoom) + pontoTela.X;
+                    tela[i].Y = (int)((vertice.Y - camPos.Y) / (-0.1f) * zoom) + pontoTela.Y;
                 }
                 else
                 {
-                    origem.X = (int)((Centro().X - cameraPos.X) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.X;
-                    origem.Y = (int)(-(Centro().Y - cameraPos.Y) / (double)(Centro().Z - cameraPos.Z) * zoom) + pontoTela.Y;
+                    origem.X = (int)((Centro().X - camPos.X) / (double)(Centro().Z - camPos.Z) * zoom) + pontoTela.X;
+                    origem.Y = (int)(-(Centro().Y - camPos.Y) / (double)(Centro().Z - camPos.Z) * zoom) + pontoTela.Y;
 
-                    tela[i].X = ((vertice.X - cameraPos.X) / (vertice.Z - cameraPos.Z) * zoom + Centro().X);
-                    tela[i].Y = (-(vertice.Y - cameraPos.Y) / (vertice.Z - cameraPos.Z) * zoom + Centro().Y);
+                    tela[i].X = ((vertice.X - camPos.X) / (vertice.Z - camPos.Z) * zoom + Centro().X);
+                    tela[i].Y = (-(vertice.Y - camPos.Y) / (vertice.Z - camPos.Z) * zoom + Centro().Y);
 
                     tela[i].X = (int)tela[i].X;
                     tela[i].Y = (int)tela[i].Y;
                 }
-            }
 
-            // Renderização
-            for (int i = 1; i < Vertices.Count() + 1; i++)
-            {
-                PointF pontoA, pontoB;
-                if (i == Vertices.Count)
+                PointF pontoA = new PointF();
+                PointF pontoB = new PointF();
+
+                if (i > 0)
                 {
-                    pontoA = new PointF(Vertices[i - 1].X, Vertices[i - 1].Y);
-                    pontoB = new PointF(Vertices[0].X, Vertices[0].Y);
-                }
-                else
-                {
-                    pontoA = new PointF(Vertices[i - 1].X, Vertices[i - 1].Y);
-                    pontoB = new PointF(Vertices[i].X, Vertices[i].Y);
+                    pontoA.X = telaAnt.X;
+                    pontoA.Y = telaAnt.Y;
+
+                    pontoB.X = tela[i].X;
+                    pontoB.Y = tela[i].Y;
+
+                    g.DrawLine(new Pen(new SolidBrush(Color.Black)), pontoA, pontoB);
                 }
 
-                g.DrawLine(new Pen(new SolidBrush(Color.Black)), pontoA, pontoB);
+                telaAnt.X = tela[i].X;
+                telaAnt.Y = tela[i].Y;
             }
         }
 
@@ -176,9 +186,9 @@ namespace Rotacao3D
         {
             for (int i = 0; i < Vertices.Count(); i++)
             {
-                Vertices[i].EulerRotacionarX(new Vetor3(0, 0, 0), grausX);
-                Vertices[i].EulerRotacionarY(new Vetor3(0, 0, 0), grausY);
-                Vertices[i].EulerRotacionarZ(new Vetor3(0, 0, 0), grausZ);
+                //Vertices[i] = Vertices[i].EulerRotacionarX(Centro(), grausX);
+                //Vertices[i] = Vertices[i].EulerRotacionarY(Centro(), grausY);
+                //Vertices[i] = Vertices[i].EulerRotacionarZ(Centro(), grausZ);
             }
         }
 
@@ -194,11 +204,6 @@ namespace Rotacao3D
             Refresh();
         }
 
-        private void TrackBar1_Scroll(object sender, EventArgs e)
-        {
-
-        }
-
         private void NumZ_ValueChanged(object sender, EventArgs e)
         {
             AngZ = (float)NumZ.Value;
@@ -206,6 +211,11 @@ namespace Rotacao3D
 
         private void FrmPrincipal_SizeChanged(object sender, EventArgs e)
         {
+        }
+
+        private void TrackBarZ_Scroll(object sender, EventArgs e)
+        {
+            cameraPos.Z = trackBarZ.Value;
         }
 
         private void NumX_ValueChanged(object sender, EventArgs e)

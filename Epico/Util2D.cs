@@ -75,12 +75,12 @@ namespace Epico
             this Camera2D cam, Eixos2 mouseXY)
         {
             Vetor2 PosCamZoomDiff = new Vetor2();
-            PosCamZoomDiff = cam.Pos * cam.ZoomCamera - cam.Pos;
+            PosCamZoomDiff = cam.Pos / cam.PosZ * cam.ZoomCamera - cam.Pos;
 
             float x = cam.Left + mouseXY.X + PosCamZoomDiff.X;
             float y = cam.Top + mouseXY.Y + PosCamZoomDiff.Y;
 
-            Vetor2 ponto = new Vetor2(x / cam.ZoomCamera, y / cam.ZoomCamera); // Reduz escala para tamanho real em 2D
+            Vetor2 ponto = new Vetor2(x * cam.PosZ / cam.ZoomCamera, y * cam.PosZ / cam.ZoomCamera); // Reduz escala para tamanho real em 2D
             Eixos2 ponto2D = Util2D.RotacionarPonto2D(cam.Pos, ponto, cam.Angulo.Z); // Rotaciona ponto no tamanho real
             return ponto2D;
         }
@@ -89,10 +89,11 @@ namespace Epico
         {
             Vetor2 PosCam = new Vetor2(cam.Pos);
             Vetor2 PosCamZoomDiff = new Vetor2();
-            PosCamZoomDiff = cam.Pos * cam.ZoomCamera - cam.Pos;
+            PosCamZoomDiff = cam.Pos / cam.PosZ * cam.ZoomCamera - cam.Pos;
 
-            Vetor2 globalPos = (Vetor2)pos2D * cam.ZoomCamera;
-            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * cam.ZoomCamera, globalPos, -cam.Angulo.Z);
+            Vetor2 globalPos = (Vetor2)pos2D * cam.ZoomCamera / cam.PosZ;
+            Eixos2 rot = Util2D.RotacionarPonto2D(PosCam * cam.ZoomCamera / cam.PosZ,
+                globalPos, -cam.Angulo.Z);
 
             PointF pontoTela = new PointF();
             pontoTela.X = -cam.Left - PosCamZoomDiff.X + rot.X;
