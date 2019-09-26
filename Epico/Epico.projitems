@@ -22,18 +22,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controles2D\Textbox2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos3.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Eixos4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Origem3.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vertice3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Pivo3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor3.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor4.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dimensao\Vetor2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EpicoGraphics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interno.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Luzes2D\LuzDestaque.cs" />
@@ -55,7 +48,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\ObjetoEpico.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\PoligonoDimensional_old.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\_Objeto2D_old.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema3D\Delaunay\Triangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Projetor2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Animacao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Avancado2D.cs" />
@@ -74,6 +66,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\PoligonoDimensional.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\Objeto2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util2D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Util3D.cs" />
   </ItemGroup>
 </Project>

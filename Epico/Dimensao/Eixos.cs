@@ -16,7 +16,6 @@ namespace Epico
         public ObjetoEpico Obj { get; set; }
         public object Tag { get; set; }
 
-
         /// <summary>
         /// Nome do {Eixos}
         /// </summary>
@@ -28,9 +27,14 @@ namespace Epico
         public bool Sel { get; set; }
 
         /// <summary>
-        /// Dimensões dos eixos
+        /// Coordenada X
         /// </summary>
-        internal float[] Dim { get; set; }
+        public float X { get; set; }
+
+        /// <summary>
+        /// Coordenada Y
+        /// </summary>
+        public float Y { get; set; }
 
         /// <summary>
         /// Cria uma nova instância do Eixos
@@ -43,47 +47,48 @@ namespace Epico
         {
             get
             {
-                float ret = 0;
-                for (int i = 0; i < Dim.Length; i++) ret += Dim[i] * Dim[i];
-                return (float)Math.Sqrt(ret);
+                return (float)Math.Sqrt(X * X + Y * Y);
             }
         }
 
         public T Somar<T>(T valor) where T : Eixos
         {
-            for (int i = 0; i < Dim.Length; i++) Dim[i] += valor.Dim[i];
+            X += valor.X;
+            Y += valor.Y;
             return (T)this;
         }
 
         public T Subtrair<T>(T valor) where T : Eixos
         {
-            for (int i = 0; i < Dim.Length; i++) Dim[i] -= valor.Dim[i];
+            X -= valor.X;
+            Y -= valor.Y;
             return (T)this;
         }
 
         public T Multiplicar<T>(T valor) where T : Eixos
         {
-            for (int i = 0; i < Dim.Length; i++) Dim[i] *= valor.Dim[i];
+            X *= valor.X;
+            Y *= valor.Y;
             return (T)this;
         }
 
         public T Dividir<T>(T valor) where T : Eixos
         {
-            for (int i = 0; i < Dim.Length; i++) Dim[i] /= valor.Dim[i];
+            X /= valor.X;
+            X /= valor.Y;
             return (T)this;
         }
 
         public float Produto<T>(T valor) where T : Eixos
         {
-            float prod = 0;
-            for (int i = 0; i < Dim.Length; i++) prod += Dim[i] * valor.Dim[i];
-            return prod;
+            return X * valor.X + Y * valor.Y;
         }
 
         public T Normalizar<T>() where T : Eixos
         {
             float magnitude = Magnitude;
-            for (int i = 0; i < Dim.Length; i++) Dim[i] /= magnitude;
+            X /= magnitude;
+            Y /= magnitude;
             return (T)this;
         }
 
@@ -109,10 +114,8 @@ namespace Epico
         {
             // a + f * (b - a);
             Eixos eixos = origem.NovaInstancia();
-            for (int i = 0; i < origem.Dim.Length; i++)
-            {
-                eixos.Dim[i] = origem.Dim[i] + distancia * (destino.Dim[i] - origem.Dim[i]);
-            }
+            eixos.X = origem.X + distancia * (destino.X - origem.X);
+            eixos.Y = origem.Y + distancia * (destino.Y - origem.Y);
             return (T)eixos;
         }
 
@@ -131,23 +134,22 @@ namespace Epico
             var ret = Lerp<T>(origem, destino, distancia);
 
             bool transladando = false;
-            for (int i = 0; i < origem.Dim.Length; i++)
-                if (origem.Dim[i] != destino.Dim[i]) transladando = true;
+
+            if (origem.X != destino.X ||
+                origem.Y != destino.Y) transladando = true;
 
             if (transladando)
             {
                 completado = true; // Antecipa o status completado
-                for (int i = 0; i < origem.Dim.Length; i++)
-                {
-                    if (Arredondar(origem.Dim[i]) != Arredondar(destino.Dim[i]))
-                        completado = false; // Não está próximo o suficiente do ponto de destino
-                }
+                if (Arredondar(origem.X) != Arredondar(destino.X) ||
+                    Arredondar(origem.Y) != Arredondar(destino.Y))
+                    completado = false; // Não está próximo o suficiente do ponto de destino
             }
 
             if (completado) // Define valores para as dimensões de origem
             {
-                for (int i = 0; i < origem.Dim.Length; i++)
-                    ret.Dim[i] = destino.Dim[i];
+                ret.X = destino.X;
+                ret.Y = destino.Y;
             }
 
             return ret;

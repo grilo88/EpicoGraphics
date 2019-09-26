@@ -20,6 +20,7 @@ namespace Epico
     public class Vertice2 : Eixos2
     {
         public Vertice2() : base() { }
+
         public Vertice2(Eixos2 eixos2) : base(eixos2) { }
         public Vertice2(float X, float Y) : base(X, Y) { }
 

@@ -264,10 +264,10 @@ namespace Editor2D
 
         PointF cameraDrag;
         Eixos2 objetoDragMove = null;
-        Eixos3 objetoDragAng = null;
+        Vetor3 objetoDragAng = null;
 
         Eixos2 objetoDragMoveDiff = new Vetor2();
-        Eixos3 objetoDragAngDiff = new Vetor3();
+        Vetor3 objetoDragAngDiff = new Vetor3();
 
         private void PicDesign_MouseDown(object sender, MouseEventArgs e)
         {

@@ -29,7 +29,6 @@ namespace Epico.Sistema
         /// <summary>
         /// Quantidade de dimensões que esta geometria trabalha
         /// </summary>
-        int _quant_dim => Pos.Dim.Length;
 
         public abstract string Nome { get; set; }
         public abstract float Raio { get; set; }
@@ -69,16 +68,14 @@ namespace Epico.Sistema
             {
                 T1 centro = (T1)Pos.NovaInstancia();
                 for (int v = 0; v < Vertices.Count; v++)
-                    for (int i = 0; i < _quant_dim; i++)
-                    {
-                        centro.Dim[i] += Vertices[v].Dim[i]; // Soma os eixos das dimensões
-                    }
-
-                for (int i = 0; i < _quant_dim; i++)
                 {
-                    // Depois divide a soma das dimensões pela quantidade de vértices
-                    centro.Dim[i] /= Vertices.Count;
+                    centro.X += Vertices[v].X; // Soma os eixos das dimensões
+                    centro.Y += Vertices[v].Y; // Soma os eixos das dimensões
                 }
+
+                // Depois divide a soma das dimensões pela quantidade de vértices
+                centro.X /= Vertices.Count;
+                centro.Y /= Vertices.Count;
                 return centro;
             }
         }
@@ -91,11 +88,8 @@ namespace Epico.Sistema
 
         public virtual void AtualizarMinMax()
         {
-            for (int i = 0; i < _quant_dim; i++)
-            {
-                Max.Dim[i] = Vertices.Max(d => d.Dim[i]);
-                Min.Dim[i] = Vertices.Min(d => d.Dim[i]);
-            }
+            Max.X = Vertices.Max(d => d.X);
+            Min.Y = Vertices.Min(d => d.Y);
         }
 
         public abstract void AtualizarGeometria(T5 novoAngulo);
