@@ -6,21 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Epico.Sistema;
-
-#if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
-#elif EtoForms
-using Eto.Drawing;
-#endif
 
 namespace Epico
 {
     public static class Util2D
     {
-        public static float DistanciaEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => 
-            DistanciaEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
-        public static float AnguloEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB) => 
-            AnguloEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
+        public static float DistanciaEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB)
+        {
+            return DistanciaEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
+        }
+        public static float AnguloEntreDoisPontos(this Eixos2 pontoA, Eixos2 pontoB)
+        {
+            return AnguloEntreDoisPontos(pontoA.X, pontoA.Y, pontoB.X, pontoB.Y);
+        }
 
         public static float DistanciaEntreDoisPontos(float x1, float y1, float x2, float y2)
         {
@@ -47,8 +46,10 @@ namespace Epico
         /// <param name="p">Ponto a ser rotacionado</param>
         /// <param name="graus">Diferença de ângulos no caso de rotação ou soma dos ângulo no caso de acoplamento de objetos.</param>
         /// <returns></returns>
-        public static Eixos2 RotacionarPonto2D(Eixos2 origem, Eixos2 ponto, float graus) => 
-            RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, graus);
+        public static Eixos2 RotacionarPonto2D(Eixos2 origem, Eixos2 ponto, float graus)
+        {
+           return RotacionarPonto2D(origem.X, origem.Y, ponto.X, ponto.Y, graus);
+        }
 
         /// <summary>
         /// Rotaciona um ponto 2D a partir de um ponto de origem

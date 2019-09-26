@@ -6,12 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Epico.Sistema;
 
-#if Editor2D || NetStandard2 || NetCore
 using System.Drawing;
 using System.Drawing.Imaging;
-#elif EtoForms
-using Eto.Drawing;
-#endif
 
 namespace Epico
 {
@@ -55,13 +51,7 @@ namespace Epico
 
         public Camera2D CriarCamera(int width, int heigth)
         {
-            return CriarCamera2D(width, heigth,
-#if Editor2D || NetStandard2 || NetCore
-                 PixelFormat.Format32bppArgb
-#elif EtoForms
-                PixelFormat.Format32bppRgba
-#endif
-                );
+            return CriarCamera2D(width, heigth,PixelFormat.Format32bppArgb);
         }
         public Camera2D CriarCamera2D(int width, int heigth,
 

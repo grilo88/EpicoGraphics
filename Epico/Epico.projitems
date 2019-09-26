@@ -46,8 +46,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Objetos2D\Primitivos\TrianguloRetangulo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Colisao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\ObjetoEpico.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema\PoligonoDimensional_old.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema\_Objeto2D_old.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Projetor2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Animacao2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Avancado2D.cs" />
@@ -63,7 +61,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Objeto2DRenderizar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Primitivo2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema2D\Transformacao.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Sistema\PoligonoDimensional.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sistema\Objeto2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util2D.cs" />
   </ItemGroup>

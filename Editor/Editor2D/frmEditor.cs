@@ -648,9 +648,11 @@ namespace Editor2D
                 if (!txtOrigemPosY.Focused) txtOrigemPosY.Value = (decimal)((Origem2)cboOrigem.SelectedValue).Y;
             }
 
+#pragma warning disable CS1030 // #warning: "Falta Vetor"
 #warning Falta Vetor
 
             if (cboVertices.SelectedValue != null)
+#pragma warning restore CS1030 // #warning: "Falta Vetor"
             {
                 if (!txtVerticePosX.Focused) txtVerticePosX.Value = (decimal)((Vertice2)cboVertices.SelectedValue).X;
                 if (!txtVerticePosY.Focused) txtVerticePosY.Value = (decimal)((Vertice2)cboVertices.SelectedValue).Y;
