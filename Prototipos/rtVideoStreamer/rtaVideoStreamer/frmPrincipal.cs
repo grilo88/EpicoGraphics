@@ -8,15 +8,17 @@ using System.Text;
 using System.Windows.Forms;
 using rtaNetworking.Streaming;
 using System.Net;
+using Microsoft.Owin.Hosting;
 
 namespace rtaVideoStreamer
 {
-    public partial class Form1 : Form
+    public partial class frmPrincipal : Form
     {
 
         private ImageStreamingServer _Server;
+        private IDisposable _SignalR;
 
-        public Form1()
+        public frmPrincipal()
         {
             InitializeComponent();
             this.linkLabel1.Text = string.Format("http://{0}:8080", Environment.MachineName);
@@ -25,6 +27,8 @@ namespace rtaVideoStreamer
         private void Form1_Load(object sender, EventArgs e)
         {
             _Server = new ImageStreamingServer();
+            string url = @"http://localhost:8081/";
+            _SignalR =  WebApp.Start<StartupEpicoHub>(url);
             _Server.Start(8080);
         }
 

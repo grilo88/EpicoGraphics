@@ -475,6 +475,36 @@ namespace Epico.Sistema2D
                 obj.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
         }
 
+        public void DispararMouseClick(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseClick(new EventArgs());
+            }
+        }
+
+        public void DispararMouseUp(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseUp(new EventArgs());
+            }
+        }
+
+        public void DispararMouseDown(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseDown(new EventArgs());
+            }
+        }
+
         #region IDisposable Support
         private bool disposedValue = false; // Para detectar chamadas redundantes
 

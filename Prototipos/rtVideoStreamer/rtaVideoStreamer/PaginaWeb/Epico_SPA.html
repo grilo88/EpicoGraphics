@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, minimum-scale=0.1">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="jquery.signalR.min.js" type="text/javascript"></script>
+		<script>
+			var SignalR;  
+			var EpicoProxy; 
+			var connectionId = '';
+			
+			function Connect() 
+				{  
+					var url = "http://localhost:8081/";  
+
+					SignalR = $.hubConnection(url, {  
+						useDefaultPath: true  
+					});  
+					EpicoProxy = SignalR.createHubProxy('EpicoSPA_Hub');  
+					
+					SignalR.start().done(function() {  
+							alert("Conectado na plataforma Epico.");  
+						})  
+						.fail(function() {  
+							alert("Falha ao conectar na plataforma Epico.");  
+						})  
+				}
+				
+			$(document).ready(function()
+			{
+				$('#Tela').click(function (e) { //Offset mouse Position
+					var posX = $(this).offset().left,
+						posY = $(this).offset().top;
+						
+					posX = e.pageX - posX;
+					posY = e.pageY - posY;
+					
+					EpicoProxy.invoke('MouseClick', connectionId, posX, posY);  
+				});
+			});
+		</script>
+		<script>
+		
+		</script>
+		<style>
+		.center {
+		  display: block;
+		  margin-left: auto;
+		  margin-right: auto;
+		  // width: 50%;
+		}
+		</style>
+	</head>
+	<body style="margin: 0px; background: #0e0e0e;" onload="Connect();">
+		<img id=Tela class="center" style="-webkit-user-select: none;margin: auto;" src="http://localhost:8080/">
+	</body>
+</html>
