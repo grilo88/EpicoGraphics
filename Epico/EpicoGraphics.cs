@@ -15,6 +15,10 @@ namespace Epico
     {
         #region Propriedades
         public long TempoDelta => Camera.TempoDelta;
+
+        /// <summary>
+        /// Câmera atualmente ativa para o usuário.
+        /// </summary>
         public Camera2D Camera { get; set; }
         public List<Camera2D> Cameras { get; set; } = new List<Camera2D>();
 

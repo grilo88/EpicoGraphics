@@ -324,7 +324,7 @@ namespace Epico.Sistema2D
         public event EventHandler MouseDown;
         public event EventHandler MouseMove;
 
-        protected virtual void OnMouseClick(EventArgs e)
+        public virtual void OnMouseClick(EventArgs e)
         {
             EventHandler handler = MouseClick;
             if (handler != null)
@@ -332,7 +332,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseUp(EventArgs e)
+        public virtual void OnMouseUp(EventArgs e)
         {
             EventHandler handler = MouseUp;
             if (handler != null)
@@ -340,7 +340,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseDown(EventArgs e)
+        public virtual void OnMouseDown(EventArgs e)
         {
             EventHandler handler = MouseDown;
             if (handler != null)
@@ -348,7 +348,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseMove(EventArgs e)
+        public virtual void OnMouseMove(EventArgs e)
         {
             EventHandler handler = MouseMove;
             if (handler != null)
