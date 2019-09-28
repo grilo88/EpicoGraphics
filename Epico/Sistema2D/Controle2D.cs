@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Epico.Sistema2D
 {
-    public class Localizao : INotifyPropertyChanged
+    public class Localizacao : INotifyPropertyChanged
     {
         private float _x;
         private float _y;
@@ -34,8 +34,8 @@ namespace Epico.Sistema2D
             }
         }
 
-        public Localizao() { }
-        public Localizao(float x, float y)
+        public Localizacao() { }
+        public Localizacao(float x, float y)
         {
             _x = x;
             _y = y;
@@ -103,7 +103,7 @@ namespace Epico.Sistema2D
         private Vertice2 _vInferiorDireito;             // Inferior Direito
         private Vertice2 _vInferiorEsquerdo;            // Inferior Esquerdo
 
-        private Localizao _localizao = new Localizao(0, 0);
+        private Localizacao _localizacao = new Localizacao(0, 0);
         private Tamanho _tamanho = new Tamanho(300, 300);
         private Controle2D _parent;
 
@@ -131,13 +131,13 @@ namespace Epico.Sistema2D
         [Category("Layout")]
         [Description("As coordenadas do canto superior esquerdo do controle em relação ao canto superior esquerdo do seu recipiente.")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public Localizao Localizao
+        public Localizacao Localizacao
         {
-            get => _localizao; set
+            get => _localizacao; set
             {
                 var val = value;
-                _localizao.X = val.X;
-                _localizao.Y = val.Y;
+                _localizacao.X = val.X;
+                _localizacao.Y = val.Y;
                 AtualizarLayout();
             }
         }
@@ -170,7 +170,7 @@ namespace Epico.Sistema2D
             } set { } }
 
 
-        private void Localizao_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Localizacao_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             AtualizarLayout();
         }
@@ -182,10 +182,10 @@ namespace Epico.Sistema2D
 
         [Browsable(false)]
         [Category("Layout")]
-        public float Top { get => Localizao.Y; set => Localizao.Y = value; }
+        public float Top { get => Localizacao.Y; set => Localizacao.Y = value; }
         [Browsable(false)]
         [Category("Layout")]
-        public float Left { get => Localizao.X; set => Localizao.X = value; }
+        public float Left { get => Localizacao.X; set => Localizacao.X = value; }
         [Browsable(false)]
         [Category("Layout")]
         public float Largura { get => Tamanho.Largura; set => Tamanho.Largura = value; }
@@ -223,14 +223,14 @@ namespace Epico.Sistema2D
             if (Pos == null)
                 Pos = new Vetor2(this, 0, 0);
             //InicializarTamanho();
-            //InicializarLocalizao();
+            //InicializarLocalizacao();
         }
 
-        private void InicializarLocalizao()
+        private void InicializarLocalizacao()
         {
             // Define posição x e y do objeto 2d
-            Localizao = new Localizao(_localizao.X, _localizao.Y);
-            Localizao.PropertyChanged += Localizao_PropertyChanged;
+            Localizacao = new Localizacao(_localizacao.X, _localizacao.Y);
+            Localizacao.PropertyChanged += Localizacao_PropertyChanged;
         }
 
         private void InicializarTamanho()
@@ -241,12 +241,12 @@ namespace Epico.Sistema2D
 
         protected virtual void GerarControle(float x, float y, float largura, float altura)
         {
-            _localizao.X = x;
-            _localizao.Y = y;
+            _localizacao.X = x;
+            _localizacao.Y = y;
             _tamanho.Largura = largura;
             _tamanho.Altura = altura;
 
-            InicializarLocalizao();
+            InicializarLocalizacao();
             InicializarTamanho();
 
             AdicionarVertice(_vSuperiorEsquerdo = new Vertice2(this));
@@ -261,36 +261,36 @@ namespace Epico.Sistema2D
             AtualizarLayout();
 
             // Centraliza o ponto de origem
-            Origens[0].X = (_localizao.X + _tamanho.Largura) / 2;
-            Origens[0].Y = (_localizao.Y + _tamanho.Altura) / 2;
+            Origens[0].X = (_localizacao.X + _tamanho.Largura) / 2;
+            Origens[0].Y = (_localizacao.Y + _tamanho.Altura) / 2;
         }
 
         private void AtualizarLayout()
         {
-            if (_localizao != null && _tamanho != null)
+            if (_localizacao != null && _tamanho != null)
             {
-                //Pos.X = _localizao.X;
-                //Pos.Y = _localizao.Y;
+                //Pos.X = _localizacao.X;
+                //Pos.Y = _localizacao.Y;
 
                 if (_vSuperiorEsquerdo != null)
                 {
-                    _vSuperiorEsquerdo.X = _localizao.X;
-                    _vSuperiorEsquerdo.Y = _localizao.Y;
+                    _vSuperiorEsquerdo.X = _localizacao.X;
+                    _vSuperiorEsquerdo.Y = _localizacao.Y;
                 }
                 if (_vSuperiorDireito != null)
                 {
-                    _vSuperiorDireito.X = _localizao.X + _tamanho.Largura;
-                    _vSuperiorDireito.Y = _localizao.Y;
+                    _vSuperiorDireito.X = _localizacao.X + _tamanho.Largura;
+                    _vSuperiorDireito.Y = _localizacao.Y;
                 }
                 if (_vInferiorDireito != null)
                 {
-                    _vInferiorDireito.X = _localizao.X + _tamanho.Largura;
-                    _vInferiorDireito.Y = _localizao.Y + _tamanho.Altura;
+                    _vInferiorDireito.X = _localizacao.X + _tamanho.Largura;
+                    _vInferiorDireito.Y = _localizacao.Y + _tamanho.Altura;
                 }
                 if (_vInferiorEsquerdo != null)
                 {
-                    _vInferiorEsquerdo.X = _localizao.X;
-                    _vInferiorEsquerdo.Y = _localizao.Y + _tamanho.Altura;
+                    _vInferiorEsquerdo.X = _localizacao.X;
+                    _vInferiorEsquerdo.Y = _localizacao.Y + _tamanho.Altura;
                 }
 
                 if (Vertices.Count > 0)
