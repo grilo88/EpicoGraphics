@@ -25,7 +25,7 @@ namespace Epico.Controles
                 .Select(obj => new { obj, mult = obj.Pos.X * obj.Pos.Y })
                 .OrderByDescending(x => x.mult).FirstOrDefault();
 
-            Location loc = new Location();
+            Localizao loc = new Localizao();
             if (last != null)
             {
                 loc.X = last.obj.Pos.X + 20;
