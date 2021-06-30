@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Epico.Sistema2D
 {
-    public class Location : INotifyPropertyChanged
+    public class Localizacao : INotifyPropertyChanged
     {
         private float _x;
         private float _y;
@@ -34,8 +34,8 @@ namespace Epico.Sistema2D
             }
         }
 
-        public Location() { }
-        public Location(float x, float y)
+        public Localizacao() { }
+        public Localizacao(float x, float y)
         {
             _x = x;
             _y = y;
@@ -49,32 +49,32 @@ namespace Epico.Sistema2D
         }
     }
 
-    public class Size : INotifyPropertyChanged
+    public class Tamanho : INotifyPropertyChanged
     {
-        private float _width;
-        private float _heigth;
+        private float _largura;
+        private float _altura;
 
-        public float Width { get => _width; set
+        public float Largura { get => _largura; set
             {
-                if (value != _width) // Alterou?
+                if (value != _largura) // Alterou?
                 {
-                    _width = value; OnPropertyChanged();
+                    _largura = value; OnPropertyChanged();
                 }
             }
         }
-        public float Height { get => _heigth; set
+        public float Altura { get => _altura; set
             {
-                if (value != _heigth) // Alterou?
+                if (value != _altura) // Alterou?
                 {
-                    _heigth = value; OnPropertyChanged();
+                    _altura = value; OnPropertyChanged();
                 }
             }
         }
 
-        public Size(float width, float height)
+        public Tamanho(float largura, float altura)
         {
-            _width = width;
-            _heigth = height;
+            _largura = largura;
+            _altura = altura;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -98,13 +98,13 @@ namespace Epico.Sistema2D
         /// </summary>
         public Controle2D Container { get; private set; }
 
-        private Vertice2 _vTopLeft;            // Superior Esquerdo
-        private Vertice2 _vTopRigth;           // Superior Direito
-        private Vertice2 _vBottomRight;        // Inferior Direito
-        private Vertice2 _vBottomLeft;         // Inferior Esquerdo
+        private Vertice2 _vSuperiorEsquerdo;            // Superior Esquerdo
+        private Vertice2 _vSuperiorDireito;             // Superior Direito
+        private Vertice2 _vInferiorDireito;             // Inferior Direito
+        private Vertice2 _vInferiorEsquerdo;            // Inferior Esquerdo
 
-        private Location _location = new Location(0, 0);
-        private Size _size = new Size(300, 300);
+        private Localizacao _localizacao = new Localizacao(0, 0);
+        private Tamanho _tamanho = new Tamanho(300, 300);
         private Controle2D _parent;
 
         [Category("Layout")]
@@ -131,13 +131,13 @@ namespace Epico.Sistema2D
         [Category("Layout")]
         [Description("As coordenadas do canto superior esquerdo do controle em relação ao canto superior esquerdo do seu recipiente.")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public Location Location
+        public Localizacao Localizacao
         {
-            get => _location; set
+            get => _localizacao; set
             {
                 var val = value;
-                _location.X = val.X;
-                _location.Y = val.Y;
+                _localizacao.X = val.X;
+                _localizacao.Y = val.Y;
                 AtualizarLayout();
             }
         }
@@ -145,13 +145,13 @@ namespace Epico.Sistema2D
         [Category("Layout")]
         [Description("O tamanho do controle em pixels")]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public Size Size
+        public Tamanho Tamanho
         {
-            get => _size; set
+            get => _tamanho; set
             {
                 var val = value;
-                _size.Width = val.Width;
-                _size.Height = val.Height;
+                _tamanho.Largura = val.Largura;
+                _tamanho.Altura = val.Altura;
                 AtualizarLayout();
             }
         }
@@ -170,28 +170,28 @@ namespace Epico.Sistema2D
             } set { } }
 
 
-        private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Localizacao_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             AtualizarLayout();
         }
 
-        private void Size_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Tamanho_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             AtualizarLayout();
         }
 
         [Browsable(false)]
         [Category("Layout")]
-        public float Top { get => Location.Y; set => Location.Y = value; }
+        public float Top { get => Localizacao.Y; set => Localizacao.Y = value; }
         [Browsable(false)]
         [Category("Layout")]
-        public float Left { get => Location.X; set => Location.X = value; }
+        public float Left { get => Localizacao.X; set => Localizacao.X = value; }
         [Browsable(false)]
         [Category("Layout")]
-        public float Width { get => Size.Width; set => Size.Width = value; }
+        public float Largura { get => Tamanho.Largura; set => Tamanho.Largura = value; }
         [Browsable(false)]
         [Category("Layout")]
-        public float Height { get => Size.Height; set => Size.Height = value; }
+        public float Altura { get => Tamanho.Altura; set => Tamanho.Altura = value; }
 
         public IEnumerable<Controle2D> ObterObjetosDesteContainer()
         {
@@ -222,37 +222,37 @@ namespace Epico.Sistema2D
         {
             if (Pos == null)
                 Pos = new Vetor2(this, 0, 0);
-            //InicializarSize();
-            //InicializarLocation();
+            //InicializarTamanho();
+            //InicializarLocalizacao();
         }
 
-        private void InicializarLocation()
+        private void InicializarLocalizacao()
         {
             // Define posição x e y do objeto 2d
-            Location = new Location(_location.X, _location.Y);
-            Location.PropertyChanged += Location_PropertyChanged;
+            Localizacao = new Localizacao(_localizacao.X, _localizacao.Y);
+            Localizacao.PropertyChanged += Localizacao_PropertyChanged;
         }
 
-        private void InicializarSize()
+        private void InicializarTamanho()
         {
-            Size = new Size(_size.Width, _size.Height);
-            Size.PropertyChanged += Size_PropertyChanged;
+            Tamanho = new Tamanho(_tamanho.Largura, _tamanho.Altura);
+            Tamanho.PropertyChanged += Tamanho_PropertyChanged;
         }
 
-        protected virtual void GerarControle(float x, float y, float width, float height)
+        protected virtual void GerarControle(float x, float y, float largura, float altura)
         {
-            _location.X = x;
-            _location.Y = y;
-            _size.Width = width;
-            _size.Height = height;
+            _localizacao.X = x;
+            _localizacao.Y = y;
+            _tamanho.Largura = largura;
+            _tamanho.Altura = altura;
 
-            InicializarLocation();
-            InicializarSize();
+            InicializarLocalizacao();
+            InicializarTamanho();
 
-            AdicionarVertice(_vTopLeft = new Vertice2(this));
-            AdicionarVertice(_vTopRigth = new Vertice2(this));
-            AdicionarVertice(_vBottomRight = new Vertice2(this));
-            AdicionarVertice(_vBottomLeft = new Vertice2(this));
+            AdicionarVertice(_vSuperiorEsquerdo = new Vertice2(this));
+            AdicionarVertice(_vSuperiorDireito = new Vertice2(this));
+            AdicionarVertice(_vInferiorDireito = new Vertice2(this));
+            AdicionarVertice(_vInferiorEsquerdo = new Vertice2(this));
 
             Mat_render.CorSolida = new RGBA(200, 150, 80, 230);
             Mat_render.CorBorda = new RGBA(255, 255, 255, 255);
@@ -261,36 +261,36 @@ namespace Epico.Sistema2D
             AtualizarLayout();
 
             // Centraliza o ponto de origem
-            Origens[0].X = (_location.X + _size.Width) / 2;
-            Origens[0].Y = (_location.Y + _size.Height) / 2;
+            Origens[0].X = (_localizacao.X + _tamanho.Largura) / 2;
+            Origens[0].Y = (_localizacao.Y + _tamanho.Altura) / 2;
         }
 
         private void AtualizarLayout()
         {
-            if (_location != null && _size != null)
+            if (_localizacao != null && _tamanho != null)
             {
-                //Pos.X = _location.X;
-                //Pos.Y = _location.Y;
+                //Pos.X = _localizacao.X;
+                //Pos.Y = _localizacao.Y;
 
-                if (_vTopLeft != null)
+                if (_vSuperiorEsquerdo != null)
                 {
-                    _vTopLeft.X = _location.X;
-                    _vTopLeft.Y = _location.Y;
+                    _vSuperiorEsquerdo.X = _localizacao.X;
+                    _vSuperiorEsquerdo.Y = _localizacao.Y;
                 }
-                if (_vTopRigth != null)
+                if (_vSuperiorDireito != null)
                 {
-                    _vTopRigth.X = _location.X + _size.Width;
-                    _vTopRigth.Y = _location.Y;
+                    _vSuperiorDireito.X = _localizacao.X + _tamanho.Largura;
+                    _vSuperiorDireito.Y = _localizacao.Y;
                 }
-                if (_vBottomRight != null)
+                if (_vInferiorDireito != null)
                 {
-                    _vBottomRight.X = _location.X + _size.Width;
-                    _vBottomRight.Y = _location.Y + _size.Height;
+                    _vInferiorDireito.X = _localizacao.X + _tamanho.Largura;
+                    _vInferiorDireito.Y = _localizacao.Y + _tamanho.Altura;
                 }
-                if (_vBottomLeft != null)
+                if (_vInferiorEsquerdo != null)
                 {
-                    _vBottomLeft.X = _location.X;
-                    _vBottomLeft.Y = _location.Y + _size.Height;
+                    _vInferiorEsquerdo.X = _localizacao.X;
+                    _vInferiorEsquerdo.Y = _localizacao.Y + _tamanho.Altura;
                 }
 
                 if (Vertices.Count > 0)
@@ -309,8 +309,8 @@ namespace Epico.Sistema2D
         /// <returns></returns>
         public Vetor2 ProximoPosControle()
         {
-            if (_proxPosCtrl.X + 50 > Container.Width) _proxPosCtrl.X = 10;
-            if (_proxPosCtrl.Y + 50 > Container.Height) _proxPosCtrl.Y = 10;
+            if (_proxPosCtrl.X + 50 > Container.Largura) _proxPosCtrl.X = 10;
+            if (_proxPosCtrl.Y + 50 > Container.Altura) _proxPosCtrl.Y = 10;
 
             _proxPosCtrl.X += 20;
             _proxPosCtrl.Y += 20;
@@ -324,7 +324,7 @@ namespace Epico.Sistema2D
         public event EventHandler MouseDown;
         public event EventHandler MouseMove;
 
-        protected virtual void OnMouseClick(EventArgs e)
+        public virtual void OnMouseClick(EventArgs e)
         {
             EventHandler handler = MouseClick;
             if (handler != null)
@@ -332,7 +332,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseUp(EventArgs e)
+        public virtual void OnMouseUp(EventArgs e)
         {
             EventHandler handler = MouseUp;
             if (handler != null)
@@ -340,7 +340,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseDown(EventArgs e)
+        public virtual void OnMouseDown(EventArgs e)
         {
             EventHandler handler = MouseDown;
             if (handler != null)
@@ -348,7 +348,7 @@ namespace Epico.Sistema2D
                 handler(this, e);
             }
         }
-        protected virtual void OnMouseMove(EventArgs e)
+        public virtual void OnMouseMove(EventArgs e)
         {
             EventHandler handler = MouseMove;
             if (handler != null)

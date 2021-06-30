@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using rtaNetworking.Streaming;
 using System.Net;
+using Microsoft.Owin.Hosting;
 
 namespace rtaVideoStreamer
 {
@@ -15,6 +16,7 @@ namespace rtaVideoStreamer
     {
 
         private ImageStreamingServer _Server;
+        private IDisposable _SignalR;
 
         public Form1()
         {
@@ -24,6 +26,8 @@ namespace rtaVideoStreamer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            string url = @"http://localhost:8081/";
+            _SignalR = WebApp.Start<StartupSignalR>(url);
             _Server = new ImageStreamingServer();
             _Server.Start(8080);
         }

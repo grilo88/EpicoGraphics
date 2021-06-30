@@ -130,8 +130,8 @@ namespace Epico.Sistema2D
 
             if (obj is Controle2D)
             {     
-                novaPos.X = obj.Pos.X + ((Controle2D)obj).Width / 2;
-                novaPos.Y = obj.Pos.Y + ((Controle2D)obj).Height / 2;
+                novaPos.X = obj.Pos.X + ((Controle2D)obj).Tamanho.Largura / 2;
+                novaPos.Y = obj.Pos.Y + ((Controle2D)obj).Tamanho.Altura / 2;
             }
             else
             {
@@ -473,6 +473,36 @@ namespace Epico.Sistema2D
 
             return Util2D.IntersecaoEntrePoligonos(rectCam,
                 obj.Vertices.Select(x => new Vertice2(x.Global.X, x.Global.Y)).ToArray());
+        }
+
+        public void MouseClick(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(this.epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseClick(new EventArgs());
+            }
+        }
+
+        public void MouseUp(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(this.epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseUp(new EventArgs());
+            }
+        }
+
+        public void MouseDown(int X, int Y)
+        {
+            Objeto2D obj = Util2D.ObterUnicoObjeto2DMouseXY(this.epico, this, new Vetor2(X, Y));
+
+            if (obj is Controle2D)
+            {
+                ((Controle2D)obj).OnMouseDown(new EventArgs());
+            }
         }
 
         #region IDisposable Support
